@@ -10,8 +10,8 @@ dat <- nullmod$fit %>%
   inner_join(phen, by = "sample.id", suffix = c(".model", ".phen"))
 
 ui <- fluidPage(
-  selectInput("y", label = "y axis", choices = names(dat)),
   selectInput("x", label = "x axis", choices = names(dat)),
+  selectInput("y", label = "y axis", choices = names(dat)),
   plotOutput("plot")
 )
 
