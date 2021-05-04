@@ -9,9 +9,7 @@
 
 .load_model <- function(filename) {
   # TODO: Check that it's a valid model file.
-  print(filename)
   tmp <- get(load(filename))
-  print(names(tmp))
   null_model <- get(load(filename))$fit %>%
     # Change names to have prefix "Model: "
     rename_with(.fn = ~ paste0("Model: ", .x), -sample.id)
@@ -25,7 +23,6 @@
   dat <- null_model %>%
     inner_join(phen, by = "sample.id") %>%
     select(sample.id, everything())
-    print(names(dat))
 
   dat
 }

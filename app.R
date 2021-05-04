@@ -46,7 +46,6 @@ server <- function(input, output, session) {
     phenotype_file <- input$phenotype_file
 
     if (input$use_example_data) {
-      print("using example data")
       .load_data(
         null_model_file = "testdata/null_model.RData",
         phenotype_file = "testdata/1KG_phase3_subset_annot.RData"
@@ -61,7 +60,6 @@ server <- function(input, output, session) {
   # Update dropdown choices when data changes?
   observe({
     data_names <- setdiff(names(data_reactive()), "sample.id")
-    print(head(data_names))
     updateSelectInput(session, "x", choices = data_names)
     updateSelectInput(session, "y", choices = c("None", data_names))
     updateSelectInput(session, "group", choices = c("None", data_names))
@@ -88,11 +86,9 @@ server <- function(input, output, session) {
     } else {
       # 2-d plot.
       type_y <- .detect_variable_type(dat[[input$y]])
-      print(type_y)
       p <- ggplot(dat, aes_string(x = as.name(input$x), y = as.name(input$y)))
       if (type_x == QUANTITATIVE & type_y == QUANTITATIVE) {
         # Show a scatterplot.
-        print("scatterplot")
         p <- p + geom_point(aes_string(color = group))
       } else if (type_x == QUANTITATIVE & type_y == CATEGORICAL) {
         # Show a flipped boxplot.
@@ -102,7 +98,6 @@ server <- function(input, output, session) {
           coord_flip()
       } else if (type_x == CATEGORICAL & type_y == QUANTITATIVE) {
         # Show a boxplot.
-        print("boxplot")
         p <- p + geom_boxplot(aes_string(fill = group))
       } else if (type_y == CATEGORICAL & type_y == CATEGORICAL) {
         # Maybe we don't want to allow this?
