@@ -7,7 +7,7 @@ source("helpers.R")
 
 ui <- fluidPage(
   selectInput("x", label = "x axis", choices = names(dat)),
-  selectInput("y", label = "y axis", choices = names(dat)),
+  selectInput("y", label = "y axis", choices = c("None", names(dat))),
   plotOutput("plot")
 )
 
@@ -16,29 +16,42 @@ server <- function(input, output, session) {
 
     type_x <- .detect_variable_type(dat[[input$x]])
     print(type_x)
-    # 2-d plot.
-    type_y <- .detect_variable_type(dat[[input$y]])
-    print(type_y)
-    p <- ggplot(dat, aes_string(x = as.name(input$x), y = as.name(input$y)))
-    if (type_x == QUANTITATIVE & type_y == QUANTITATIVE) {
-      # Show a scatterplot.
-      print("scatterplot")
-      p <- p + geom_point()
-    } else if (type_x == QUANTITATIVE & type_y == CATEGORICAL) {
-      # Show a flipped boxplot.
-      # We have to recreate p because we need to use coord_flip.
-      p <- ggplot(dat, aes_string(y = as.name(input$x), x = as.name(input$y))) +
-        geom_boxplot() +
-        coord_flip()
-    } else if (type_x == CATEGORICAL & type_y == QUANTITATIVE) {
-      # Show a boxplot.
-      print("boxplot")
-      p <- p + geom_boxplot()
-    } else if (type_y == CATEGORICAL & type_y == CATEGORICAL) {
-      # Maybe we don't want to allow this?
-      stop("Cannot plot two categorical variables against each other.")
+
+    if (input$y == "None") {
+      # 1-d plot.
+      print("1d plot")
+      p <- ggplot(dat, aes_string(x = as.name(input$x)))
+      if (type_x == QUANTITATIVE) {
+        p <- p + geom_histogram()
+      } else if (type_x == CATEGORICAL) {
+        p <- p + geom_bar()
+      }
+
     } else {
-      stop("unknown")
+      # 2-d plot.
+      type_y <- .detect_variable_type(dat[[input$y]])
+      print(type_y)
+      p <- ggplot(dat, aes_string(x = as.name(input$x), y = as.name(input$y)))
+      if (type_x == QUANTITATIVE & type_y == QUANTITATIVE) {
+        # Show a scatterplot.
+        print("scatterplot")
+        p <- p + geom_point()
+      } else if (type_x == QUANTITATIVE & type_y == CATEGORICAL) {
+        # Show a flipped boxplot.
+        # We have to recreate p because we need to use coord_flip.
+        p <- ggplot(dat, aes_string(y = as.name(input$x), x = as.name(input$y))) +
+          geom_boxplot() +
+          coord_flip()
+      } else if (type_x == CATEGORICAL & type_y == QUANTITATIVE) {
+        # Show a boxplot.
+        print("boxplot")
+        p <- p + geom_boxplot()
+      } else if (type_y == CATEGORICAL & type_y == CATEGORICAL) {
+        # Maybe we don't want to allow this?
+        stop("Cannot plot two categorical variables against each other.")
+      } else {
+        stop("unknown")
+      }
     }
     p
   })
