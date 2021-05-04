@@ -2,6 +2,7 @@ library(shiny)
 library(Biobase)
 library(dplyr)
 library(ggplot2)
+library(shinyWidgets)
 
 source("helpers.R")
 
@@ -11,23 +12,31 @@ theme_set(
 )
 
 ui <- fluidPage(
+  materialSwitch("use_example_data", label = "Load example data?", value = TRUE, status = "primary"),
   fileInput("null_model_file", label = "null model file", accept = ".RData"),
   fileInput("phenotype_file", label = "phenotype file", accept = ".RData"),
   selectInput("x", label = "x axis", choices = "None"),
   selectInput("y", label = "y axis", choices = c("None")),
   selectInput("group", label = "group by", choices = c("None")),
-  tableOutput("data"),
-  plotOutput("plot")
+  plotOutput("plot"),
+  tableOutput("data")
 )
 
 server <- function(input, output, session) {
 
   # Load the data when the user selects a null model and phenotype file.
   data_reactive <- reactive({
+
     null_model_file <- input$null_model_file
     phenotype_file <- input$phenotype_file
 
-    if (!is.null(null_model_file) & !is.null(phenotype_file)) {
+    if (input$use_example_data) {
+      print("using example data")
+      .load_data(
+        null_model_file = "testdata/null_model.RData",
+        phenotype_file = "testdata/1KG_phase3_subset_annot.RData"
+      )
+    } else if (!is.null(null_model_file) & !is.null(phenotype_file)) {
       .load_data(null_model_file$datapath, phenotype_file$datapath)
     } else {
       return(NULL)
