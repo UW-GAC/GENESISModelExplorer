@@ -15,8 +15,11 @@ ui <- fluidPage(
   sidebarPanel(
     h2("Load data"),
     materialSwitch("use_example_data", label = "Load example data?", value = TRUE, status = "primary"),
-    fileInput("null_model_file", label = "null model file", accept = ".RData"),
-    fileInput("phenotype_file", label = "phenotype file", accept = ".RData")
+    conditionalPanel(
+      condition = "input.use_example_data == false",
+      fileInput("null_model_file", label = "null model file", accept = ".RData"),
+      fileInput("phenotype_file", label = "phenotype file", accept = ".RData")
+    )
   ),
   sidebarPanel(
     h2("Plot setup"),
