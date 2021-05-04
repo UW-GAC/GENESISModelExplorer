@@ -27,3 +27,19 @@ dat <- .load_data(
   null_model_file = "testdata/null_model.RData",
   phenotype_file = "testdata/1KG_phase3_subset_annot.RData"
 )
+
+
+QUANTITATIVE = "quantitative"
+CATEGORICAL = "categorical"
+.detect_variable_type <- function(variable, n_categories_threshold = 10) {
+  # Right now we only care about numeric vs. categorical, I think?
+  cls <- class(variable)
+  variable_type <- switch(
+      cls,
+      "numeric" = QUANTITATIVE,
+      "integer" = QUANTITATIVE,
+      "character" = CATEGORICAL,
+      sprintf("unknown type: %s", cls)
+    )
+  variable_type
+}
