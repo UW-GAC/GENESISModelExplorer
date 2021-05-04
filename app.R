@@ -11,15 +11,44 @@ theme_set(
 )
 
 ui <- fluidPage(
-  selectInput("x", label = "x axis", choices = names(dat)),
-  selectInput("y", label = "y axis", choices = c("None", names(dat))),
-  selectInput("group", label = "group by", choices = c("None", names(dat)[sapply(dat, .detect_variable_type) == CATEGORICAL])),
+  fileInput("null_model_file", label = "null model file", accept = ".RData"),
+  fileInput("phenotype_file", label = "phenotype file", accept = ".RData"),
+  selectInput("x", label = "x axis", choices = "None"),
+  selectInput("y", label = "y axis", choices = c("None")),
+  selectInput("group", label = "group by", choices = c("None")),
+  tableOutput("data"),
   plotOutput("plot")
 )
 
 server <- function(input, output, session) {
+
+  # Load the data when the user selects a null model and phenotype file.
+  data_reactive <- reactive({
+    null_model_file <- input$null_model_file
+    phenotype_file <- input$phenotype_file
+
+    if (!is.null(null_model_file) & !is.null(phenotype_file)) {
+      .load_data(null_model_file$datapath, phenotype_file$datapath)
+    } else {
+      return(NULL)
+    }
+  })
+
+  # Save the head of the data file to the outputs to display as a table.
+  output$data <- renderTable({data_reactive() %>% head()})
+
+  # Update dropdown choices when data changes?
+  observe({
+    data_names <- setdiff(names(data_reactive()), "sample.id")
+    print(head(data_names))
+    updateSelectInput(session, "x", choices = data_names)
+    updateSelectInput(session, "y", choices = c("None", data_names))
+    updateSelectInput(session, "group", choices = c("None", data_names))
+  })
+
   output$plot <- renderPlot({
 
+    dat <- data_reactive()
     type_x <- .detect_variable_type(dat[[input$x]])
     print(type_x)
 
@@ -63,6 +92,7 @@ server <- function(input, output, session) {
     }
     p
   })
+
 }
 
 shinyApp(ui, server)
