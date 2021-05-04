@@ -12,14 +12,26 @@ theme_set(
 )
 
 ui <- fluidPage(
-  materialSwitch("use_example_data", label = "Load example data?", value = TRUE, status = "primary"),
-  fileInput("null_model_file", label = "null model file", accept = ".RData"),
-  fileInput("phenotype_file", label = "phenotype file", accept = ".RData"),
-  selectInput("x", label = "x axis", choices = "None"),
-  selectInput("y", label = "y axis", choices = c("None")),
-  selectInput("group", label = "group by", choices = c("None")),
-  plotOutput("plot"),
-  tableOutput("data")
+  sidebarPanel(
+    h2("Load data"),
+    materialSwitch("use_example_data", label = "Load example data?", value = TRUE, status = "primary"),
+    fileInput("null_model_file", label = "null model file", accept = ".RData"),
+    fileInput("phenotype_file", label = "phenotype file", accept = ".RData")
+  ),
+  sidebarPanel(
+    h2("Plot setup"),
+    selectInput("x", label = "x axis", choices = "None"),
+    selectInput("y", label = "y axis", choices = c("None")),
+    selectInput("group", label = "group by", choices = c("None"))
+  ),
+  mainPanel(
+    h2("data plot"),
+    plotOutput("plot")
+  ),
+  mainPanel(
+    h2("data preview"),
+    tableOutput("data")
+  )
 )
 
 server <- function(input, output, session) {
