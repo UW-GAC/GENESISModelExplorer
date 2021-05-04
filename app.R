@@ -58,7 +58,7 @@ server <- function(input, output, session) {
         # Maybe we don't want to allow this?
         stop("Cannot plot two categorical variables against each other.")
       } else {
-        stop("unknown")
+        stop("Unknown variable type.")
       }
     }
     p
