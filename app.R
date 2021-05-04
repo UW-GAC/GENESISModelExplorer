@@ -55,9 +55,6 @@ server <- function(input, output, session) {
     }
   })
 
-  # Save the head of the data file to the outputs to display as a table.
-  output$data <- renderTable({data_reactive() %>% head()})
-
   # Update dropdown choices when data changes?
   observe({
     data_names <- setdiff(names(data_reactive()), "sample.id")
@@ -69,15 +66,15 @@ server <- function(input, output, session) {
 
   output$plot <- renderPlot({
 
+    req(data_reactive())
+
+    # Obtain the data for plotting.
     dat <- data_reactive()
     type_x <- .detect_variable_type(dat[[input$x]])
-    print(type_x)
 
     group <- if (input$group == "None") NULL else as.name(input$group)
-    print(group)
     if (input$y == "None") {
       # 1-d plot.
-      print("1d plot")
       p <- ggplot(dat, aes_string(x = as.name(input$x)))
       if (type_x == QUANTITATIVE) {
         p <- p + geom_histogram(aes_string(fill = group))
@@ -112,6 +109,12 @@ server <- function(input, output, session) {
       }
     }
     p
+  })
+
+  # Save the head of the data file to the outputs to display as a table.
+  output$data <- renderTable({
+    req(data_reactive())
+    data_reactive() %>% head()
   })
 
 }
