@@ -2,6 +2,7 @@ library(shiny)
 library(Biobase)
 library(dplyr)
 library(ggplot2)
+library(shinyWidgets)
 
 source("helpers.R")
 
@@ -11,23 +12,101 @@ theme_set(
 )
 
 ui <- fluidPage(
-  selectInput("x", label = "x axis", choices = names(dat)),
-  selectInput("y", label = "y axis", choices = c("None", names(dat))),
-  selectInput("group", label = "group by", choices = c("None", names(dat)[sapply(dat, .detect_variable_type) == CATEGORICAL])),
-  plotOutput("plot")
+  sidebarPanel(
+    h2("Load data"),
+    materialSwitch("use_example_data", label = "Load example data?", value = TRUE, status = "primary"),
+    conditionalPanel(
+      condition = "input.use_example_data == false",
+      fileInput("null_model_file", label = "null model file", accept = ".RData"),
+      fileInput("phenotype_file", label = "phenotype file", accept = ".RData")
+    )
+  ),
+  sidebarPanel(
+    h2("Plot setup"),
+    # The choices for each of the plotting parameters come from the data, so they are dynamic.
+    uiOutput("x"),
+    uiOutput("y"),
+    uiOutput("group")
+  ),
+  mainPanel(
+    h2("data plot"),
+    plotOutput("plot")
+  ),
+  mainPanel(
+    h2("data preview"),
+    tableOutput("data")
+  )
 )
 
 server <- function(input, output, session) {
-  output$plot <- renderPlot({
 
+  # Load the data when the user selects a null model and phenotype file.
+  data_reactive <- reactive({
+
+    null_model_file <- input$null_model_file
+    phenotype_file <- input$phenotype_file
+
+    if (input$use_example_data) {
+      .load_data(
+        null_model_file = "testdata/null_model.RData",
+        phenotype_file = "testdata/1KG_phase3_subset_annot.RData"
+      )
+    } else if (!is.null(null_model_file) & !is.null(phenotype_file)) {
+      .load_data(null_model_file$datapath, phenotype_file$datapath)
+    } else {
+      return(NULL)
+    }
+  })
+
+  data_names <- reactive({
+    if (is.null(data_reactive())) {
+      return(NULL)
+    } else {
+      names(data_reactive())
+    }
+  })
+
+  # Select allowed x, y, and group choices using loaded data.
+  output$x <- renderUI({
+    if (is.null(data_reactive())) {
+      choices <- NULL
+    } else {
+      choices <- setdiff(names(data_reactive()), "sample.id")
+    }
+    print(paste("x:", choices))
+    selectInput("x", label = "x axis", choices = choices)
+  })
+  output$y <- renderUI({
+    if (is.null(data_reactive())) {
+      choices <- NULL
+    } else {
+      choices <- c("None", setdiff(names(data_reactive()), "sample.id"))
+    }
+    selectInput("y", label = "y axis", choices = choices)
+  })
+  output$group <- renderUI({
+    if (is.null(data_reactive())) {
+      choices <- NULL
+    } else {
+      choices <- names(data_reactive())[sapply(data_reactive(), .detect_variable_type) == CATEGORICAL]
+      choices <- c("None", setdiff(choices, "sample.id"))
+    }
+    selectInput("group", label = "group by", choices = choices)
+  })
+
+  output$plot <- renderPlot({
+    # TODO: fix warning/error when loading example data:
+    # Warning: Error in as.name: attempt to use zero-length variable name
+
+    req(data_reactive())
+
+    # Obtain the data for plotting.
+    dat <- data_reactive()
     type_x <- .detect_variable_type(dat[[input$x]])
-    print(type_x)
 
     group <- if (input$group == "None") NULL else as.name(input$group)
-    print(group)
     if (input$y == "None") {
       # 1-d plot.
-      print("1d plot")
       p <- ggplot(dat, aes_string(x = as.name(input$x)))
       if (type_x == QUANTITATIVE) {
         p <- p + geom_histogram(aes_string(fill = group))
@@ -38,11 +117,9 @@ server <- function(input, output, session) {
     } else {
       # 2-d plot.
       type_y <- .detect_variable_type(dat[[input$y]])
-      print(type_y)
       p <- ggplot(dat, aes_string(x = as.name(input$x), y = as.name(input$y)))
       if (type_x == QUANTITATIVE & type_y == QUANTITATIVE) {
         # Show a scatterplot.
-        print("scatterplot")
         p <- p + geom_point(aes_string(color = group))
       } else if (type_x == QUANTITATIVE & type_y == CATEGORICAL) {
         # Show a flipped boxplot.
@@ -52,7 +129,6 @@ server <- function(input, output, session) {
           coord_flip()
       } else if (type_x == CATEGORICAL & type_y == QUANTITATIVE) {
         # Show a boxplot.
-        print("boxplot")
         p <- p + geom_boxplot(aes_string(fill = group))
       } else if (type_y == CATEGORICAL & type_y == CATEGORICAL) {
         # Maybe we don't want to allow this?
@@ -63,6 +139,13 @@ server <- function(input, output, session) {
     }
     p
   })
+
+  # Save the head of the data file to the outputs to display as a table.
+  output$data <- renderTable({
+    req(data_reactive())
+    data_reactive() %>% head()
+  })
+
 }
 
 shinyApp(ui, server)

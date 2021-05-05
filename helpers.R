@@ -1,5 +1,6 @@
 # Hard code data loading statements here for now.
 .load_phenotype <- function(filename) {
+  # TODO: Check that it's a valid phenotype file.
   phen <- get(load(filename)) %>%
     pData() %>%
     # Change names to have prefix "Phenotype: "
@@ -7,6 +8,8 @@
 }
 
 .load_model <- function(filename) {
+  # TODO: Check that it's a valid model file.
+  tmp <- get(load(filename))
   null_model <- get(load(filename))$fit %>%
     # Change names to have prefix "Model: "
     rename_with(.fn = ~ paste0("Model: ", .x), -sample.id)
@@ -16,17 +19,13 @@
 .load_data <- function(null_model_file, phenotype_file) {
   null_model <- .load_model(null_model_file)
   phen <- .load_phenotype(phenotype_file)
+  # TODO: Check that sample sets are compatible.
   dat <- null_model %>%
-    inner_join(phen, by = "sample.id")
-    print(names(dat))
+    inner_join(phen, by = "sample.id") %>%
+    select(sample.id, everything())
 
   dat
 }
-
-dat <- .load_data(
-  null_model_file = "testdata/null_model.RData",
-  phenotype_file = "testdata/1KG_phase3_subset_annot.RData"
-)
 
 
 QUANTITATIVE = "quantitative"
