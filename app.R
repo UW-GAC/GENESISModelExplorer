@@ -23,9 +23,10 @@ ui <- fluidPage(
   ),
   sidebarPanel(
     h2("Plot setup"),
-    selectInput("x", label = "x axis", choices = "None"),
-    selectInput("y", label = "y axis", choices = c("None")),
-    selectInput("group", label = "group by", choices = c("None"))
+    # The choices for each of the plotting parameters come from the data, so they are dynamic.
+    uiOutput("x"),
+    uiOutput("y"),
+    uiOutput("group")
   ),
   mainPanel(
     h2("data plot"),
@@ -57,15 +58,45 @@ server <- function(input, output, session) {
     }
   })
 
-  # Update dropdown choices when data changes?
-  observe({
-    data_names <- setdiff(names(data_reactive()), "sample.id")
-    updateSelectInput(session, "x", choices = data_names)
-    updateSelectInput(session, "y", choices = c("None", data_names))
-    updateSelectInput(session, "group", choices = c("None", data_names))
+  data_names <- reactive({
+    if (is.null(data_reactive())) {
+      return(NULL)
+    } else {
+      names(data_reactive())
+    }
+  })
+
+  # Select allowed x, y, and group choices using loaded data.
+  output$x <- renderUI({
+    if (is.null(data_reactive())) {
+      choices <- NULL
+    } else {
+      choices <- setdiff(names(data_reactive()), "sample.id")
+    }
+    print(paste("x:", choices))
+    selectInput("x", label = "x axis", choices = choices)
+  })
+  output$y <- renderUI({
+    if (is.null(data_reactive())) {
+      choices <- NULL
+    } else {
+      choices <- c("None", setdiff(names(data_reactive()), "sample.id"))
+    }
+    selectInput("y", label = "y axis", choices = choices)
+  })
+  output$group <- renderUI({
+    if (is.null(data_reactive())) {
+      choices <- NULL
+    } else {
+      choices <- names(data_reactive())[sapply(data_reactive(), .detect_variable_type) == CATEGORICAL]
+      choices <- c("None", setdiff(choices, "sample.id"))
+    }
+    selectInput("group", label = "group by", choices = choices)
   })
 
   output$plot <- renderPlot({
+    # TODO: fix warning/error when loading example data:
+    # Warning: Error in as.name: attempt to use zero-length variable name
 
     req(data_reactive())
 
