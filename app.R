@@ -73,7 +73,6 @@ server <- function(input, output, session) {
     } else {
       choices <- setdiff(names(data_reactive()), "sample.id")
     }
-    print(paste("x:", choices))
     selectInput("x", label = "x axis", choices = choices)
   })
   output$y <- renderUI({
