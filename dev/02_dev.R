@@ -60,14 +60,14 @@ golem::add_module( name = "plot" )
 ## service for your application
 ##
 ## (You'll need GitHub there)
-usethis::use_github()
+# usethis::use_github() # I already had a github repo set up so I didn't run this.
 
 # # GitHub Actions
 # usethis::use_github_action()
 # # Chose one of the three
 # # See https://usethis.r-lib.org/reference/use_github_action.html
 # usethis::use_github_action_check_release()
-# usethis::use_github_action_check_standard()
+usethis::use_github_action_check_standard()
 # usethis::use_github_action_check_full()
 # # Add action for PR
 # usethis::use_github_action_pr_commands()
