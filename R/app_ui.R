@@ -11,7 +11,8 @@ app_ui <- function(request) {
     # Your application UI logic
     fluidPage(
       h1("shinyNullModel"),
-      mod_data_loader_ui("data_loader_ui_1")
+      mod_data_loader_ui("data_loader_ui_1"),
+      mod_plot_ui("plot_ui_1")
     )
   )
 }
