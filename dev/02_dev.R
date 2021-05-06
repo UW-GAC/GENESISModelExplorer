@@ -42,6 +42,7 @@ golem::add_module( name = "plot" )
 # ## Add internal datasets ----
 # ## If you have data in your package
 # usethis::use_data_raw( name = "my_dataset", open = FALSE )
+usethis::use_data_raw( name = "phenotype", open = FALSE )
 usethis::use_data_raw( name = "null_model", open = FALSE )
 
 # ## Tests ----
