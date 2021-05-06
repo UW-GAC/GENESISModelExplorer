@@ -22,6 +22,7 @@ RoxygenNote: 7.1.1
 URL: https://github.com/UW-GAC/shinyNullModel
 BugReports: https://github.com/UW-GAC/shinyNullModel/issues
 Suggests:
+    charlatan,
     GENESIS,
     spelling,
     testthat (>= 3.0.0)

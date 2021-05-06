@@ -298,6 +298,13 @@
       "Repository": "CRAN",
       "Hash": "461aa75a11ce2400245190ef5d3995df"
     },
+    "charlatan": {
+      "Package": "charlatan",
+      "Version": "0.4.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "1c06f273d4fb31e66b030390ee15b25f"
+    },
     "cli": {
       "Package": "cli",
       "Version": "2.5.0",
