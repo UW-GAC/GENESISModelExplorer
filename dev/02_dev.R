@@ -21,7 +21,7 @@ usethis::use_package( "ggplot2" )
 
 # ## Add modules ----
 # ## Create a module infrastructure in R/
-golem::add_module( name = "data_loader" ) # Name of the module
+golem::add_module( name = "data_loader", fct = "load" ) # Name of the module
 golem::add_module( name = "plot" )
 
 # ## Add helper functions ----
