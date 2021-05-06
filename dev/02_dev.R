@@ -55,13 +55,13 @@ golem::add_module( name = "plot" )
 # # Create a summary readme for the testthat subdirectory
 # covrpage::covrpage()
 #
-# ## CI ----
-# ## Use this part of the script if you need to set up a CI
-# ## service for your application
-# ##
-# ## (You'll need GitHub there)
-# usethis::use_github()
-#
+## CI ----
+## Use this part of the script if you need to set up a CI
+## service for your application
+##
+## (You'll need GitHub there)
+usethis::use_github()
+
 # # GitHub Actions
 # usethis::use_github_action()
 # # Chose one of the three
