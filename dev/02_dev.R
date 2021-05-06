@@ -18,6 +18,9 @@
 usethis::use_package( "rlang" )
 usethis::use_package( "dplyr" )
 usethis::use_package( "ggplot2" )
+# Manually add "BiocViews:" to the description.
+# I'm not sure how to do this through the golem/usethis framework.
+usethis::use_package( "GENESIS", type = "Suggests" )
 
 # ## Add modules ----
 # ## Create a module infrastructure in R/
@@ -38,6 +41,7 @@ golem::add_module( name = "plot" )
 # ## Add internal datasets ----
 # ## If you have data in your package
 # usethis::use_data_raw( name = "my_dataset", open = FALSE )
+usethis::use_data_raw( name = "null_model", open = FALSE )
 
 # ## Tests ----
 # ## Add one line by test you want to create
