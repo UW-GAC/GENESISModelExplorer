@@ -21,6 +21,7 @@ usethis::use_package( "ggplot2" )
 usethis::use_package( "charlatan", type = "Suggests" ) # For fake data.
 # Manually add "BiocViews:" to the description.
 # I'm not sure how to do this through the golem/usethis framework.
+usethis::use_package( "Biobase", type = "Suggests" )
 usethis::use_package( "GENESIS", type = "Suggests" )
 
 # ## Add modules ----
