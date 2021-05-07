@@ -31,4 +31,4 @@ null_model <- fitNullModel(
   family = "gaussian",
   cov.mat = cov_mat
 )
-save(null_model, file = "inst/extdata/null_model.RData")
+save(null_model, file = "inst/extdata/null_model.RData", version = 2)

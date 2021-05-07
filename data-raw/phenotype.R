@@ -27,4 +27,4 @@ dat <- data.frame(
 
 phenotype <- AnnotatedDataFrame(dat)
 
-save(phenotype, file = "inst/extdata/phenotype.RData")
+save(phenotype, file = "inst/extdata/phenotype.RData", version = 2)
