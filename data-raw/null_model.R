@@ -32,3 +32,6 @@ null_model <- fitNullModel(
   cov.mat = cov_mat
 )
 save(null_model, file = "inst/extdata/null_model.RData", version = 2)
+
+# Note: also ran the above script with an older format GENESIS null model,
+# and saved it as null_model_old.RData.

@@ -59,9 +59,15 @@
     },
     "GENESIS": {
       "Package": "GENESIS",
-      "Version": "2.20.1",
-      "Source": "Bioconductor",
-      "Hash": "11ab0801e274578c18ebd8b7d5b654f1"
+      "Version": "2.21.5",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "GENESIS",
+      "RemoteUsername": "UW-GAC",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "c3936ed4d60cb13537944a9afc5716eb401a1a35",
+      "Hash": "0a5d96b693eb8a6bf3fe26e3ed37df02"
     },
     "GWASExactHW": {
       "Package": "GWASExactHW",
