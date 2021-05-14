@@ -42,16 +42,18 @@
 .load_data <- function(null_model_filename, phenotype_filename) {
   null_model <- .load_null_model(null_model_filename)
   phen <- .load_phenotype(phenotype_filename)
-  # TODO: Check that sample sets are compatible.
+
+  # Check that sample sets are compatible.
+  # All samples in the null model must be in the phenotype file.
+  chk <- length(setdiff(null_model$sample.id, phen$sample.id))
+  if (chk > 0) {
+    err <- "Phenotype file must contain all sample.ids in the null model."
+    stop(err)
+  }
+
   dat <- null_model %>%
     dplyr::inner_join(phen, by = "sample.id") %>%
     dplyr::select(.data$sample.id, tidyselect::everything())
 
   dat
 }
-
-.check_null_model <- function(null_model) {}
-
-.check_phenotype <- function (phen) {}
-
-.check_data <- function(null_model, phen) {}

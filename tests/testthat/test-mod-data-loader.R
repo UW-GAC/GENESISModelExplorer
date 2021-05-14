@@ -68,3 +68,43 @@ test_that("load phenotype fails with incorrect data type", {
   expect_error(.load_phenotype(tmpfile), "must be a data frame or AnnotatedDataFrame")
   unlink(tmpfile)
 })
+
+test_that("load data works as expected", {
+  nullmod_file <- system.file("extdata", "null_model.RData", package="shinyNullModel")
+  nm <- .load_null_model(nullmod_file)
+  phenotype_file <- system.file("extdata", "phenotype.RData", package="shinyNullModel")
+  phen <- .load_phenotype(phenotype_file)
+  out <- .load_data(nullmod_file, phenotype_file)
+  expect_s3_class(out, "tbl_df")
+  expect_equal(nrow(out), nrow(nm))
+  expect_equal(out$sample.id, nm$sample.id)
+  expect_equal(names(out), unique(c("sample.id", names(nm), names(phen))))
+})
+
+test_that("load data works when null model has fewer samples than phenotype file", {
+  # Hacky, for now.
+  tmp <- get(load(system.file("extdata", "null_model.RData", package="shinyNullModel")))
+  tmp$fit <- tmp$fit[1:10, ]
+  tmpfile <- tempfile()
+  save(tmp, file = tmpfile)
+  nm <- .load_null_model(tmpfile)
+  phenotype_file <- system.file("extdata", "phenotype.RData", package="shinyNullModel")
+  phen <- .load_phenotype(phenotype_file)
+  out <- .load_data(tmpfile, phenotype_file)
+  expect_s3_class(out, "tbl_df")
+  expect_equal(nrow(out), 10)
+  expect_equal(out$sample.id, nm$sample.id)
+  expect_equal(names(out), unique(c("sample.id", names(nm), names(phen))))
+  unlink(tmpfile)
+})
+
+test_that("load data fails when null model has more samples than phenotype file", {
+  nullmod_file <- system.file("extdata", "null_model.RData", package="shinyNullModel")
+  nm <- .load_null_model(nullmod_file)
+  tmp <- get(load(system.file("extdata", "phenotype.RData", package="shinyNullModel")))
+  tmp <- tmp[1:10, ]
+  tmpfile <- tempfile()
+  save(tmp, file = tmpfile)
+  expect_error(.load_data(nullmod_file, tmpfile), "must contain all sample.ids")
+  unlink(tmpfile)
+})
