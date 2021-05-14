@@ -10,9 +10,13 @@ app_ui <- function(request) {
     golem_add_external_resources(),
     # Your application UI logic
     fluidPage(
-      h1("shinyNullModel"),
-      mod_data_loader_ui("data_loader_ui_1"),
-      mod_plot_ui("plot_ui_1")
+      titlePanel("shinyNullModel"),
+      sidebarPanel(
+        mod_data_loader_ui("data_loader_ui_1")
+      ),
+      mainPanel(
+        mod_plot_ui("plot_ui_1")
+      )
     )
   )
 }

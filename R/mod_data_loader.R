@@ -10,7 +10,11 @@
 mod_data_loader_ui <- function(id){
   ns <- NS(id)
   tagList(
-
+      h2("Load data"),
+      fileInput("null_model_file", label = "Null model file", accept = ".RData"),
+      fileInput("phenotype_file", label = "Phenotype file", accept = ".RData"),
+      # Grey this out until both files are uploaded?
+      actionButton("load_data", "Load data")
   )
 }
 
