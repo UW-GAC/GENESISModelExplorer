@@ -13,7 +13,7 @@
 
   null_model <- tmp$fit %>%
     # Change names to have prefix "Model: "
-    dplyr::rename_with(.fn = ~ paste0("Model: ", .x), -sample.id) %>%
+    dplyr::rename_with(.fn = ~ paste0("Model: ", .x), -.data$sample.id) %>%
     tibble::as_tibble()
   # No rownames.
   rownames(null_model) <- NULL
@@ -35,17 +35,17 @@
   }
   phen <- tmp %>%
     # Change names to have prefix "Phenotype: "
-    dplyr::rename_with(.fn = ~ paste0("Phenotype: ", .x), -sample.id) %>%
+    dplyr::rename_with(.fn = ~ paste0("Phenotype: ", .x), -.data$sample.id) %>%
     tibble::as_tibble()
 }
 
 .load_data <- function(null_model_filename, phenotype_filename) {
-  null_model <- .load_null_model(null_model_file)
-  phen <- .load_phenotype(phenotype_file)
+  null_model <- .load_null_model(null_model_filename)
+  phen <- .load_phenotype(phenotype_filename)
   # TODO: Check that sample sets are compatible.
   dat <- null_model %>%
     dplyr::inner_join(phen, by = "sample.id") %>%
-    dplyr::select(sample.id, everything())
+    dplyr::select(.data$sample.id, tidyselect::everything())
 
   dat
 }

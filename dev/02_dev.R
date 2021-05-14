@@ -17,8 +17,13 @@
 ## Add one line by package you want to add as dependency
 usethis::use_package( "rlang" )
 usethis::use_package( "dplyr" )
+usethis::use_package( "stringr" )
 usethis::use_package( "ggplot2" )
+usethis::use_package( "tibble" )
+usethis::use_package( "tidyselect" )
 usethis::use_package( "charlatan", type = "Suggests" ) # For fake data.
+# Different command for pipes.
+usethis::use_pipe(export = FALSE)
 # Manually add "BiocViews:" to the description.
 # I'm not sure how to do this through the golem/usethis framework.
 usethis::use_package( "Biobase", type = "Suggests" )
