@@ -13,7 +13,8 @@
 
   null_model <- tmp$fit %>%
     # Change names to have prefix "Model: "
-    dplyr::rename_with(.fn = ~ paste0("Model: ", .x), -sample.id)
+    dplyr::rename_with(.fn = ~ paste0("Model: ", .x), -sample.id) %>%
+    tibble::as_tibble()
   # No rownames.
   rownames(null_model) <- NULL
   null_model
