@@ -20,9 +20,35 @@
   null_model
 }
 
-.load_phenotype_file <- function(filename) {}
+.load_phenotype <- function(filename) {
+  tmp <- get(load(filename))
+  # Convert to data frame if necessary.
+  if (class(tmp) == "AnnotatedDataFrame") tmp <- Biobase::pData(tmp)
+  if (!("data.frame" %in% class(tmp))) {
+    err <- "Phenotype file must be a data frame or AnnotatedDataFrame."
+    stop(err)
+  }
+  # Check if sample.id exists.
+  if (!("sample.id" %in% names(tmp))) {
+    err <- "Phenotype file must include sample.id."
+    stop(err)
+  }
+  phen <- tmp %>%
+    # Change names to have prefix "Phenotype: "
+    dplyr::rename_with(.fn = ~ paste0("Phenotype: ", .x), -sample.id) %>%
+    tibble::as_tibble()
+}
 
-.load_data <- function(null_model_filename, phenotype_filename) {}
+.load_data <- function(null_model_filename, phenotype_filename) {
+  null_model <- .load_null_model(null_model_file)
+  phen <- .load_phenotype(phenotype_file)
+  # TODO: Check that sample sets are compatible.
+  dat <- null_model %>%
+    dplyr::inner_join(phen, by = "sample.id") %>%
+    dplyr::select(sample.id, everything())
+
+  dat
+}
 
 .check_null_model <- function(null_model) {}
 
