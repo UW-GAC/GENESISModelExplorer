@@ -27,11 +27,6 @@ mod_data_loader_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
-    # Report if button was pressed in the console.
-    observe({
-        print(input$load_data_button)
-    })
-
     # Load the data when the user selects a null model and phenotype file.
     data_reactive <- eventReactive(input$load_data_button, {
 
