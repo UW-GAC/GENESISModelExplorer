@@ -53,7 +53,8 @@ usethis::use_data_raw( name = "null_model", open = FALSE )
 
 # ## Tests ----
 # ## Add one line by test you want to create
-usethis::use_test( "mod-data-loader" )
+usethis::use_test( "mod-data-loader-fct" )
+usethis::use_test( "mod-data-loader-server" )
 
 
 # # Documentation
