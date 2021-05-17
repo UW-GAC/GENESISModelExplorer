@@ -14,11 +14,8 @@ mod_data_loader_ui <- function(id){
       fileInput(ns("null_model_file"), label = "Null model file", accept = ".RData"),
       fileInput(ns("phenotype_file"), label = "Phenotype file", accept = ".RData"),
       # TODO: Grey this out until both files are uploaded?
-      #actionButton(ns("load_data_button"), "Load data")
+      actionButton(ns("load_data_button"), "Load data"),
 
-      # actionButton(ns("load_data_button"), "Load data"),
-      # # For now - just so we can see that the data loaded.
-      # verbatimTextOutput("text", placeholder = TRUE)
       tableOutput(ns("data_head"))
   )
 }
@@ -30,8 +27,13 @@ mod_data_loader_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
+    # Report if button was pressed in the console.
+    observe({
+        print(input$load_data_button)
+    })
+
     # Load the data when the user selects a null model and phenotype file.
-    data_reactive <- reactive({
+    data_reactive <- eventReactive(input$load_data_button, {
 
       print('checking data reactive')
       null_model_file <- input$null_model_file
