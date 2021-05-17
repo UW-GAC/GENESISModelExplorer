@@ -11,6 +11,7 @@ mod_data_loader_ui <- function(id){
   ns <- NS(id)
   tagList(
       h2("Load data"),
+      checkboxInput(ns("use_example_data"), label = "Use example data?"),
       fileInput(ns("null_model_file"), label = "Null model file", accept = ".RData"),
       fileInput(ns("phenotype_file"), label = "Phenotype file", accept = ".RData"),
       # TODO: Grey this out until both files are uploaded?
@@ -28,17 +29,25 @@ mod_data_loader_server <- function(id){
 
     # Load the data when the user selects a null model and phenotype file.
     data_reactive <- eventReactive(input$load_data_button, {
-
-      print('checking data reactive')
-      null_model_file <- input$null_model_file
-      phenotype_file <- input$phenotype_file
-
-      if (!is.null(null_model_file) & !is.null(phenotype_file)) {
-        print('loading data')
-        .load_data(null_model_file$datapath, phenotype_file$datapath)
+      print(input$use_example_data)
+      if (input$use_example_data) {
+        print("loading example data")
+        # TODO: May need to change this when deployed.
+        null_model_file = "inst/extdata/null_model.RData"
+        phenotype_file = "inst/extdata/phenotype.RData"
+        print(file.exists(null_model_file))
+        print(file.exists(phenotype_file))
+      } else if (!is.null(input$null_model_file) & !is.null(input$phenotype_file)) {
+        print("loading user data")
+        null_model_file <- input$null_model_file$datapath
+        phenotype_file <- input$phenotype_file$datapath
       } else {
+        print("inputs are wrong")
         return(NULL)
       }
+
+      print('loading data')
+      .load_data(null_model_file, phenotype_file)
     })
 
     output$data_loaded_message <- renderText(
