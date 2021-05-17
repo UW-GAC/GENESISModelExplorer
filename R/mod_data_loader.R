@@ -15,8 +15,7 @@ mod_data_loader_ui <- function(id){
       fileInput(ns("phenotype_file"), label = "Phenotype file", accept = ".RData"),
       # TODO: Grey this out until both files are uploaded?
       actionButton(ns("load_data_button"), "Load data"),
-
-      tableOutput(ns("data_head"))
+      textOutput(ns("data_loaded_message"))
   )
 }
 
@@ -42,9 +41,9 @@ mod_data_loader_server <- function(id){
       }
     })
 
-    output$data_head <- renderTable({
-      head(data_reactive())
-    })
+    output$data_loaded_message <- renderText(
+      sprintf("%s samples loaded", nrow(data_reactive()))
+    )
 
   })
 }
