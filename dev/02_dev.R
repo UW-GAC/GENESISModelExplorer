@@ -28,6 +28,12 @@ usethis::use_pipe(export = FALSE)
 # I'm not sure how to do this through the golem/usethis framework.
 usethis::use_package( "Biobase", type = "Suggests" )
 usethis::use_package( "GENESIS", type = "Suggests" )
+# Shiny tests
+usethis::use_package( "globals", type = "Suggests" ) # required by shinytest I guess
+usethis::use_package( "shinytest", type = "Suggests" )
+
+# For shiny test?
+shinytest::installDependencies()
 
 # ## Add modules ----
 # ## Create a module infrastructure in R/
