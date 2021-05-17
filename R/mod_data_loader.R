@@ -11,10 +11,15 @@ mod_data_loader_ui <- function(id){
   ns <- NS(id)
   tagList(
       h2("Load data"),
-      fileInput("null_model_file", label = "Null model file", accept = ".RData"),
-      fileInput("phenotype_file", label = "Phenotype file", accept = ".RData"),
-      # Grey this out until both files are uploaded?
-      actionButton("load_data", "Load data")
+      fileInput(ns("null_model_file"), label = "Null model file", accept = ".RData"),
+      fileInput(ns("phenotype_file"), label = "Phenotype file", accept = ".RData"),
+      # TODO: Grey this out until both files are uploaded?
+      #actionButton(ns("load_data_button"), "Load data")
+
+      # actionButton(ns("load_data_button"), "Load data"),
+      # # For now - just so we can see that the data loaded.
+      # verbatimTextOutput("text", placeholder = TRUE)
+      tableOutput(ns("data_head"))
   )
 }
 
@@ -24,6 +29,25 @@ mod_data_loader_ui <- function(id){
 mod_data_loader_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
+
+    # Load the data when the user selects a null model and phenotype file.
+    data_reactive <- reactive({
+
+      print('checking data reactive')
+      null_model_file <- input$null_model_file
+      phenotype_file <- input$phenotype_file
+
+      if (!is.null(null_model_file) & !is.null(phenotype_file)) {
+        print('loading data')
+        .load_data(null_model_file$datapath, phenotype_file$datapath)
+      } else {
+        return(NULL)
+      }
+    })
+
+    output$data_head <- renderTable({
+      head(data_reactive())
+    })
 
   })
 }
