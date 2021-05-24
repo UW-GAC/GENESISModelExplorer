@@ -33,8 +33,9 @@ mod_data_loader_server <- function(id){
       if (input$use_example_data) {
         print("loading example data")
         # TODO: May need to change this when deployed.
-        null_model_file = "inst/extdata/null_model.RData"
-        phenotype_file = "inst/extdata/phenotype.RData"
+        null_model_file = system.file("extdata", "null_model.RData", package = "shinyNullModel")
+
+        phenotype_file = system.file("extdata", "phenotype.RData", package = "shinyNullModel")
         print(file.exists(null_model_file))
         print(file.exists(phenotype_file))
       } else if (!is.null(input$null_model_file) & !is.null(input$phenotype_file)) {
