@@ -11,8 +11,16 @@ app_ui <- function(request) {
     # Your application UI logic
     fluidPage(
       titlePanel("shinyNullModel"),
-      mod_data_loader_ui("data_loader_ui_1"),
-      mod_var_selector_ui("var_selector_ui_1"),
+      hr(),
+      fluidRow(
+        column(4,
+          mod_data_loader_ui("data_loader_ui_1")
+        ),
+        column(8,
+          mod_var_selector_ui("var_selector_ui_1")
+        )
+      ),
+      hr(),
       mod_plot_ui("plot_ui_1")
     )
   )
