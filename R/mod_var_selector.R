@@ -24,8 +24,8 @@ mod_var_selector_server <- function(id, r){
     ns <- session$ns
 
     r$var_selector <- reactiveValues(
-      x = NULL,
-      y = NULL
+      x_var = NULL,
+      y_var = NULL
     )
     # Update x and y axis selections based on loaded data.
     observe({
@@ -36,5 +36,23 @@ mod_var_selector_server <- function(id, r){
       updateSelectInput(session, "y", choices = .get_variable_names(r$data_loader$dataset))
     })
 
+
+    observeEvent(input$x, {
+      print(input$x)
+      r$var_selector$x_var <- input$x
+    })
+
+    observeEvent(input$y, {
+      print(input$y)
+      r$var_selector$y_var <- input$y
+    })
+
+    #
+    # return(
+    #   list(
+    #     x_var = reactive({ input$x }),
+    #     y_var = reactive({ input$y })
+    #   )
+    # )
   })
 }
