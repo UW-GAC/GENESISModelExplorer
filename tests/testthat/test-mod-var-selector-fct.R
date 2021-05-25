@@ -14,3 +14,16 @@ test_that(".get_variable_names works properly", {
   names(x) <- names_with_colon
   expect_equal(.get_variable_names(x), names_with_colon[1:2])
 })
+
+
+test_that(".detect_variable_type works properly", {
+  expect_equal(.detect_variable_type(1:100), QUANTITATIVE) # integers
+  expect_equal(.detect_variable_type(rnorm(100)), QUANTITATIVE) # numeric
+  expect_equal(.detect_variable_type(sample(letters, 100, replace = T)), CATEGORICAL) # character
+  expect_equal(.detect_variable_type(sample(letters[1:2], 100, replace = T)), CATEGORICAL) # other character
+  expect_equal(.detect_variable_type(sample(0:1, 100, replace = T)), CATEGORICAL)
+  expect_equal(.detect_variable_type(sample(0:1, 100, replace = T), n_categories_threshold = 0), QUANTITATIVE)
+  expect_equal(.detect_variable_type(1:10, n_categories_threshold = 9), QUANTITATIVE)
+  expect_equal(.detect_variable_type(1:10, n_categories_threshold = 10), CATEGORICAL)
+  expect_equal(.detect_variable_type(1:10, n_categories_threshold = 11), CATEGORICAL)
+})
