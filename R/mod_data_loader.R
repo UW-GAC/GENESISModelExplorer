@@ -27,9 +27,15 @@ mod_data_loader_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
+    # Store reactive values in a reactive list.
+    r <- reactiveValues(
+      dataset = NULL,
+      data_loaded = FALSE,
+      data_loaded_message = NULL
+    )
+
     # Load the data when the user selects a null model and phenotype file.
-    data_reactive <- eventReactive(input$load_data_button, {
-      print(input$use_example_data)
+    observeEvent(input$load_data_button, {
       if (input$use_example_data) {
         print("loading example data")
         # TODO: May need to change this when deployed.
@@ -48,13 +54,12 @@ mod_data_loader_server <- function(id){
       }
 
       print('loading data')
-      .load_data(null_model_file, phenotype_file)
+      r$dataset <- .load_data(null_model_file, phenotype_file)
+      r$data_loaded <- TRUE
+      r$data_loaded_message <- sprintf("%s samples loaded", nrow(r$dataset))
     })
 
-    output$data_loaded_message <- renderText(
-      sprintf("%s samples loaded", nrow(data_reactive()))
-    )
-
+    output$data_loaded_message <- renderText(r$data_loaded_message)
   })
 }
 
