@@ -10,7 +10,9 @@
 mod_var_selector_ui <- function(id){
   ns <- NS(id)
   tagList(
-
+    h2("Plot setup"),
+    selectInput(ns("x"), label = "x axis", choices = NULL),
+    selectInput(ns("y"), label = "y axis", choices = NULL)
   )
 }
 
