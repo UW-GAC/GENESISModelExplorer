@@ -23,12 +23,12 @@ mod_data_loader_ui <- function(id){
 #' data_loader Server Functions
 #'
 #' @noRd
-mod_data_loader_server <- function(id){
+mod_data_loader_server <- function(id, r){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
     # Store reactive values in a reactive list.
-    r <- reactiveValues(
+    r$data_loader <- reactiveValues(
       dataset = NULL,
       data_loaded = FALSE,
       data_loaded_message = NULL
@@ -54,12 +54,12 @@ mod_data_loader_server <- function(id){
       }
 
       print('loading data')
-      r$dataset <- .load_data(null_model_file, phenotype_file)
-      r$data_loaded <- TRUE
-      r$data_loaded_message <- sprintf("%s samples loaded", nrow(r$dataset))
+      r$data_loader$dataset <- .load_data(null_model_file, phenotype_file)
+      r$data_loader$data_loaded <- TRUE
+      r$data_loader$data_loaded_message <- sprintf("%s samples loaded", nrow(r$data_loader$dataset))
     })
 
-    output$data_loaded_message <- renderText(r$data_loaded_message)
+    output$data_loaded_message <- renderText(r$data_loader$data_loaded_message)
   })
 }
 
