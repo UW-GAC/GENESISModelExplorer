@@ -10,6 +10,7 @@
 mod_plot_ui <- function(id){
   ns <- NS(id)
   tagList(
+    actionButton(ns("plot_button"), "Generate plot"),
     plotOutput(ns("plot"))
   )
 }
@@ -24,7 +25,8 @@ mod_plot_server <- function(id, r){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
-    plot_obj <- reactive({
+    plot_obj <- eventReactive(input$plot_button, {
+      print("here")
       .generate_plot(r$data_loader$dataset, r$var_selector$x_var, r$var_selector$y_var)
     })
 
