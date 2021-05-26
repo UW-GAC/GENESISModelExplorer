@@ -32,6 +32,9 @@ test_that("generate plot with xvar and group",{
   # bar plot
   expect_doppelganger("x barplot grouped", .generate_plot(dat, "c", group = "d"))
   # not allowed - grouping by a quantitative variable.
+  expect_error(.generate_plot(dat, "a", group = "a"), "Cannot group")
+  expect_error(.generate_plot(dat, "a", group = "b"), "Cannot group")
+  expect_error(.generate_plot(dat, "c", group = "a"), "Cannot group")
 })
 
 
@@ -75,5 +78,12 @@ test_that("generate plot with group specified", {
   expect_doppelganger("xy flipped boxplot grouped", .generate_plot(dat, "a", "c", group = "group"))
   # errors
   expect_error(.generate_plot(dat, "c", "d", group = "group"), "two categorical variables")
+  expect_error(.generate_plot(dat, "a", "b", group = "a"), "Cannot group")
+  expect_error(.generate_plot(dat, "a", "b", group = "b"), "Cannot group")
+  expect_error(.generate_plot(dat, "a", "b", group = "e"), "Cannot group")
+  expect_error(.generate_plot(dat, "c", "a", group = "a"), "Cannot group")
+  expect_error(.generate_plot(dat, "c", "a", group = "b"), "Cannot group")
+  expect_error(.generate_plot(dat, "a", "c", group = "a"), "Cannot group")
+  expect_error(.generate_plot(dat, "a", "c", group = "b"), "Cannot group")
 
 })

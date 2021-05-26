@@ -10,6 +10,10 @@
   # This is using functions in the var_selector module. TODO: improve this?
   type_x <- .detect_variable_type(dat[[x_var]])
 
+  if (!is.null(group) && .detect_variable_type(dat[[group]]) == QUANTITATIVE) {
+    stop("Cannot group by a quantitative variable.")
+  }
+
   if (is.null(y_var)) {
     p <- ggplot(dat, aes_string(x = as.name(x_var)))
     if (type_x == QUANTITATIVE) {
