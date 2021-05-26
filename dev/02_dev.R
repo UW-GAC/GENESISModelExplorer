@@ -31,6 +31,7 @@ usethis::use_package( "GENESIS", type = "Suggests" )
 # Shiny tests
 usethis::use_package( "globals", type = "Suggests" ) # required by shinytest I guess
 usethis::use_package( "shinytest", type = "Suggests" )
+usethis::use_package( "vdiffr", type = "Suggests" ) # for testing plots
 
 # For shiny test?
 shinytest::installDependencies()
