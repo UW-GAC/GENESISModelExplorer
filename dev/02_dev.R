@@ -39,7 +39,7 @@ shinytest::installDependencies()
 # ## Create a module infrastructure in R/
 golem::add_module( name = "data_loader", fct = "load" ) # Name of the module
 golem::add_module( name = "var_selector", fct = "select" ) # Name of the module
-golem::add_module( name = "plot" )
+golem::add_module( name = "plot", fct = "plots" )
 
 # ## Add helper functions ----
 # ## Creates fct_* and utils_*

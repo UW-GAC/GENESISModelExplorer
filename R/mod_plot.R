@@ -25,13 +25,7 @@ mod_plot_server <- function(id, r){
     ns <- session$ns
 
     plot_obj <- reactive({
-      dat <- r$data_loader$dataset
-      x_var <- r$var_selector$x_var
-      y_var <- r$var_selector$y_var
-
-      p <- ggplot(dat, aes_string(x = as.name(x_var), y = as.name(y_var))) +
-        geom_point()
-      return(p)
+      .generate_plot(r$data_loader$dataset, r$var_selector$x_var, r$var_selector$y_var)
     })
 
     output$plot <- renderPlot({
