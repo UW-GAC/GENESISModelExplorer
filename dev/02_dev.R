@@ -64,6 +64,8 @@ usethis::use_test( "mod-data-loader-fct" )
 usethis::use_test( "mod-data-loader-server" )
 usethis::use_test( "mod-var-selector-fct" )
 usethis::use_test( "mod-var-selector-server" )
+usethis::use_test( "mod-plot-fct" )
+usethis::use_test( "mod-plot-server" )
 
 # # Documentation
 #
