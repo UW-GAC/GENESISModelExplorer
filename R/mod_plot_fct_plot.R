@@ -8,8 +8,8 @@
 #' @importFrom ggplot2 coord_flip
 .generate_plot <- function(dat, x_var, y_var, group = NULL) {
   # This is using functions in the var_selector module. TODO: improve this?
-  print(type_x <- .detect_variable_type(dat[[x_var]]))
-  print(type_y <- .detect_variable_type(dat[[y_var]]))
+  type_x <- .detect_variable_type(dat[[x_var]])
+  type_y <- .detect_variable_type(dat[[y_var]])
 
   p <- ggplot(dat, aes_string(x = as.name(x_var), y = as.name(y_var)))
   if (type_x == QUANTITATIVE & type_y == QUANTITATIVE) {
