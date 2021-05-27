@@ -12,7 +12,8 @@ mod_var_selector_ui <- function(id){
   tagList(
     h2("Plot setup"),
     selectInput(ns("x"), label = "x axis", choices = NULL),
-    selectInput(ns("y"), label = "y axis", choices = NULL)
+    selectInput(ns("y"), label = "y axis", choices = NULL),
+    selectInput(ns("group"), label = "group by", choices = NULL)
   )
 }
 
@@ -36,6 +37,11 @@ mod_var_selector_server <- function(id, r){
       updateSelectInput(session, "y", choices = .get_variable_names(r$data_loader$dataset))
     })
 
+    observe({
+      var_types <- sapply(r$data_loader$dataset, .detect_variable_type)
+      categorical_variables <- names(var_types)[var_types == CATEGORICAL]
+      updateSelectInput(session, "group", choices = categorical_variables)
+    })
 
     observeEvent(input$x, {
       print(input$x)
