@@ -11,5 +11,5 @@ app_server <- function( input, output, session ) {
   # Your application server logic
   dataset <- mod_data_loader_server("data_loader_ui_1")
   mod_var_selector_server("var_selector_ui_1", r, dataset)
-  mod_plot_server("plot_ui_1", r)
+  mod_plot_server("plot_ui_1", r, dataset)
 }

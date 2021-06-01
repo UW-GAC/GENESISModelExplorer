@@ -21,13 +21,13 @@ mod_plot_ui <- function(id){
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 aes_string
 #' @importFrom ggplot2 geom_point
-mod_plot_server <- function(id, r){
+mod_plot_server <- function(id, r, dataset){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
     plot_obj <- eventReactive(input$plot_button, {
       print("here")
-      .generate_plot(r$data_loader$dataset, r$var_selector$x_var, r$var_selector$y_var)
+      .generate_plot(dataset(), r$var_selector$x_var, r$var_selector$y_var)
     })
 
     output$plot <- renderPlot({
