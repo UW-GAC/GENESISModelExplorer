@@ -81,6 +81,10 @@ test_that("fails when only phenotype file is specified", {
 })
 app$stop()
 
+test_that("return value?", {
+  skip("add test?")
+})
+
 # test_that("fails to load user data when only one file is specified", {
 # })
 
