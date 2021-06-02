@@ -9,6 +9,8 @@ test_that("loads example data", {
     session$setInputs(load_data_button = TRUE)
     expect_equal(data_reactive(), dat)
     expect_equal(output$data_loaded_message, "900 samples loaded")
+    returned <- session$getReturned()
+    expect_equal(returned(), dat)
   })
 })
 
@@ -18,6 +20,8 @@ test_that("does not load without button - example data", {
     session$setInputs(use_example_data = TRUE)
     # Is this appropriate?
     expect_error(data_reactive())
+    returned <- session$getReturned()
+    expect_error(returned())
   })
 })
 
@@ -31,6 +35,8 @@ test_that("does not load without button - user data", {
     session$setInputs(phenotype_file = list(datapath = pheno_file))
     # Is this appropriate?
     expect_error(data_reactive())
+    returned <- session$getReturned()
+    expect_error(returned())
   })
 })
 
@@ -45,13 +51,17 @@ test_that("loads user data", {
   null_model$fit <- null_model$fit[1:100, ]
   save(null_model, file = user_nullmod_file)
 
+  dat <- .load_data(user_nullmod_file, user_pheno_file)
+
   testServer(mod_data_loader_server, {
     session$setInputs(use_example_data = FALSE)
     session$setInputs(null_model_file = list(datapath = user_nullmod_file))
     session$setInputs(phenotype_file = list(datapath = user_pheno_file))
     session$setInputs(load_data_button = TRUE)
-    expect_equal(data_reactive(), .load_data(user_nullmod_file, user_pheno_file))
+    expect_equal(data_reactive(), dat)
     expect_equal(output$data_loaded_message, "100 samples loaded")
+    returned <- session$getReturned()
+    expect_equal(returned(), dat)
   })
 })
 
@@ -72,6 +82,8 @@ test_that("fails when only null model file is specified", {
     session$setInputs(load_data_button = TRUE)
     expect_equal(data_reactive(), NULL)
     expect_equal(output$data_loaded_message, "")
+    returned <- session$getReturned()
+    expect_equal(returned(), NULL)
   })
 })
 
@@ -92,6 +104,8 @@ test_that("fails when only phenotype file is specified", {
     session$setInputs(load_data_button = TRUE)
     expect_equal(data_reactive(), NULL)
     expect_equal(output$data_loaded_message, "")
+    returned <- session$getReturned()
+    expect_equal(returned(), NULL)
   })
 })
 
@@ -108,16 +122,16 @@ test_that("loads example data over user data when box is checked", {
   null_model$fit <- null_model$fit[1:100, ]
   save(null_model, file = user_nullmod_file)
 
+  dat <- .load_data(example_nullmod_file, example_pheno_file)
+
   testServer(mod_data_loader_server, {
     session$setInputs(use_example_data = TRUE)
     session$setInputs(null_model_file = list(datapath = user_nullmod_file))
     session$setInputs(phenotype_file = list(datapath = user_pheno_file))
     session$setInputs(load_data_button = TRUE)
-    expect_equal(data_reactive(), .load_data(example_nullmod_file, example_pheno_file))
+    expect_equal(data_reactive(), dat)
     expect_equal(output$data_loaded_message, "900 samples loaded")
+    returned <- session$getReturned()
+    expect_equal(returned(), dat)
   })
 })
-
-# test_that("return value?", {
-#   skip("add test?")
-# })
