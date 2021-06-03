@@ -1,9 +1,9 @@
 # Test data for tests.
 testdata <- tibble::tibble(
-  a = rnorm(100),
-  b = rnorm(100),
-  c = sample(letters[1:3], 100, replace = T),
-  d = sample(letters[1:3], 100, replace = T)
+  quant1 = rnorm(100),
+  quant2 = rnorm(100),
+  cat1 = sample(letters[1:3], 100, replace = T),
+  cat2 = sample(letters[1:3], 100, replace = T)
 )
 
 
@@ -12,7 +12,7 @@ test_that("test plot is created with x variable only", {
   n <- 100
   dat <- reactiveVal(testdata)
   selected <- list(
-    x_var = reactiveVal("a"),
+    x_var = reactiveVal("quant1"),
     y_var = reactiveVal(""),
     group_var = reactiveVal(""),
     facet_var = reactive("")
@@ -31,9 +31,9 @@ test_that("test plot is created with x and group variables only", {
   n <- 100
   dat <- reactiveVal(testdata)
   selected <- list(
-    x_var = reactiveVal("a"),
+    x_var = reactiveVal("quant1"),
     y_var = reactiveVal(""),
-    group_var = reactiveVal("c"),
+    group_var = reactiveVal("cat1"),
     facet_var = reactive("")
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
@@ -44,13 +44,14 @@ test_that("test plot is created with x and group variables only", {
     # Note that this does not test if the plot is correct. We'll need to add snapshot tests for that.
   })
 })
+
 test_that("test plot is created with x and y variables", {
   # Reactive input arguments
   n <- 100
   dat <- reactiveVal(testdata)
   selected <- list(
-    x_var = reactiveVal("a"),
-    y_var = reactiveVal("b"),
+    x_var = reactiveVal("quant1"),
+    y_var = reactiveVal("quant2"),
     group_var = reactiveVal(""),
     facet_var = reactive("")
   )
@@ -68,9 +69,9 @@ test_that("test plot is created with x, y, and group variables", {
   n <- 100
   dat <- reactiveVal(testdata)
   selected <- list(
-    x_var = reactiveVal("a"),
-    y_var = reactiveVal("b"),
-    group_var = reactiveVal("c"),
+    x_var = reactiveVal("quant1"),
+    y_var = reactiveVal("quant2"),
+    group_var = reactiveVal("cat1"),
     facet_var = reactive("")
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
@@ -82,16 +83,15 @@ test_that("test plot is created with x, y, and group variables", {
   })
 })
 
-
 test_that("test plot is created with x, y, and facet variables", {
   # Reactive input arguments
   n <- 100
   dat <- reactiveVal(testdata)
   selected <- list(
-    x_var = reactiveVal("a"),
-    y_var = reactiveVal("b"),
+    x_var = reactiveVal("quant1"),
+    y_var = reactiveVal("quant2"),
     group_var = reactiveVal(""),
-    facet_var = reactive("d")
+    facet_var = reactive("cat2")
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -102,16 +102,15 @@ test_that("test plot is created with x, y, and facet variables", {
   })
 })
 
-
 test_that("test plot is created with x, y, group, and facet variables", {
   # Reactive input arguments
   n <- 100
   dat <- reactiveVal(testdata)
   selected <- list(
-    x_var = reactiveVal("a"),
-    y_var = reactiveVal("b"),
-    group_var = reactiveVal("c"),
-    facet_var = reactive("d")
+    x_var = reactiveVal("quant1"),
+    y_var = reactiveVal("quant2"),
+    group_var = reactiveVal("cat1"),
+    facet_var = reactive("cat2")
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
