@@ -42,7 +42,8 @@ mod_var_selector_server <- function(id, dataset){
     return(
       list(
         x_var = reactive({ input$x }),
-        y_var = reactive({ input$y })
+        y_var = reactive({ input$y }),
+        group_var = reactive({ input$group })
       )
     )
   })
