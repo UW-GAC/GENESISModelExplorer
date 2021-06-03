@@ -10,7 +10,8 @@ dat <- data.frame(
   cat1 = sample(letters[1:3], n, replace = T),
   cat2 = sample(letters[1:3], n, replace = T),
   group = sample(letters[1:3], n, replace = T),
-  quant3 = rnorm(n)
+  quant3 = rnorm(n),
+  facet = sample(letters[1:3], n, replace = T)
 )
 
 test_that(".check_truthiness", {
@@ -39,6 +40,27 @@ test_that("generate plot with xvar and group",{
   expect_error(.generate_plot(dat, "cat1", group_var = "quant1"), "Cannot group")
 })
 
+test_that("generate plot with xvar and facet",{
+  # histogram
+  expect_doppelganger("x histogram faceted", .generate_plot(dat, "quant1", facet_var = "facet"))
+  # bar plot
+  expect_doppelganger("x barplot faceted", .generate_plot(dat, "cat1", facet_var = "facet"))
+  # not allowed - grouping by a quantitative variable.
+  expect_error(.generate_plot(dat, "quant1", facet_var = "quant1"), "Cannot facet")
+  expect_error(.generate_plot(dat, "quant1", facet_var = "quant2"), "Cannot facet")
+  expect_error(.generate_plot(dat, "cat1", facet_var = "quant1"), "Cannot facet")
+})
+
+test_that("generate plot with xvar, group, facet",{
+  # histogram
+  expect_doppelganger("x histogram grouped faceted", .generate_plot(dat, "quant1", group_var = "group", facet_var = "facet"))
+  # bar plot
+  expect_doppelganger("x barplot grouped faceted", .generate_plot(dat, "cat1", group_var = "group", facet_var = "facet"))
+  # not allowed - grouping by a quantitative variable.
+  expect_error(.generate_plot(dat, "quant1", facet_var = "quant1"), "Cannot facet")
+  expect_error(.generate_plot(dat, "quant1", facet_var = "quant2"), "Cannot facet")
+  expect_error(.generate_plot(dat, "cat1", facet_var = "quant1"), "Cannot facet")
+})
 
 test_that("generate plot with xvar and yvar only", {
   # scatterplot
@@ -51,7 +73,7 @@ test_that("generate plot with xvar and yvar only", {
   expect_error(.generate_plot(dat, "cat1", "cat2"), "two categorical variables")
 })
 
-test_that("generate plot with group specified", {
+test_that("generate xy plot with group specified", {
   # scatterplot
   expect_doppelganger("xy scatterplot grouped", .generate_plot(dat, "quant1", "quant2", group_var = "group"))
   # boxplot
@@ -70,6 +92,25 @@ test_that("generate plot with group specified", {
 
 })
 
+test_that("generate xy plot with facet specified", {
+  # scatterplot
+  expect_doppelganger("xy scatterplot faceted", .generate_plot(dat, "quant1", "quant2", facet_var = "facet"))
+  # boxplot
+  expect_doppelganger("xy boxplot faceted", .generate_plot(dat, "cat1", "quant1", facet_var = "facet"))
+  # flipped boxplot
+  expect_doppelganger("xy flipped boxplot faceted", .generate_plot(dat, "quant1", "cat1", facet_var = "facet"))
+  # errors
+  expect_error(.generate_plot(dat, "cat1", "cat2", group_var = "group"), "two categorical variables")
+  expect_error(.generate_plot(dat, "quant1", "quant2", facet_var = "quant1"), "Cannot facet")
+  expect_error(.generate_plot(dat, "quant1", "quant2", facet_var = "quant2"), "Cannot facet")
+  expect_error(.generate_plot(dat, "quant1", "quant2", facet_var = "quant3"), "Cannot facet")
+  expect_error(.generate_plot(dat, "cat1", "quant1", facet_var = "quant1"), "Cannot facet")
+  expect_error(.generate_plot(dat, "cat1", "quant1", facet_var = "quant2"), "Cannot facet")
+  expect_error(.generate_plot(dat, "quant1", "cat1", facet_var = "quant1"), "Cannot facet")
+  expect_error(.generate_plot(dat, "quant1", "cat1", facet_var = "quant2"), "Cannot facet")
+
+})
+
 test_that("variable names with spaces", {
   tmp_dat <- dat
   names(tmp_dat) <- paste("var", names(tmp_dat))
@@ -77,8 +118,10 @@ test_that("variable names with spaces", {
   # no y variable
   .generate_plot(tmp_dat, "var quant1") # histogram
   .generate_plot(tmp_dat, "var cat1") # bar plot
-  .generate_plot(tmp_dat, "var quant1", group_var = "var cat1") # grouped histogram
-  .generate_plot(tmp_dat, "var cat1", group_var = "var cat2") # grouped bar plot
+  .generate_plot(tmp_dat, "var quant1", group_var = "var group") # grouped histogram
+  .generate_plot(tmp_dat, "var cat1", group_var = "var group") # grouped bar plot
+  .generate_plot(tmp_dat, "var quant1", facet_var = "var facet") # grouped histogram
+  .generate_plot(tmp_dat, "var cat1", facet_var = "var facet") # grouped bar plot
   # with y variable
   .generate_plot(tmp_dat, "var quant1", "var quant2") # scatterplot
   .generate_plot(tmp_dat, "var cat1", "var quant1") # boxplot
@@ -86,5 +129,8 @@ test_that("variable names with spaces", {
   .generate_plot(tmp_dat, "var quant1", "var quant2", group_var = "var group") # grouped scatterplot
   .generate_plot(tmp_dat, "var cat1", "var quant1", group_var = "var group") # grouped boxplot
   .generate_plot(tmp_dat, "var quant1", "var cat1", group_var = "var group") # grouped flipped boxplot
+  .generate_plot(tmp_dat, "var quant1", "var quant2", facet_var = "var facet") # faceted scatterplot
+  .generate_plot(tmp_dat, "var cat1", "var quant1", facet_var = "var facet") # faceted boxplot
+  .generate_plot(tmp_dat, "var quant1", "var cat1", facet_var = "var facet") # faceted flipped boxplot
   expect_true(TRUE)
 })
