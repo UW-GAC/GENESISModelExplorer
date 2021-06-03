@@ -14,7 +14,8 @@ test_that("test plot is created with x variable only", {
   selected <- list(
     x_var = reactiveVal("a"),
     y_var = reactiveVal(""),
-    group_var = reactiveVal("")
+    group_var = reactiveVal(""),
+    facet_var = reactive("")
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -32,7 +33,8 @@ test_that("test plot is created with x and group variables only", {
   selected <- list(
     x_var = reactiveVal("a"),
     y_var = reactiveVal(""),
-    group_var = reactiveVal("c")
+    group_var = reactiveVal("c"),
+    facet_var = reactive("")
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -49,7 +51,8 @@ test_that("test plot is created with x and y variables", {
   selected <- list(
     x_var = reactiveVal("a"),
     y_var = reactiveVal("b"),
-    group_var = reactiveVal("")
+    group_var = reactiveVal(""),
+    facet_var = reactive("")
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -67,7 +70,48 @@ test_that("test plot is created with x, y, and group variables", {
   selected <- list(
     x_var = reactiveVal("a"),
     y_var = reactiveVal("b"),
-    group_var = reactiveVal("c")
+    group_var = reactiveVal("c"),
+    facet_var = reactive("")
+  )
+  testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
+    # No plot to begin with
+    expect_error(output$plot)
+    session$setInputs(plot_button = TRUE)
+    output$plot # Confirm that the plot can be accessed without an error.
+    # Note that this does not test if the plot is correct. We'll need to add snapshot tests for that.
+  })
+})
+
+
+test_that("test plot is created with x, y, and facet variables", {
+  # Reactive input arguments
+  n <- 100
+  dat <- reactiveVal(testdata)
+  selected <- list(
+    x_var = reactiveVal("a"),
+    y_var = reactiveVal("b"),
+    group_var = reactiveVal(""),
+    facet_var = reactive("d")
+  )
+  testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
+    # No plot to begin with
+    expect_error(output$plot)
+    session$setInputs(plot_button = TRUE)
+    output$plot # Confirm that the plot can be accessed without an error.
+    # Note that this does not test if the plot is correct. We'll need to add snapshot tests for that.
+  })
+})
+
+
+test_that("test plot is created with x, y, group, and facet variables", {
+  # Reactive input arguments
+  n <- 100
+  dat <- reactiveVal(testdata)
+  selected <- list(
+    x_var = reactiveVal("a"),
+    y_var = reactiveVal("b"),
+    group_var = reactiveVal("c"),
+    facet_var = reactive("d")
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with

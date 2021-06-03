@@ -29,7 +29,15 @@ mod_plot_server <- function(id, dataset, selections){
       x_var <- .check_truthiness(selections$x_var())
       y_var <- .check_truthiness(selections$y_var())
       group_var <- .check_truthiness(selections$group_var())
-      .generate_plot(dataset(), x_var, y_var, group_var)
+      facet_var <- .check_truthiness(selections$facet_var())
+      
+      .generate_plot(
+        dataset(),
+        x_var,
+        y_var,
+        group_var = group_var,
+        facet_var = facet_var
+      )
     })
 
     output$plot <- renderPlot({
