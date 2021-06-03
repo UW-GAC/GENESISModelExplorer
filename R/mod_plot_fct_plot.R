@@ -29,6 +29,12 @@
   } else if (!is.null(group_var)) {
     group_var_str <- as.name(group_var)
   }
+  facet_var_str <- NULL
+  if (!is.null(facet_var) && .detect_variable_type(dat[[facet_var]]) == QUANTITATIVE) {
+    stop("Cannot facet by a quantitative variable.")
+  } else if (!is.null(facet_var)) {
+    facet_var_str <- as.name(facet_var)
+  }
 
 
   if (is.null(y_var)) {
