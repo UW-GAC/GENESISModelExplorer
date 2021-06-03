@@ -27,29 +27,23 @@ mod_var_selector_server <- function(id, dataset){
 
     # Update x and y axis selections based on loaded data.
     observe({
-      updateSelectInput(session, "x", choices = .get_variable_names(dataset()))
-      updateSelectInput(session, "y", choices = .get_variable_names(dataset()))
-      # group by categorical variables only.
+      # Get variable types.
       var_types <- sapply(dataset(), .detect_variable_type)
+      var_types <- var_types[names(var_types) != "sample.id"]
+
+      updateSelectInput(session, "x", choices = names(var_types))
+      updateSelectInput(session, "y", choices = names(var_types))
+
+      # group by categorical variables only.
       categorical_variables <- names(var_types)[var_types == CATEGORICAL]
       updateSelectInput(session, "group", choices = categorical_variables)
     })
 
-    # observeEvent(input$x, {
-    #   print(input$x)
-    #   r$var_selector$x_var <- input$x
-    # })
-    #
-    # observeEvent(input$y, {
-    #   print(input$y)
-    #   r$var_selector$y_var <- input$y
-    # })
-
-
     return(
       list(
         x_var = reactive({ input$x }),
-        y_var = reactive({ input$y })
+        y_var = reactive({ input$y }),
+        group_var = reactive({ input$group })
       )
     )
   })
