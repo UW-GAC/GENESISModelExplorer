@@ -87,3 +87,31 @@ test_that("generate plot with group specified", {
   expect_error(.generate_plot(dat, "a", "c", group_var = "b"), "Cannot group")
 
 })
+
+test_that("variable names with spaces", {
+  set.seed(123)
+  n <- 100
+  dat <- data.frame(
+    a = rnorm(n),
+    b = rnorm(n),
+    c = sample(letters[1:3], n, replace = T),
+    d = sample(letters[1:3], n, replace = T),
+    group = sample(letters[1:3], n, replace = T),
+    e = rnorm(n)
+  )
+  names(dat) <- paste("var", names(dat))
+  # No errors:
+  # no y variable
+  .generate_plot(dat, "var a") # histogram
+  .generate_plot(dat, "var c") # bar plot
+  .generate_plot(dat, "a", group_var = "c") # grouped histogram
+  .generate_plot(dat, "c", group_var = "d") # grouped bar plot
+  # with y variable
+  .generate_plot(dat, "var a", "var b") # scatterplot
+  .generate_plot(dat, "var c", "var a") # boxplot
+  .generate_plot(dat, "var a", "var c") # flipped boxplot
+  .generate_plot(dat, "var a", "var b", group_var = "var group") # grouped scatterplot
+  .generate_plot(dat, "var c", "var a", group_var = "var group") # grouped boxplot
+  .generate_plot(dat, "var a", "var c", group_var = "var group") # grouped flipped boxplot
+  expect_true(TRUE)
+})
