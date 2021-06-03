@@ -12,8 +12,8 @@ mod_var_selector_ui <- function(id){
   tagList(
     h2("Plot setup"),
     selectInput(ns("x"), label = "x axis", choices = NULL),
-    selectInput(ns("y"), label = "y axis", choices = NULL),
-    selectInput(ns("group"), label = "group by", choices = NULL)
+    selectInput(ns("y"), label = "y axis", choices = NULL, selectize = FALSE),
+    selectInput(ns("group"), label = "group by", choices = NULL, selectize = FALSE)
   )
 }
 
@@ -32,12 +32,13 @@ mod_var_selector_server <- function(id, dataset){
       var_types <- var_types[names(var_types) != "sample.id"]
 
       updateSelectInput(session, "x", choices = names(var_types))
-      updateSelectInput(session, "y", choices = names(var_types))
+      updateSelectInput(session, "y", choices = c("---" = "", names(var_types)))
 
       # group by categorical variables only.
       categorical_variables <- names(var_types)[var_types == CATEGORICAL]
-      updateSelectInput(session, "group", choices = categorical_variables)
+      updateSelectInput(session, "group", choices = c("---" = "", categorical_variables))
     })
+
 
     return(
       list(
