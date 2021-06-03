@@ -40,17 +40,6 @@ mod_var_selector_server <- function(id, dataset){
       updateSelectInput(session, "group", choices = categorical_variables)
     })
 
-    # observeEvent(input$x, {
-    #   print(input$x)
-    #   r$var_selector$x_var <- input$x
-    # })
-    #
-    # observeEvent(input$y, {
-    #   print(input$y)
-    #   r$var_selector$y_var <- input$y
-    # })
-
-
     return(
       list(
         x_var = reactive({ input$x }),
