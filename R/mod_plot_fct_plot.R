@@ -18,6 +18,7 @@
 #' @importFrom ggplot2 geom_histogram
 #' @importFrom ggplot2 geom_bar
 #' @importFrom ggplot2 coord_flip
+#' @importFrom ggplot2 facet_wrap
 .generate_plot <- function(dat, x_var, y_var = NULL, group_var = NULL, facet_var = NULL) {
   # This is using functions in the var_selector module. TODO: improve this?
   type_x <- .detect_variable_type(dat[[x_var]])
@@ -65,6 +66,10 @@
       # Maybe we don't want to allow this?
       stop("Cannot plot two categorical variables against each other.")
     }
+  }
+
+  if (!is.null(facet_var_str)) {
+    p <- p + facet_wrap(facet_var_str)
   }
   return(p)
 }
