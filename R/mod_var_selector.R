@@ -13,7 +13,8 @@ mod_var_selector_ui <- function(id){
     h2("Plot setup"),
     selectInput(ns("x"), label = "x axis", choices = NULL),
     selectInput(ns("y"), label = "y axis", choices = NULL, selectize = FALSE),
-    selectInput(ns("group"), label = "group by", choices = NULL, selectize = FALSE)
+    selectInput(ns("group"), label = "group by", choices = NULL, selectize = FALSE),
+    selectInput(ns("facet"), label = "facet by", choices = NULL, selectize = FALSE)
   )
 }
 
@@ -37,6 +38,7 @@ mod_var_selector_server <- function(id, dataset){
       # group by categorical variables only.
       categorical_variables <- names(var_types)[var_types == CATEGORICAL]
       updateSelectInput(session, "group", choices = c("---" = "", categorical_variables))
+      updateSelectInput(session, "facet", choices = c("---" = "", categorical_variables))
     })
 
 
@@ -44,7 +46,8 @@ mod_var_selector_server <- function(id, dataset){
       list(
         x_var = reactive({ input$x }),
         y_var = reactive({ input$y }),
-        group_var = reactive({ input$group })
+        group_var = reactive({ input$group }),
+        facet_var = reactive({ input$facet })
       )
     )
   })
