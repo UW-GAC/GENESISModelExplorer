@@ -18,16 +18,18 @@
 #' @importFrom ggplot2 geom_histogram
 #' @importFrom ggplot2 geom_bar
 #' @importFrom ggplot2 coord_flip
-.generate_plot <- function(dat, x_var, y_var = NULL, group_var = NULL) {
+.generate_plot <- function(dat, x_var, y_var = NULL, group_var = NULL, facet_var = NULL) {
   # This is using functions in the var_selector module. TODO: improve this?
   type_x <- .detect_variable_type(dat[[x_var]])
 
+  # Check categorical variables
   group_var_str <- NULL
   if (!is.null(group_var) && .detect_variable_type(dat[[group_var]]) == QUANTITATIVE) {
     stop("Cannot group by a quantitative variable.")
   } else if (!is.null(group_var)) {
     group_var_str <- as.name(group_var)
   }
+
 
   if (is.null(y_var)) {
     p <- ggplot(dat, aes_string(x = as.name(x_var)))
