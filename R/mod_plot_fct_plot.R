@@ -1,3 +1,13 @@
+#' Return NULL if a string is not truthy, otherwise return the string itself.
+#' @noRD
+.check_truthiness <- function(x) {
+  if (shiny::isTruthy(x)) {
+    x
+  } else {
+    NULL
+  }
+}
+
 #' Generate a plot from a dataset
 #'
 #' @noRd

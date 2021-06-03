@@ -1,6 +1,14 @@
 context("test-mod-plot-fct") #  - required for vdiffr
 library(vdiffr)
 
+test_that(".check_truthiness", {
+  expect_null(.check_truthiness(""))
+  expect_equal(.check_truthiness("x"), "x")
+  expect_equal(.check_truthiness("x23"), "x23")
+  expect_equal(.check_truthiness("23x"), "23x")
+  expect_equal(.check_truthiness("Model: outcome"), "Model: outcome")
+})
+
 test_that("generate plot with xvar only",{
   set.seed(123)
   n <- 100
