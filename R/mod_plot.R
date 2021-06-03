@@ -26,7 +26,10 @@ mod_plot_server <- function(id, dataset, selections){
     ns <- session$ns
 
     plot_obj <- eventReactive(input$plot_button, {
-      .generate_plot(dataset(), selections$x_var(), selections$y_var(), selections$group_var())
+      x_var <- .check_truthiness(selections$x_var())
+      y_var <- .check_truthiness(selections$y_var())
+      group_var <- .check_truthiness(selections$group_var())
+      .generate_plot(dataset(), x_var, y_var, group_var)
     })
 
     output$plot <- renderPlot({
