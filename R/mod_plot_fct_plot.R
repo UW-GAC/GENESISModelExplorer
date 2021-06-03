@@ -1,3 +1,13 @@
+#' Return NULL if a string is not truthy, otherwise return the string itself.
+#' @noRd
+.check_truthiness <- function(x) {
+  if (shiny::isTruthy(x)) {
+    x
+  } else {
+    NULL
+  }
+}
+
 #' Generate a plot from a dataset
 #'
 #' @noRd
@@ -5,6 +15,8 @@
 #' @importFrom ggplot2 aes_string
 #' @importFrom ggplot2 geom_point
 #' @importFrom ggplot2 geom_boxplot
+#' @importFrom ggplot2 geom_histogram
+#' @importFrom ggplot2 geom_bar
 #' @importFrom ggplot2 coord_flip
 .generate_plot <- function(dat, x_var, y_var = NULL, group_var = NULL) {
   # This is using functions in the var_selector module. TODO: improve this?
