@@ -8,7 +8,7 @@ testdata <- tibble::tibble(
   d = sample(letters[1:3], 100, replace = T)
 )
 
-test_that("test plot is created", {
+test_that("test plot is created with x and y variables", {
   # Reactive input arguments
   n <- 100
   dat <- reactiveVal(testdata)
