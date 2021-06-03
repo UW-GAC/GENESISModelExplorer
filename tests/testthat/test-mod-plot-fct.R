@@ -28,13 +28,13 @@ test_that("generate plot with xvar and group",{
   )
 
   # histogram
-  expect_doppelganger("x histogram grouped", .generate_plot(dat, "a", group = "c"))
+  expect_doppelganger("x histogram grouped", .generate_plot(dat, "a", group_var = "c"))
   # bar plot
-  expect_doppelganger("x barplot grouped", .generate_plot(dat, "c", group = "d"))
+  expect_doppelganger("x barplot grouped", .generate_plot(dat, "c", group_var = "d"))
   # not allowed - grouping by a quantitative variable.
-  expect_error(.generate_plot(dat, "a", group = "a"), "Cannot group")
-  expect_error(.generate_plot(dat, "a", group = "b"), "Cannot group")
-  expect_error(.generate_plot(dat, "c", group = "a"), "Cannot group")
+  expect_error(.generate_plot(dat, "a", group_var = "a"), "Cannot group")
+  expect_error(.generate_plot(dat, "a", group_var = "b"), "Cannot group")
+  expect_error(.generate_plot(dat, "c", group_var = "a"), "Cannot group")
 })
 
 
@@ -71,19 +71,19 @@ test_that("generate plot with group specified", {
     e = rnorm(n)
   )
   # scatterplot
-  expect_doppelganger("xy scatterplot grouped", .generate_plot(dat, "a", "b", group = "group"))
+  expect_doppelganger("xy scatterplot grouped", .generate_plot(dat, "a", "b", group_var = "group"))
   # boxplot
-  expect_doppelganger("xy boxplot grouped", .generate_plot(dat, "c", "a", group = "group"))
+  expect_doppelganger("xy boxplot grouped", .generate_plot(dat, "c", "a", group_var = "group"))
   # flipped boxplot
-  expect_doppelganger("xy flipped boxplot grouped", .generate_plot(dat, "a", "c", group = "group"))
+  expect_doppelganger("xy flipped boxplot grouped", .generate_plot(dat, "a", "c", group_var = "group"))
   # errors
-  expect_error(.generate_plot(dat, "c", "d", group = "group"), "two categorical variables")
-  expect_error(.generate_plot(dat, "a", "b", group = "a"), "Cannot group")
-  expect_error(.generate_plot(dat, "a", "b", group = "b"), "Cannot group")
-  expect_error(.generate_plot(dat, "a", "b", group = "e"), "Cannot group")
-  expect_error(.generate_plot(dat, "c", "a", group = "a"), "Cannot group")
-  expect_error(.generate_plot(dat, "c", "a", group = "b"), "Cannot group")
-  expect_error(.generate_plot(dat, "a", "c", group = "a"), "Cannot group")
-  expect_error(.generate_plot(dat, "a", "c", group = "b"), "Cannot group")
+  expect_error(.generate_plot(dat, "c", "d", group_var = "group"), "two categorical variables")
+  expect_error(.generate_plot(dat, "a", "b", group_var = "a"), "Cannot group")
+  expect_error(.generate_plot(dat, "a", "b", group_var = "b"), "Cannot group")
+  expect_error(.generate_plot(dat, "a", "b", group_var = "e"), "Cannot group")
+  expect_error(.generate_plot(dat, "c", "a", group_var = "a"), "Cannot group")
+  expect_error(.generate_plot(dat, "c", "a", group_var = "b"), "Cannot group")
+  expect_error(.generate_plot(dat, "a", "c", group_var = "a"), "Cannot group")
+  expect_error(.generate_plot(dat, "a", "c", group_var = "b"), "Cannot group")
 
 })
