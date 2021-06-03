@@ -11,10 +11,17 @@ mod_var_selector_ui <- function(id){
   ns <- NS(id)
   tagList(
     h2("Plot setup"),
-    selectInput(ns("x"), label = "x axis", choices = NULL),
-    selectInput(ns("y"), label = "y axis", choices = NULL, selectize = FALSE),
-    selectInput(ns("group"), label = "group by", choices = NULL, selectize = FALSE),
-    selectInput(ns("facet"), label = "facet by", choices = NULL, selectize = FALSE)
+    column(4,
+      h3("Main selections"),
+      selectInput(ns("x"), label = "x axis", choices = NULL),
+      selectInput(ns("y"), label = "y axis", choices = NULL, selectize = FALSE),
+      selectInput(ns("group"), label = "group by", choices = NULL, selectize = FALSE),
+      selectInput(ns("facet"), label = "facet by", choices = NULL, selectize = FALSE),
+    ),
+    column(4,
+      h3("Other options"),
+      checkboxInput("hexbin", label = "Hexbin instead of scatterplot?")
+    )
   )
 }
 
@@ -47,7 +54,8 @@ mod_var_selector_server <- function(id, dataset){
         x_var = reactive({ input$x }),
         y_var = reactive({ input$y }),
         group_var = reactive({ input$group }),
-        facet_var = reactive({ input$facet })
+        facet_var = reactive({ input$facet }),
+        hexbin = reactive({ input$hexbin })
       )
     )
   })
