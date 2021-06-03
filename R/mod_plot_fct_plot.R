@@ -1,5 +1,5 @@
 #' Return NULL if a string is not truthy, otherwise return the string itself.
-#' @noRD
+#' @noRd
 .check_truthiness <- function(x) {
   if (shiny::isTruthy(x)) {
     x
