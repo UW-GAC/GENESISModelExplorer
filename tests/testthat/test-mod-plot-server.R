@@ -1,5 +1,3 @@
-context("test-mod-plot-server") # required by vdiffr
-
 # Test data for tests.
 testdata <- tibble::tibble(
   a = rnorm(100),
