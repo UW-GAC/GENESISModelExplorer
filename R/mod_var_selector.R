@@ -28,12 +28,11 @@ mod_var_selector_server <- function(id, dataset){
     # Update x and y axis selections based on loaded data.
     observe({
       # Get variable types.
-      var_types <- sapply(dataset() %>% dplyr::select(-.data$sample.id), .detect_variable_type)
+      var_types <- sapply(dataset(), .detect_variable_type)
+      var_types <- var_types[names(var_types) != "sample.id"]
 
-      possible_variables <- setdiff(names(var_types), "sample.id")
-
-      updateSelectInput(session, "x", choices = possible_variables)
-      updateSelectInput(session, "y", choices = possible_variables)
+      updateSelectInput(session, "x", choices = names(var_types))
+      updateSelectInput(session, "y", choices = names(var_types))
 
       # group by categorical variables only.
       categorical_variables <- names(var_types)[var_types == CATEGORICAL]
