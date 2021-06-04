@@ -98,6 +98,12 @@ test_that("generate plot with lm and loess option", {
   expect_doppelganger("xy loess lm", .generate_plot(dat, "quant1", "quant2", lm = TRUE, loess = TRUE))
 })
 
+test_that("generate plot with yintercept line", {
+  expect_doppelganger("xy scatterplot yintercept", .generate_plot(dat, "quant1", "quant2", yintercept = TRUE))
+  expect_doppelganger("xy boxplot yintercept", .generate_plot(dat, "cat1", "quant1", yintercept = TRUE))  
+  expect_doppelganger("xy flipped boxplot yintercept", .generate_plot(dat, "quant1", "cat1", yintercept = TRUE))
+})
+
 test_that("generate xy plot with group specified", {
   # scatterplot
   expect_doppelganger("xy scatterplot grouped", .generate_plot(dat, "quant1", "quant2", group_var = "group"))
