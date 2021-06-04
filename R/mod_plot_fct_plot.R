@@ -14,12 +14,13 @@
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 aes_string
 #' @importFrom ggplot2 geom_point
+#' @importFrom ggplot2 geom_hex
 #' @importFrom ggplot2 geom_boxplot
 #' @importFrom ggplot2 geom_histogram
 #' @importFrom ggplot2 geom_bar
 #' @importFrom ggplot2 coord_flip
 #' @importFrom ggplot2 facet_wrap
-.generate_plot <- function(dat, x_var, y_var = NULL, group_var = NULL, facet_var = NULL) {
+.generate_plot <- function(dat, x_var, y_var = NULL, group_var = NULL, facet_var = NULL, hexbin = FALSE) {
   # This is using functions in the var_selector module. TODO: improve this?
   type_x <- .detect_variable_type(dat[[x_var]])
 
@@ -51,8 +52,11 @@
 
     p <- ggplot(dat, aes_string(x = as.name(x_var), y = as.name(y_var)))
     if (type_x == QUANTITATIVE & type_y == QUANTITATIVE) {
-      # Show a scatterplot.
-      p <- p + geom_point(aes_string(color = group_var_str))
+      if (hexbin) {
+        p <- p + geom_hex(aes_string())
+      } else {
+        p <- p + geom_point(aes_string(color = group_var_str))
+      }
     } else if (type_x == QUANTITATIVE & type_y == CATEGORICAL) {
       # Show a flipped boxplot.
       # We have to recreate p because we need to use coord_flip.
