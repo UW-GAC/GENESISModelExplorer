@@ -28,7 +28,8 @@
   facet_var = NULL,
   hexbin = FALSE,
   abline = FALSE,
-  loess = FALSE
+  loess = FALSE,
+  lm = FALSE
 ) {
   # This is using functions in the var_selector module. TODO: improve this?
   type_x <- .detect_variable_type(dat[[x_var]])
@@ -74,6 +75,10 @@
 
       if (loess) {
         p <- p + geom_smooth(method = 'loess')
+      }
+
+      if (lm) {
+        p <- p + geom_smooth(method = 'lm')
       }
 
     } else if (type_x == QUANTITATIVE & type_y == CATEGORICAL) {

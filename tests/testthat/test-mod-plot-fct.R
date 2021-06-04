@@ -88,6 +88,16 @@ test_that("generate plot with loess option", {
   expect_doppelganger("xy loess facet", .generate_plot(dat, "quant1", "quant2", facet = "facet", loess = TRUE))
 })
 
+test_that("generate plot with lm option", {
+  expect_doppelganger("xy lm", .generate_plot(dat, "quant1", "quant2", lm = TRUE))
+  expect_doppelganger("xy lm grouped", .generate_plot(dat, "quant1", "quant2", group = "group", lm = TRUE))
+  expect_doppelganger("xy lm facet", .generate_plot(dat, "quant1", "quant2", facet = "facet", lm = TRUE))
+})
+
+test_that("generate plot with lm and loess option", {
+  expect_doppelganger("xy loess lm", .generate_plot(dat, "quant1", "quant2", lm = TRUE, loess = TRUE))
+})
+
 test_that("generate xy plot with group specified", {
   # scatterplot
   expect_doppelganger("xy scatterplot grouped", .generate_plot(dat, "quant1", "quant2", group_var = "group"))
