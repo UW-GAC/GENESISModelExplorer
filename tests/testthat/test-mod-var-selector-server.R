@@ -13,7 +13,8 @@ test_that("return values", {
       "group_var",
       "facet_var",
       "hexbin",
-      "abline"
+      "abline",
+      "loess"
     )
     expect_type(session$returned, "list")
     expect_equal(names(session$returned), expected_names)
@@ -22,6 +23,7 @@ test_that("return values", {
     expect_null(session$returned$group_var())
     expect_null(session$returned$facet_var())
     expect_null(session$returned$abline())
+    expect_null(session$returned$loess())
   })
 })
 
@@ -133,5 +135,25 @@ test_that("abline", {
     expect_equal(session$returned$facet_var(), NULL)
     expect_equal(session$returned$hexbin(), NULL)
     expect_equal(session$returned$abline(), TRUE)
+  })
+})
+
+test_that("loess", {
+  n <- 100
+  dat <- reactiveVal(tibble::tibble(
+    a = rnorm(100),
+    b = rnorm(100),
+    c = sample(letters[1:3], 100, replace = T),
+    d = sample(letters[1:3], 100, replace = T)
+  ))
+  testServer(mod_var_selector_server, args = list(dataset = dat), {
+    session$setInputs(loess = TRUE)
+    expect_equal(session$returned$x_var(), NULL)
+    expect_equal(session$returned$y_var(), NULL)
+    expect_equal(session$returned$group_var(), NULL)
+    expect_equal(session$returned$facet_var(), NULL)
+    expect_equal(session$returned$hexbin(), NULL)
+    expect_equal(session$returned$abline(), NULL)
+    expect_equal(session$returned$loess(), TRUE)
   })
 })
