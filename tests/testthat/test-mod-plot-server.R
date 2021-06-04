@@ -15,7 +15,8 @@ test_that("test plot is created with x variable only", {
     x_var = reactiveVal("quant1"),
     y_var = reactiveVal(""),
     group_var = reactiveVal(""),
-    facet_var = reactive("")
+    facet_var = reactiveVal(""),
+    hexbin = reactiveVal(FALSE)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -34,7 +35,8 @@ test_that("test plot is created with x and group variables only", {
     x_var = reactiveVal("quant1"),
     y_var = reactiveVal(""),
     group_var = reactiveVal("cat1"),
-    facet_var = reactive("")
+    facet_var = reactiveVal(""),
+    hexbin = reactiveVal(FALSE)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -53,7 +55,8 @@ test_that("test plot is created with x and y variables", {
     x_var = reactiveVal("quant1"),
     y_var = reactiveVal("quant2"),
     group_var = reactiveVal(""),
-    facet_var = reactive("")
+    facet_var = reactiveVal(""),
+    hexbin = reactiveVal(FALSE)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -72,7 +75,8 @@ test_that("test plot is created with x, y, and group variables", {
     x_var = reactiveVal("quant1"),
     y_var = reactiveVal("quant2"),
     group_var = reactiveVal("cat1"),
-    facet_var = reactive("")
+    facet_var = reactiveVal(""),
+    hexbin = reactiveVal(FALSE)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -91,7 +95,8 @@ test_that("test plot is created with x, y, and facet variables", {
     x_var = reactiveVal("quant1"),
     y_var = reactiveVal("quant2"),
     group_var = reactiveVal(""),
-    facet_var = reactive("cat2")
+    facet_var = reactiveVal("cat2"),
+    hexbin = reactiveVal(FALSE)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -110,7 +115,8 @@ test_that("test plot is created with x, y, group, and facet variables", {
     x_var = reactiveVal("quant1"),
     y_var = reactiveVal("quant2"),
     group_var = reactiveVal("cat1"),
-    facet_var = reactive("cat2")
+    facet_var = reactiveVal("cat2"),
+    hexbin = reactiveVal(TRUE)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -119,4 +125,24 @@ test_that("test plot is created with x, y, group, and facet variables", {
     output$plot # Confirm that the plot can be accessed without an error.
     # Note that this does not test if the plot is correct. We'll need to add snapshot tests for that.
   })
+})
+
+test_that("plot is created with hexbin option", {
+  n <- 100
+  dat <- reactiveVal(testdata)
+  selected <- list(
+    x_var = reactiveVal("quant1"),
+    y_var = reactiveVal("quant2"),
+    group_var = reactiveVal("cat1"),
+    facet_var = reactiveVal("cat2"),
+    hexbin = reactiveVal(TRUE)
+  )
+  testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
+    # No plot to begin with
+    expect_error(output$plot)
+    session$setInputs(plot_button = TRUE)
+    output$plot # Confirm that the plot can be accessed without an error.
+    # Note that this does not test if the plot is correct. We'll need to add snapshot tests for that.
+  })
+
 })
