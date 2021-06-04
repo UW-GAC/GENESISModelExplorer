@@ -1,3 +1,6 @@
+#' Load a null model file
+#' @noRd
+#' @importFrom rlang .data
 .load_null_model <- function(filename) {
   tmp <- get(load(filename))
 
@@ -20,6 +23,9 @@
   null_model
 }
 
+#' Load a phenotype file
+#' @noRd
+#' @importFrom rlang .data
 .load_phenotype <- function(filename) {
   tmp <- get(load(filename))
   # Convert to data frame if necessary.
@@ -39,6 +45,9 @@
     tibble::as_tibble()
 }
 
+#' Load and combine null model and phenotype files
+#' @noRd
+#' @importFrom rlang .data
 .load_data <- function(null_model_filename, phenotype_filename) {
   null_model <- .load_null_model(null_model_filename)
   phen <- .load_phenotype(phenotype_filename)
