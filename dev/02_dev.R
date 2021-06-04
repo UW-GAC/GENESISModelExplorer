@@ -21,6 +21,7 @@ usethis::use_package( "stringr" )
 usethis::use_package( "ggplot2" )
 usethis::use_package( "tibble" )
 usethis::use_package( "tidyselect" )
+usethis::use_package( "hexbin" ) # for testing plots
 usethis::use_package( "charlatan", type = "Suggests" ) # For fake data.
 # Different command for pipes.
 usethis::use_pipe(export = FALSE)
@@ -32,6 +33,8 @@ usethis::use_package( "GENESIS", type = "Suggests" )
 usethis::use_package( "globals", type = "Suggests" ) # required by shinytest I guess
 usethis::use_package( "shinytest", type = "Suggests" )
 usethis::use_package( "vdiffr", type = "Suggests" ) # for testing plots
+usethis::use_package( "withr", type = "Suggests" ) # for tests
+usethis::use_package( "testthat", type = "Suggests" ) # for tests
 
 # For shiny test?
 shinytest::installDependencies()
