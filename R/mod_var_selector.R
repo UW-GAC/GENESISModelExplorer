@@ -20,7 +20,7 @@ mod_var_selector_ui <- function(id){
     ),
     column(4,
       h3("Other options"),
-      checkboxInput("hexbin", label = "Hexbin instead of scatterplot?")
+      checkboxInput(ns("hexbin"), label = "Hexbin instead of scatterplot?")
     )
   )
 }
@@ -47,7 +47,6 @@ mod_var_selector_server <- function(id, dataset){
       updateSelectInput(session, "group", choices = c("---" = "", categorical_variables))
       updateSelectInput(session, "facet", choices = c("---" = "", categorical_variables))
     })
-
 
     return(
       list(
