@@ -32,7 +32,8 @@ Suggests:
     GENESIS,
     spelling,
     testthat (>= 3.0.0),
-    globals
+    globals,
+    vdiffr
 Config/testthat/edition: 3
 Language: en-US
 BiocViews:
