@@ -20,7 +20,14 @@
 #' @importFrom ggplot2 geom_bar
 #' @importFrom ggplot2 coord_flip
 #' @importFrom ggplot2 facet_wrap
-.generate_plot <- function(dat, x_var, y_var = NULL, group_var = NULL, facet_var = NULL, hexbin = FALSE) {
+#' @importFrom ggplot2 geom_abline
+.generate_plot <- function(dat, x_var,
+  y_var = NULL,
+  group_var = NULL,
+  facet_var = NULL,
+  hexbin = FALSE,
+  abline = FALSE
+) {
   # This is using functions in the var_selector module. TODO: improve this?
   type_x <- .detect_variable_type(dat[[x_var]])
 
@@ -56,6 +63,9 @@
         p <- p + geom_hex(aes_string())
       } else {
         p <- p + geom_point(aes_string(color = group_var_str))
+      }
+      if (abline) {
+        p <- p + geom_abline()
       }
     } else if (type_x == QUANTITATIVE & type_y == CATEGORICAL) {
       # Show a flipped boxplot.
