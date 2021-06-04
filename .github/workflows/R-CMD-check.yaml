@@ -6,6 +6,7 @@ on:
       - main
       - master
       - golem
+      - fix-github-actions
   pull_request:
     branches:
       - main
