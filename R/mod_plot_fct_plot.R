@@ -20,7 +20,19 @@
 #' @importFrom ggplot2 geom_bar
 #' @importFrom ggplot2 coord_flip
 #' @importFrom ggplot2 facet_wrap
-.generate_plot <- function(dat, x_var, y_var = NULL, group_var = NULL, facet_var = NULL, hexbin = FALSE) {
+#' @importFrom ggplot2 geom_abline
+#' @importFrom ggplot2 geom_smooth
+#' @importFrom ggplot2 geom_hline
+.generate_plot <- function(dat, x_var,
+  y_var = NULL,
+  group_var = NULL,
+  facet_var = NULL,
+  hexbin = FALSE,
+  abline = FALSE,
+  loess = FALSE,
+  lm = FALSE,
+  yintercept = FALSE
+) {
   # This is using functions in the var_selector module. TODO: improve this?
   type_x <- .detect_variable_type(dat[[x_var]])
 
@@ -52,20 +64,44 @@
 
     p <- ggplot(dat, aes_string(x = as.name(x_var), y = as.name(y_var)))
     if (type_x == QUANTITATIVE & type_y == QUANTITATIVE) {
+
       if (hexbin) {
         p <- p + geom_hex(aes_string())
       } else {
         p <- p + geom_point(aes_string(color = group_var_str))
       }
+
+      if (abline) {
+        p <- p + geom_abline()
+      }
+
+      if (loess) {
+        p <- p + geom_smooth(method = 'loess')
+      }
+
+      if (lm) {
+        p <- p + geom_smooth(method = 'lm')
+      }
+
+      if (yintercept) {
+        p <- p + geom_hline(yintercept = 0)
+      }
+
     } else if (type_x == QUANTITATIVE & type_y == CATEGORICAL) {
       # Show a flipped boxplot.
       # We have to recreate p because we need to use coord_flip.
       p <- ggplot(dat, aes_string(y = as.name(x_var), x = as.name(y_var))) +
         geom_boxplot(aes_string(fill = group_var_str)) +
         coord_flip()
+
     } else if (type_x == CATEGORICAL & type_y == QUANTITATIVE) {
       # Show a boxplot.
       p <- p + geom_boxplot(aes_string(fill = group_var_str))
+
+      if (yintercept) {
+        p <- p + geom_hline(yintercept = 0)
+      }
+
     } else if (type_y == CATEGORICAL & type_y == CATEGORICAL) {
       # Maybe we don't want to allow this?
       stop("Cannot plot two categorical variables against each other.")

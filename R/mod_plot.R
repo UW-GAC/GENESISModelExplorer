@@ -18,9 +18,6 @@ mod_plot_ui <- function(id){
 #' plot Server Functions
 #'
 #' @noRd
-#' @importFrom ggplot2 ggplot
-#' @importFrom ggplot2 aes_string
-#' @importFrom ggplot2 geom_point
 mod_plot_server <- function(id, dataset, selections){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
@@ -30,7 +27,6 @@ mod_plot_server <- function(id, dataset, selections){
       y_var <- .check_truthiness(selections$y_var())
       group_var <- .check_truthiness(selections$group_var())
       facet_var <- .check_truthiness(selections$facet_var())
-      hexbin <- selections$hexbin()
 
       .generate_plot(
         dataset(),
@@ -38,7 +34,11 @@ mod_plot_server <- function(id, dataset, selections){
         y_var,
         group_var = group_var,
         facet_var = facet_var,
-        hexbin = hexbin
+        hexbin = selections$hexbin(),
+        abline = selections$abline(),
+        loess = selections$loess(),
+        lm = selections$lm(),
+        yintercept = selections$yintercept()
       )
     })
 

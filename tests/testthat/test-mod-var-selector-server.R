@@ -12,7 +12,11 @@ test_that("return values", {
       "y_var",
       "group_var",
       "facet_var",
-      "hexbin"
+      "hexbin",
+      "abline",
+      "loess",
+      "lm",
+      "yintercept"
     )
     expect_type(session$returned, "list")
     expect_equal(names(session$returned), expected_names)
@@ -20,6 +24,10 @@ test_that("return values", {
     expect_null(session$returned$y_var())
     expect_null(session$returned$group_var())
     expect_null(session$returned$facet_var())
+    expect_null(session$returned$abline())
+    expect_null(session$returned$loess())
+    expect_null(session$returned$lm())
+    expect_null(session$returned$yintercept())
   })
 })
 
@@ -37,6 +45,8 @@ test_that("x variable names update", {
     expect_equal(session$returned$y_var(), NULL)
     expect_equal(session$returned$group_var(), NULL)
     expect_equal(session$returned$facet_var(), NULL)
+    expect_equal(session$returned$lm(), NULL)
+    expect_equal(session$returned$yintercept(), NULL)
   })
 })
 
@@ -54,6 +64,9 @@ test_that("y variable names update", {
     expect_equal(session$returned$y_var(), "b")
     expect_equal(session$returned$group_var(), NULL)
     expect_equal(session$returned$facet_var(), NULL)
+    expect_equal(session$returned$abline(), NULL)
+    expect_equal(session$returned$lm(), NULL)
+    expect_equal(session$returned$yintercept(), NULL)
   })
 })
 
@@ -71,6 +84,9 @@ test_that("group variable names update", {
     expect_equal(session$returned$y_var(), NULL)
     expect_equal(session$returned$group_var(), "c")
     expect_equal(session$returned$facet_var(), NULL)
+    expect_equal(session$returned$abline(), NULL)
+    expect_equal(session$returned$lm(), NULL)
+    expect_equal(session$returned$yintercept(), NULL)
   })
 })
 
@@ -89,6 +105,9 @@ test_that("facet variable names update", {
     expect_equal(session$returned$y_var(), NULL)
     expect_equal(session$returned$group_var(), NULL)
     expect_equal(session$returned$facet_var(), "c")
+    expect_equal(session$returned$abline(), NULL)
+    expect_equal(session$returned$lm(), NULL)
+    expect_equal(session$returned$yintercept(), NULL)
   })
 })
 
@@ -107,5 +126,97 @@ test_that("hexbin update", {
     expect_equal(session$returned$group_var(), NULL)
     expect_equal(session$returned$facet_var(), NULL)
     expect_equal(session$returned$hexbin(), TRUE)
+    expect_equal(session$returned$abline(), NULL)
+    expect_equal(session$returned$lm(), NULL)
+    expect_equal(session$returned$yintercept(), NULL)
+  })
+})
+
+
+test_that("abline", {
+  n <- 100
+  dat <- reactiveVal(tibble::tibble(
+    a = rnorm(100),
+    b = rnorm(100),
+    c = sample(letters[1:3], 100, replace = T),
+    d = sample(letters[1:3], 100, replace = T)
+  ))
+  testServer(mod_var_selector_server, args = list(dataset = dat), {
+    session$setInputs(abline = TRUE)
+    expect_equal(session$returned$x_var(), NULL)
+    expect_equal(session$returned$y_var(), NULL)
+    expect_equal(session$returned$group_var(), NULL)
+    expect_equal(session$returned$facet_var(), NULL)
+    expect_equal(session$returned$hexbin(), NULL)
+    expect_equal(session$returned$abline(), TRUE)
+    expect_equal(session$returned$lm(), NULL)
+    expect_equal(session$returned$yintercept(), NULL)
+  })
+})
+
+test_that("loess", {
+  n <- 100
+  dat <- reactiveVal(tibble::tibble(
+    a = rnorm(100),
+    b = rnorm(100),
+    c = sample(letters[1:3], 100, replace = T),
+    d = sample(letters[1:3], 100, replace = T)
+  ))
+  testServer(mod_var_selector_server, args = list(dataset = dat), {
+    session$setInputs(loess = TRUE)
+    expect_equal(session$returned$x_var(), NULL)
+    expect_equal(session$returned$y_var(), NULL)
+    expect_equal(session$returned$group_var(), NULL)
+    expect_equal(session$returned$facet_var(), NULL)
+    expect_equal(session$returned$hexbin(), NULL)
+    expect_equal(session$returned$abline(), NULL)
+    expect_equal(session$returned$loess(), TRUE)
+    expect_equal(session$returned$lm(), NULL)
+    expect_equal(session$returned$yintercept(), NULL)
+  })
+})
+
+test_that("lm", {
+  n <- 100
+  dat <- reactiveVal(tibble::tibble(
+    a = rnorm(100),
+    b = rnorm(100),
+    c = sample(letters[1:3], 100, replace = T),
+    d = sample(letters[1:3], 100, replace = T)
+  ))
+  testServer(mod_var_selector_server, args = list(dataset = dat), {
+    session$setInputs(lm = TRUE)
+    expect_equal(session$returned$x_var(), NULL)
+    expect_equal(session$returned$y_var(), NULL)
+    expect_equal(session$returned$group_var(), NULL)
+    expect_equal(session$returned$facet_var(), NULL)
+    expect_equal(session$returned$hexbin(), NULL)
+    expect_equal(session$returned$abline(), NULL)
+    expect_equal(session$returned$loess(), NULL)
+    expect_equal(session$returned$lm(), TRUE)
+    expect_equal(session$returned$yintercept(), NULL)
+  })
+})
+
+
+test_that("yintercept", {
+  n <- 100
+  dat <- reactiveVal(tibble::tibble(
+    a = rnorm(100),
+    b = rnorm(100),
+    c = sample(letters[1:3], 100, replace = T),
+    d = sample(letters[1:3], 100, replace = T)
+  ))
+  testServer(mod_var_selector_server, args = list(dataset = dat), {
+    session$setInputs(yintercept = TRUE)
+    expect_equal(session$returned$x_var(), NULL)
+    expect_equal(session$returned$y_var(), NULL)
+    expect_equal(session$returned$group_var(), NULL)
+    expect_equal(session$returned$facet_var(), NULL)
+    expect_equal(session$returned$hexbin(), NULL)
+    expect_equal(session$returned$abline(), NULL)
+    expect_equal(session$returned$loess(), NULL)
+    expect_equal(session$returned$lm(), NULL)
+    expect_equal(session$returned$yintercept(), TRUE)
   })
 })
