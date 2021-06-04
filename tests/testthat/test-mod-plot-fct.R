@@ -73,6 +73,11 @@ test_that("generate plot with xvar and yvar only", {
   expect_error(.generate_plot(dat, "cat1", "cat2"), "two categorical variables")
 })
 
+test_that("generate plot with hexbin option", {
+  expect_doppelganger("xy hexbin", .generate_plot(dat, "quant1", "quant2", hexbin = TRUE))
+  expect_doppelganger("xy hexbin grouped", .generate_plot(dat, "quant1", "quant2", group = "cat1", hexbin = TRUE))
+})
+
 test_that("generate xy plot with group specified", {
   # scatterplot
   expect_doppelganger("xy scatterplot grouped", .generate_plot(dat, "quant1", "quant2", group_var = "group"))
