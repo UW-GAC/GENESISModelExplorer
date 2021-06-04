@@ -36,7 +36,8 @@ mod_plot_server <- function(id, dataset, selections){
         facet_var = facet_var,
         hexbin = selections$hexbin(),
         abline = selections$abline(),
-        loess = selections$loess()
+        loess = selections$loess(),
+        lm = selections$lm()
       )
     })
 
