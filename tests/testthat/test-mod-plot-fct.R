@@ -82,6 +82,12 @@ test_that("generate plot with abline option", {
   expect_doppelganger("xy abline", .generate_plot(dat, "quant1", "quant2", abline = TRUE))
 })
 
+test_that("generate plot with loess option", {
+  expect_doppelganger("xy loess", .generate_plot(dat, "quant1", "quant2", loess = TRUE))
+  expect_doppelganger("xy loess grouped", .generate_plot(dat, "quant1", "quant2", group = "group", loess = TRUE))
+  expect_doppelganger("xy loess facet", .generate_plot(dat, "quant1", "quant2", facet = "facet", loess = TRUE))
+})
+
 test_that("generate xy plot with group specified", {
   # scatterplot
   expect_doppelganger("xy scatterplot grouped", .generate_plot(dat, "quant1", "quant2", group_var = "group"))
