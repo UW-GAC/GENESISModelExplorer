@@ -105,7 +105,7 @@ test_that("hexbin update", {
     expect_equal(session$returned$x_var(), NULL)
     expect_equal(session$returned$y_var(), NULL)
     expect_equal(session$returned$group_var(), NULL)
-    expect_equal(session$returned$facet_var(), "c")
+    expect_equal(session$returned$facet_var(), NULL)
     expect_equal(session$returned$hexbin(), TRUE)
   })
 })
