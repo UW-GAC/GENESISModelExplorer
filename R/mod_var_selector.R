@@ -23,7 +23,8 @@ mod_var_selector_ui <- function(id){
       checkboxInput(ns("hexbin"), label = "Hexbin instead of scatterplot?"),
       checkboxInput(ns("abline"), label = "Add x = y line?"),
       checkboxInput(ns("loess"), label = "Add loess smooth line?"),
-      checkboxInput(ns("lm"), label = "Add lm line?")
+      checkboxInput(ns("lm"), label = "Add lm line?"),
+      checkboxInput(ns("yintercept"), label = "Add y = 0 line?")
     )
   )
 }
@@ -60,7 +61,8 @@ mod_var_selector_server <- function(id, dataset){
         hexbin = reactive({ input$hexbin }),
         abline = reactive({ input$abline }),
         loess = reactive({ input$loess }),
-        lm = reactive({ input$lm })
+        lm = reactive({ input$lm }),
+        yintercept = reactive({ input$yintercept })
       )
     )
   })
