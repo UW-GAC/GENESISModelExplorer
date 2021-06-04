@@ -37,7 +37,8 @@ mod_plot_server <- function(id, dataset, selections){
         hexbin = selections$hexbin(),
         abline = selections$abline(),
         loess = selections$loess(),
-        lm = selections$lm()
+        lm = selections$lm(),
+        yintercept = selections$yintercept()
       )
     })
 
