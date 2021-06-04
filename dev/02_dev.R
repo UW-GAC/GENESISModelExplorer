@@ -35,7 +35,7 @@ usethis::use_package( "shinytest", type = "Suggests" )
 usethis::use_package( "vdiffr", type = "Suggests" ) # for testing plots
 usethis::use_package( "withr", type = "Suggests" ) # for tests
 usethis::use_package( "testthat", type = "Suggests" ) # for tests
-
+usethis::use_package( "rsconnect", type = "Suggests" ) # for shinyapps.io
 # For shiny test?
 shinytest::installDependencies()
 

@@ -36,7 +36,8 @@ Suggests:
     testthat (>= 3.0.0),
     globals,
     vdiffr,
-    withr
+    withr,
+    rsconnect
 Config/testthat/edition: 3
 Language: en-US
 BiocViews:
