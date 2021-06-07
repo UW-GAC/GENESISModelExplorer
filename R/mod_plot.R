@@ -46,7 +46,8 @@ mod_plot_server <- function(id, dataset, selections){
     })
 
     output$plot <- renderPlotly({
-      ggplotly(plot_obj())
+      req(plot_obj)
+      plot_obj() %>% ggplotly() %>% plotly::layout(boxmode = 'group')
     })
   })
 }
