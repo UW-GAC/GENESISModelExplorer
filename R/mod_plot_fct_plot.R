@@ -54,7 +54,7 @@
   if (is.null(y_var)) {
     p <- ggplot(dat, aes_string(x = as.name(x_var)))
     if (type_x == QUANTITATIVE) {
-      p <- p + geom_histogram(aes_string(fill = group_var_str))
+      p <- p + geom_histogram(aes_string(fill = group_var_str), bins = 30)
     } else if (type_x == CATEGORICAL) {
       p <- p + geom_bar(aes_string(fill = group_var_str))
     }
