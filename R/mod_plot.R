@@ -7,16 +7,19 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
+#' @importFrom plotly plotlyOutput
 mod_plot_ui <- function(id){
   ns <- NS(id)
   tagList(
     actionButton(ns("plot_button"), "Generate plot"),
-    plotOutput(ns("plot"))
+    plotlyOutput(ns("plot"))
   )
 }
 
 #' plot Server Functions
 #'
+#' @importFrom plotly renderPlotly
+#' @importFrom plotly ggplotly
 #' @noRd
 mod_plot_server <- function(id, dataset, selections){
   moduleServer( id, function(input, output, session){
@@ -42,8 +45,8 @@ mod_plot_server <- function(id, dataset, selections){
       )
     })
 
-    output$plot <- renderPlot({
-      plot_obj()
+    output$plot <- renderPlotly({
+      ggplotly(plot_obj())
     })
   })
 }
