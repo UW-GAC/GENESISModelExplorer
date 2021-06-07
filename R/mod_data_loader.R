@@ -28,26 +28,18 @@ mod_data_loader_server <- function(id){
     ns <- session$ns
 
     data_reactive <- eventReactive(input$load_data_button, {
-    # data_reactive <- reactive({
-      print("reading in dataset")
       if (input$use_example_data) {
-        print("loading example data")
         # TODO: May need to change this when deployed.
         null_model_file = system.file("extdata", "null_model.RData", package = "shinyNullModel")
 
         phenotype_file = system.file("extdata", "phenotype.RData", package = "shinyNullModel")
-        print(file.exists(null_model_file))
-        print(file.exists(phenotype_file))
       } else if (!is.null(input$null_model_file) & !is.null(input$phenotype_file)) {
-        print("loading user data")
         null_model_file <- input$null_model_file$datapath
         phenotype_file <- input$phenotype_file$datapath
       } else {
-        print("inputs are wrong")
         return(NULL)
       }
 
-      print('loading data')
       .load_data(null_model_file, phenotype_file)
     })
 
