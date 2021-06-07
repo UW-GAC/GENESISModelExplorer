@@ -76,11 +76,11 @@
       }
 
       if (loess) {
-        p <- p + geom_smooth(method = 'loess')
+        p <- p + geom_smooth(formula = y ~ x, method = 'loess')
       }
 
       if (lm) {
-        p <- p + geom_smooth(method = 'lm')
+        p <- p + geom_smooth(formula = y ~ x, method = 'lm')
       }
 
       if (yintercept) {
