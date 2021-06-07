@@ -68,7 +68,7 @@
       if (hexbin) {
         p <- p + geom_hex(aes_string())
       } else {
-        p <- p + geom_point(aes_string(color = group_var_str))
+        p <- p + geom_point(aes_string(color = group_var_str, label = "sample.id"))
       }
 
       if (abline) {

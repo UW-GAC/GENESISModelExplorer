@@ -1,5 +1,6 @@
 # Test data for tests.
 testdata <- tibble::tibble(
+  sample.id = sprintf("samp%03d", 1:100),
   quant1 = rnorm(100),
   quant2 = rnorm(100),
   cat1 = sample(letters[1:3], 100, replace = T),

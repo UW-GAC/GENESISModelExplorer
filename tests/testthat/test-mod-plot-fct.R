@@ -5,6 +5,7 @@ library(vdiffr)
 set.seed(123)
 n <- 100
 dat <- data.frame(
+  sample.id = sprintf("samp%03d", 1:n),
   quant1 = rnorm(n),
   quant2 = rnorm(n),
   cat1 = sample(letters[1:3], n, replace = T),
@@ -100,7 +101,7 @@ test_that("generate plot with lm and loess option", {
 
 test_that("generate plot with yintercept line", {
   expect_doppelganger("xy scatterplot yintercept", .generate_plot(dat, "quant1", "quant2", yintercept = TRUE))
-  expect_doppelganger("xy boxplot yintercept", .generate_plot(dat, "cat1", "quant1", yintercept = TRUE))  
+  expect_doppelganger("xy boxplot yintercept", .generate_plot(dat, "cat1", "quant1", yintercept = TRUE))
   expect_doppelganger("xy flipped boxplot yintercept", .generate_plot(dat, "quant1", "cat1", yintercept = TRUE))
 })
 
