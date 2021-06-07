@@ -16,6 +16,7 @@ Imports:
     htmltools,
     magrittr,
     pkgload,
+    plotly,
     processx,
     rlang,
     shiny (>= 1.6.0),

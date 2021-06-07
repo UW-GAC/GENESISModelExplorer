@@ -19,6 +19,7 @@ usethis::use_package( "rlang" )
 usethis::use_package( "dplyr" )
 usethis::use_package( "stringr" )
 usethis::use_package( "ggplot2" )
+usethis::use_package( "plotly" )
 usethis::use_package( "tibble" )
 usethis::use_package( "tidyselect" )
 usethis::use_package( "hexbin" ) # for testing plots
