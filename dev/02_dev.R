@@ -23,6 +23,7 @@ usethis::use_package( "tibble" )
 usethis::use_package( "tidyselect" )
 usethis::use_package( "hexbin" ) # for testing plots
 usethis::use_package( "charlatan", type = "Suggests" ) # For fake data.
+usethis::use_package( "shinyFiles" )
 # Different command for pipes.
 usethis::use_pipe(export = FALSE)
 # Manually add "BiocViews:" to the description.
