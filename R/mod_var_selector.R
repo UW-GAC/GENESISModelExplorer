@@ -24,8 +24,15 @@ mod_var_selector_ui <- function(id){
       checkboxInput(ns("abline"), label = "Add x = y line?"),
       checkboxInput(ns("loess"), label = "Add loess smooth line?"),
       checkboxInput(ns("lm"), label = "Add lm line?"),
+      h3("Boxplot options"),
+      checkboxInput(ns("violin"), label = "Violin plot instead of boxplot?"),
+      h3("Histogram options"),
+      checkboxInput(ns("density"), label = "Density plot instead of histogram?"),
+      checkboxInput(ns("proportion"), label = "Show proportion instead of counts?"),
       h3("Other options"),
-      checkboxInput(ns("yintercept"), label = "Add y = 0 line?")
+      checkboxInput(ns("yintercept"), label = "Add y = 0 line?"),
+      numericInput(ns("nbins"), label = "Number of bins for histograms or hexbin plots", value = 30, step = 1, min = 2, max = 100),
+      checkboxInput(ns("hide_legend"), label = "Hide legend?")
     )
   )
 }
@@ -63,7 +70,12 @@ mod_var_selector_server <- function(id, dataset){
         abline = reactive({ input$abline }),
         loess = reactive({ input$loess }),
         lm = reactive({ input$lm }),
-        yintercept = reactive({ input$yintercept })
+        yintercept = reactive({ input$yintercept }),
+        violin = reactive({ input$violin }),
+        nbins = reactive({ input$nbins }),
+        density = reactive({ input$density }),
+        hide_legend = reactive({ input$hide_legend }),
+        proportion = reactive({ input$proportion })
       )
     )
   })

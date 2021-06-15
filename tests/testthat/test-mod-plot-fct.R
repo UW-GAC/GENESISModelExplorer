@@ -100,7 +100,7 @@ test_that("generate plot with lm and loess option", {
 
 test_that("generate plot with yintercept line", {
   expect_doppelganger("xy scatterplot yintercept", .generate_plot(dat, "quant1", "quant2", yintercept = TRUE))
-  expect_doppelganger("xy boxplot yintercept", .generate_plot(dat, "cat1", "quant1", yintercept = TRUE))  
+  expect_doppelganger("xy boxplot yintercept", .generate_plot(dat, "cat1", "quant1", yintercept = TRUE))
   expect_doppelganger("xy flipped boxplot yintercept", .generate_plot(dat, "quant1", "cat1", yintercept = TRUE))
 })
 
@@ -164,4 +164,40 @@ test_that("variable names with spaces", {
   .generate_plot(tmp_dat, "var cat1", "var quant1", facet_var = "var facet") # faceted boxplot
   .generate_plot(tmp_dat, "var quant1", "var cat1", facet_var = "var facet") # faceted flipped boxplot
   expect_true(TRUE)
+})
+
+test_that("violin plots", {
+  # boxplot
+  expect_doppelganger("xy boxplot violin", .generate_plot(dat, "cat1", "quant1", violin = TRUE))
+  expect_doppelganger("xy boxplot grouped violin", .generate_plot(dat, "cat1", "quant1", group_var = "group", violin = TRUE))
+  # flipped boxplot
+  expect_doppelganger("xy flipped boxplot violin", .generate_plot(dat, "quant1", "cat1", violin = TRUE))
+  expect_doppelganger("xy flipped boxplot grouped violin", .generate_plot(dat, "quant1", "cat1", group_var = "group", violin = TRUE))
+})
+
+test_that("nbins", {
+  expect_doppelganger("x histogram bins 2", .generate_plot(dat, "quant1", nbins = 2))
+  expect_doppelganger("x histogram bins 100", .generate_plot(dat, "quant1", nbins = 100))
+  expect_doppelganger("x histogram bins grouped", .generate_plot(dat, "quant1", group_var = "group", nbins = 10))
+  expect_doppelganger("xy hexbin bins 2", .generate_plot(dat, "quant1", "quant2", hexbin = TRUE, nbins = 2))
+  expect_doppelganger("xy hexbin bins 100", .generate_plot(dat, "quant1", "quant2", hexbin = TRUE, nbins = 100))
+  expect_doppelganger("xy hexbin bins grouped", .generate_plot(dat, "quant1", "quant2", group_var = "group", hexbin = TRUE, nbins = 20))
+})
+
+
+test_that("density plot", {
+  expect_doppelganger("x density", .generate_plot(dat, "quant1", density = TRUE))
+  expect_doppelganger("x density grouped", .generate_plot(dat, "quant1", group_var = "group", density = TRUE))
+})
+
+test_that("hide legend", {
+  expect_doppelganger("x grouped hide legend", .generate_plot(dat, "quant1", group_var = "group", hide_legend = TRUE))
+  expect_doppelganger("xy boxplot hide legend", .generate_plot(dat, "cat1", "quant1", group_var = "group", hide_legend = TRUE))
+})
+
+test_that("proportion", {
+  expect_doppelganger("x histogram proportion", .generate_plot(dat, "quant1", proportion = TRUE, nbins = 5))
+  expect_doppelganger("x histogram grouped proportion", .generate_plot(dat, "quant1", group_var = "group", proportion = TRUE, nbins = 5))
+  expect_doppelganger("x density proportion", .generate_plot(dat, "quant1", proportion = TRUE, density = TRUE))
+  expect_doppelganger("x density grouped proportion", .generate_plot(dat, "quant1", group_var = "group", proportion = TRUE, density = TRUE))
 })
