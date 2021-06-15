@@ -29,7 +29,9 @@ mod_data_loader_ui <- function(id){
       h2("Load data"),
       checkboxInput(ns("use_example_data"), label = "Use example data?"),
       shinyFilesButton(ns("null_model_file"), label = "Null model file", title = 'Please select a null model file', multiple = FALSE),
+      textOutput(ns("selected_null_model_file")),
       shinyFilesButton(ns("phenotype_file"), label = "Phenotype file", title = 'Please select a phenotype file', multiple = FALSE),
+      textOutput(ns("selected_phenotype_file")),
       # TODO: Grey this out until both files are uploaded?
       actionButton(ns("load_data_button"), "Load data"),
       textOutput(ns("data_loaded_message"))
@@ -46,8 +48,8 @@ mod_data_loader_server <- function(id, parent_session = NULL){
     ns <- session$ns
 
     roots <- c(wd = ".")
-    shinyFileChoose(input, 'null_model_file', root=roots, filetypes=c('', 'RData'))
-    shinyFileChoose(input, 'phenotype_file', root=roots, filetypes=c('', 'RData'))
+    shinyFileChoose(input, 'null_model_file', root=roots, filetypes=c('', 'RData'), session = session)
+    shinyFileChoose(input, 'phenotype_file', root=roots, filetypes=c('', 'RData'), session = session)
 
     selected_null_model_file <- reactive({
       if (input$use_example_data) {
@@ -114,6 +116,14 @@ mod_data_loader_server <- function(id, parent_session = NULL){
       }
 
       return(dat)
+    })
+
+    output$selected_null_model_file <- renderText({
+      selected_null_model_file()
+    })
+
+    output$selected_phenotype_file <- renderText({
+      selected_phenotype_file()
     })
 
     output$data_loaded_message <- renderText({
