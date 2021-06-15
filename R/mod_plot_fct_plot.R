@@ -38,7 +38,8 @@
   violin = FALSE,
   nbins = 30,
   density = FALSE,
-  hide_legend = FALSE
+  hide_legend = FALSE,
+  proportion = FALSE
 ) {
   # This is using functions in the var_selector module. TODO: improve this?
   type_x <- .detect_variable_type(dat[[x_var]])
@@ -63,13 +64,28 @@
     if (type_x == QUANTITATIVE) {
       # Density plot or histogram.
       if (density) {
-        p <- p + geom_density(aes_string(fill = group_var_str), alpha = 0.5)
+        if (proportion) {
+          pos_string <- "fill"
+        } else {
+          pos_string <- "identity"
+        }
+        p <- p + geom_density(aes_string(fill = group_var_str), position = pos_string, alpha = 0.5)
       } else {
-        p <- p + geom_histogram(aes_string(fill = group_var_str), bins = nbins)
+        if (proportion) {
+          pos_string <- "fill"
+        } else {
+          pos_string <- "stack"
+        }
+        p <- p + geom_histogram(aes_string(fill = group_var_str), position = pos_string, bins = nbins)
       }
     } else if (type_x == CATEGORICAL) {
       # Bar plot.
-      p <- p + geom_bar(aes_string(fill = group_var_str))
+      if (proportion) {
+        pos_string <- "fill"
+      } else {
+        pos_string <- "stack"
+      }
+      p <- p + geom_bar(aes_string(fill = group_var_str), position = pos_string)
     }
   }
   else {

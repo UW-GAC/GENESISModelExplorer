@@ -194,3 +194,10 @@ test_that("hide legend", {
   expect_doppelganger("x grouped hide legend", .generate_plot(dat, "quant1", group_var = "group", hide_legend = TRUE))
   expect_doppelganger("xy boxplot hide legend", .generate_plot(dat, "cat1", "quant1", group_var = "group", hide_legend = TRUE))
 })
+
+test_that("proportion", {
+  expect_doppelganger("x histogram proportion", .generate_plot(dat, "quant1", proportion = TRUE, nbins = 5))
+  expect_doppelganger("x histogram grouped proportion", .generate_plot(dat, "quant1", group_var = "group", proportion = TRUE, nbins = 5))
+  expect_doppelganger("x density proportion", .generate_plot(dat, "quant1", proportion = TRUE, density = TRUE))
+  expect_doppelganger("x density grouped proportion", .generate_plot(dat, "quant1", group_var = "group", proportion = TRUE, density = TRUE))
+})

@@ -42,7 +42,8 @@ mod_plot_server <- function(id, dataset, selections){
         violin = selections$violin(),
         nbins = selections$nbins(),
         density = selections$density(),
-        hide_legend = selections$hide_legend()
+        hide_legend = selections$hide_legend(),
+        proportion = selections$proportion()
       )
     })
 

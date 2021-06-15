@@ -20,7 +20,10 @@ test_that("return values", {
       "violin",
       "nbins",
       "density",
-      "hide_legend"
+      "hide_legend",
+      "proportion"
     )
+    expect_type(session$returned, "list")
+    expect_equal(names(session$returned), expected_names)
   })
 })

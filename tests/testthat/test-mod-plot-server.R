@@ -23,7 +23,8 @@ test_that("test plot is created with x variable only", {
     yintercept = reactiveVal(FALSE),
     nbins = reactiveVal(30),
     density = reactiveVal(FALSE),
-    hide_legend = reactiveVal(FALSE)
+    hide_legend = reactiveVal(FALSE),
+    proportion = reactiveVal(FALSE)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -50,7 +51,8 @@ test_that("test plot is created with x and group variables only", {
     yintercept = reactiveVal(FALSE),
     nbins = reactiveVal(30),
     density = reactiveVal(FALSE),
-    hide_legend = reactiveVal(FALSE)
+    hide_legend = reactiveVal(FALSE),
+    proportion = reactiveVal(FALSE)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -305,7 +307,8 @@ test_that("plot is created with density option", {
     yintercept = reactiveVal(TRUE),
     nbins = reactiveVal(30),
     density = reactiveVal(TRUE),
-    hide_legend = reactiveVal(FALSE)
+    hide_legend = reactiveVal(FALSE),
+    proportion = reactiveVal(FALSE)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -332,7 +335,8 @@ test_that("plot is created with hide legend option", {
     yintercept = reactiveVal(TRUE),
     nbins = reactiveVal(30),
     density = reactiveVal(TRUE),
-    hide_legend = reactiveVal(TRUE)
+    hide_legend = reactiveVal(TRUE),
+    proportion = reactiveVal(FALSE)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
