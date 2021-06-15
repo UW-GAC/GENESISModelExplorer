@@ -182,5 +182,10 @@ test_that("nbins", {
   expect_doppelganger("xy hexbin bins 2", .generate_plot(dat, "quant1", "quant2", hexbin = TRUE, nbins = 2))
   expect_doppelganger("xy hexbin bins 100", .generate_plot(dat, "quant1", "quant2", hexbin = TRUE, nbins = 100))
   expect_doppelganger("xy hexbin bins grouped", .generate_plot(dat, "quant1", "quant2", group_var = "group", hexbin = TRUE, nbins = 20))
+})
 
+
+test_that("density plot", {
+  expect_doppelganger("x density", .generate_plot(dat, "quant1", density = TRUE))
+  expect_doppelganger("x density grouped", .generate_plot(dat, "quant1", group_var = "group", density = TRUE))
 })

@@ -40,7 +40,8 @@ mod_plot_server <- function(id, dataset, selections){
         lm = selections$lm(),
         yintercept = selections$yintercept(),
         violin = selections$violin(),
-        nbins = selections$nbins()
+        nbins = selections$nbins(),
+        density = selections$density()
       )
     })
 

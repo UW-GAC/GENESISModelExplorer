@@ -24,6 +24,7 @@
 #' @importFrom ggplot2 geom_smooth
 #' @importFrom ggplot2 geom_hline
 #' @importFrom ggplot2 geom_violin
+#' @importFrom ggplot2 geom_density
 .generate_plot <- function(dat, x_var,
   y_var = NULL,
   group_var = NULL,
@@ -34,7 +35,8 @@
   lm = FALSE,
   yintercept = FALSE,
   violin = FALSE,
-  nbins = 30
+  nbins = 30,
+  density = FALSE
 ) {
   # This is using functions in the var_selector module. TODO: improve this?
   type_x <- .detect_variable_type(dat[[x_var]])
@@ -57,8 +59,14 @@
   if (is.null(y_var)) {
     p <- ggplot(dat, aes_string(x = as.name(x_var)))
     if (type_x == QUANTITATIVE) {
-      p <- p + geom_histogram(aes_string(fill = group_var_str), bins = nbins)
+      # Density plot or histogram.
+      if (density) {
+        p <- p + geom_density(aes_string(fill = group_var_str), alpha = 0.5)
+      } else {
+        p <- p + geom_histogram(aes_string(fill = group_var_str), bins = nbins)
+      }
     } else if (type_x == CATEGORICAL) {
+      # Bar plot.
       p <- p + geom_bar(aes_string(fill = group_var_str))
     }
   }

@@ -18,7 +18,8 @@ test_that("return values", {
       "lm",
       "yintercept",
       "violin",
-      "nbins"
+      "nbins",
+      "density"
     )
     expect_type(session$returned, "list")
     expect_equal(names(session$returned), expected_names)
@@ -31,6 +32,7 @@ test_that("return values", {
     expect_null(session$returned$lm())
     expect_null(session$returned$yintercept())
     expect_null(session$returned$violin())
+    expect_null(session$returned$density())
   })
 })
 

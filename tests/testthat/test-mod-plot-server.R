@@ -21,7 +21,8 @@ test_that("test plot is created with x variable only", {
     loess = reactiveVal(FALSE),
     lm = reactiveVal(FALSE),
     yintercept = reactiveVal(FALSE),
-    nbins = reactiveVal(30)
+    nbins = reactiveVal(30),
+    density = reactiveVal(FALSE)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -46,7 +47,8 @@ test_that("test plot is created with x and group variables only", {
     loess = reactiveVal(FALSE),
     lm = reactiveVal(FALSE),
     yintercept = reactiveVal(FALSE),
-    nbins = reactiveVal(30)
+    nbins = reactiveVal(30),
+    density = reactiveVal(FALSE)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -267,6 +269,31 @@ test_that("plot is created with yintercept option", {
     lm = reactiveVal(FALSE),
     yintercept = reactiveVal(TRUE),
     nbins = reactiveVal(30)
+  )
+  testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
+    # No plot to begin with
+    expect_error(output$plot)
+    session$setInputs(plot_button = TRUE)
+    output$plot # Confirm that the plot can be accessed without an error.
+    # Note that this does not test if the plot is correct. We'll need to add snapshot tests for that.
+  })
+})
+
+test_that("plot is created with density option", {
+  n <- 100
+  dat <- reactiveVal(testdata)
+  selected <- list(
+    x_var = reactiveVal("quant1"),
+    y_var = reactiveVal(""),
+    group_var = reactiveVal("cat1"),
+    facet_var = reactiveVal("cat2"),
+    hexbin = reactiveVal(FALSE),
+    abline = reactiveVal(FALSE),
+    loess = reactiveVal(FALSE),
+    lm = reactiveVal(FALSE),
+    yintercept = reactiveVal(TRUE),
+    nbins = reactiveVal(30),
+    density = reactiveVal(TRUE)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
