@@ -39,7 +39,8 @@ mod_plot_server <- function(id, dataset, selections){
         loess = selections$loess(),
         lm = selections$lm(),
         yintercept = selections$yintercept(),
-        violin = selections$violin()
+        violin = selections$violin(),
+        nbins = selections$nbins()
       )
     })
 

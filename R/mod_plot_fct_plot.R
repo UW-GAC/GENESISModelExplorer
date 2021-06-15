@@ -33,7 +33,8 @@
   loess = FALSE,
   lm = FALSE,
   yintercept = FALSE,
-  violin = FALSE
+  violin = FALSE,
+  nbins = 30
 ) {
   # This is using functions in the var_selector module. TODO: improve this?
   type_x <- .detect_variable_type(dat[[x_var]])
@@ -56,7 +57,7 @@
   if (is.null(y_var)) {
     p <- ggplot(dat, aes_string(x = as.name(x_var)))
     if (type_x == QUANTITATIVE) {
-      p <- p + geom_histogram(aes_string(fill = group_var_str), bins = 30)
+      p <- p + geom_histogram(aes_string(fill = group_var_str), bins = nbins)
     } else if (type_x == CATEGORICAL) {
       p <- p + geom_bar(aes_string(fill = group_var_str))
     }
@@ -68,7 +69,7 @@
     if (type_x == QUANTITATIVE & type_y == QUANTITATIVE) {
 
       if (hexbin) {
-        p <- p + geom_hex(aes_string())
+        p <- p + geom_hex(aes_string(), bins = nbins)
       } else {
         p <- p + geom_point(aes_string(color = group_var_str))
       }

@@ -20,7 +20,8 @@ test_that("test plot is created with x variable only", {
     abline = reactiveVal(FALSE),
     loess = reactiveVal(FALSE),
     lm = reactiveVal(FALSE),
-    yintercept = reactiveVal(FALSE)
+    yintercept = reactiveVal(FALSE),
+    nbins = reactiveVal(30)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -44,7 +45,8 @@ test_that("test plot is created with x and group variables only", {
     abline = reactiveVal(FALSE),
     loess = reactiveVal(FALSE),
     lm = reactiveVal(FALSE),
-    yintercept = reactiveVal(FALSE)
+    yintercept = reactiveVal(FALSE),
+    nbins = reactiveVal(30)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -68,7 +70,8 @@ test_that("test plot is created with x and y variables", {
     abline = reactiveVal(FALSE),
     loess = reactiveVal(FALSE),
     lm = reactiveVal(FALSE),
-    yintercept = reactiveVal(FALSE)
+    yintercept = reactiveVal(FALSE),
+    nbins = reactiveVal(30)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -92,7 +95,8 @@ test_that("test plot is created with x, y, and group variables", {
     abline = reactiveVal(FALSE),
     loess = reactiveVal(FALSE),
     lm = reactiveVal(FALSE),
-    yintercept = reactiveVal(FALSE)
+    yintercept = reactiveVal(FALSE),
+    nbins = reactiveVal(30)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -116,7 +120,8 @@ test_that("test plot is created with x, y, and facet variables", {
     abline = reactiveVal(FALSE),
     loess = reactiveVal(FALSE),
     lm = reactiveVal(FALSE),
-    yintercept = reactiveVal(FALSE)
+    yintercept = reactiveVal(FALSE),
+    nbins = reactiveVal(30)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -140,7 +145,8 @@ test_that("test plot is created with x, y, group, and facet variables", {
     abline = reactiveVal(FALSE),
     loess = reactiveVal(FALSE),
     lm = reactiveVal(FALSE),
-    yintercept = reactiveVal(FALSE)
+    yintercept = reactiveVal(FALSE),
+    nbins = reactiveVal(30)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -163,7 +169,8 @@ test_that("plot is created with hexbin option", {
     abline = reactiveVal(FALSE),
     loess = reactiveVal(FALSE),
     lm = reactiveVal(FALSE),
-    yintercept = reactiveVal(FALSE)
+    yintercept = reactiveVal(FALSE),
+    nbins = reactiveVal(30)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -186,7 +193,8 @@ test_that("plot is created with abline option", {
     abline = reactiveVal(TRUE),
     loess = reactiveVal(FALSE),
     lm = reactiveVal(FALSE),
-    yintercept = reactiveVal(FALSE)
+    yintercept = reactiveVal(FALSE),
+    nbins = reactiveVal(30)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -209,7 +217,8 @@ test_that("plot is created with loess option", {
     abline = reactiveVal(FALSE),
     loess = reactiveVal(TRUE),
     lm = reactiveVal(FALSE),
-    yintercept = reactiveVal(FALSE)
+    yintercept = reactiveVal(FALSE),
+    nbins = reactiveVal(30)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -232,7 +241,8 @@ test_that("plot is created with lm option", {
     abline = reactiveVal(FALSE),
     loess = reactiveVal(FALSE),
     lm = reactiveVal(TRUE),
-    yintercept = reactiveVal(FALSE)
+    yintercept = reactiveVal(FALSE),
+    nbins = reactiveVal(30)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with
@@ -255,7 +265,8 @@ test_that("plot is created with yintercept option", {
     abline = reactiveVal(FALSE),
     loess = reactiveVal(FALSE),
     lm = reactiveVal(FALSE),
-    yintercept = reactiveVal(TRUE)
+    yintercept = reactiveVal(TRUE),
+    nbins = reactiveVal(30)
   )
   testServer(mod_plot_server, args = list(dataset = dat, selections = selected), {
     # No plot to begin with

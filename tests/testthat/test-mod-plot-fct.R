@@ -174,3 +174,13 @@ test_that("violin plots", {
   expect_doppelganger("xy flipped boxplot violin", .generate_plot(dat, "quant1", "cat1", violin = TRUE))
   expect_doppelganger("xy flipped boxplot grouped violin", .generate_plot(dat, "quant1", "cat1", group_var = "group", violin = TRUE))
 })
+
+test_that("nbins", {
+  expect_doppelganger("x histogram bins 2", .generate_plot(dat, "quant1", nbins = 2))
+  expect_doppelganger("x histogram bins 100", .generate_plot(dat, "quant1", nbins = 100))
+  expect_doppelganger("x histogram bins grouped", .generate_plot(dat, "quant1", group_var = "group", nbins = 10))
+  expect_doppelganger("xy hexbin bins 2", .generate_plot(dat, "quant1", "quant2", hexbin = TRUE, nbins = 2))
+  expect_doppelganger("xy hexbin bins 100", .generate_plot(dat, "quant1", "quant2", hexbin = TRUE, nbins = 100))
+  expect_doppelganger("xy hexbin bins grouped", .generate_plot(dat, "quant1", "quant2", group_var = "group", hexbin = TRUE, nbins = 20))
+
+})

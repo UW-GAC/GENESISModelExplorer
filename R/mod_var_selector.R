@@ -27,7 +27,8 @@ mod_var_selector_ui <- function(id){
       h3("Boxplot options"),
       checkboxInput(ns("violin"), label = "Violin plot instead of boxplot?"),
       h3("Other options"),
-      checkboxInput(ns("yintercept"), label = "Add y = 0 line?")
+      checkboxInput(ns("yintercept"), label = "Add y = 0 line?"),
+      numericInput(ns("nbins"), label = "Number of bins for histograms or hexbin plots", value = 30, step = 1, min = 2, max = 100)
     )
   )
 }
@@ -66,7 +67,8 @@ mod_var_selector_server <- function(id, dataset){
         loess = reactive({ input$loess }),
         lm = reactive({ input$lm }),
         yintercept = reactive({ input$yintercept }),
-        violin = reactive({ input$violin })
+        violin = reactive({ input$violin }),
+        nbins = reactive({ input$nbins })
       )
     )
   })
