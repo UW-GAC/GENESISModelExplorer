@@ -2,8 +2,6 @@
 #' @noRd
 #' @importFrom rlang .data
 .load_null_model <- function(filename) {
-  Sys.sleep(5) # TODO: REMOVE
-
   tmp <- get(load(filename))
 
   # Check that it's a valid nuull model file.
@@ -29,8 +27,6 @@
 #' @noRd
 #' @importFrom rlang .data
 .load_phenotype <- function(filename) {
-  Sys.sleep(5) # TODO: REMOVE
-
   tmp <- get(load(filename))
   # Convert to data frame if necessary.
   if (class(tmp) == "AnnotatedDataFrame") tmp <- Biobase::pData(tmp)
