@@ -76,7 +76,12 @@ mod_data_loader_server <- function(id){
         return(NULL)
       }
 
-      .load_data(null_model_file, phenotype_file, updateProgress = updateProgress)
+      tryCatch({
+        .load_data(null_model_file, phenotype_file, updateProgress = updateProgress)
+      },
+      error = function(err) {
+        validate(err$message)
+      })
     })
 
     output$data_loaded_message <- renderText({
