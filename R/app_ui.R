@@ -11,12 +11,15 @@ app_ui <- function(request) {
     # Your application UI logic
     navbarPage(
       "Shiny null model",
+      id = 'navbar',
       tabPanel(
         "Load data",
+        id = "load",
         mod_data_loader_ui("data_loader_ui_1")
       ),
       tabPanel(
         "Plot",
+        id = "plot",
         mod_var_selector_ui("var_selector_ui_1"),
         mod_plot_ui("plot_ui_1")
       )

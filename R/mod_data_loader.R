@@ -38,7 +38,7 @@ mod_data_loader_ui <- function(id){
 #' data_loader Server Functions
 #'
 #' @noRd
-mod_data_loader_server <- function(id){
+mod_data_loader_server <- function(id, parent_session){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
@@ -77,11 +77,16 @@ mod_data_loader_server <- function(id){
        }
 
       tryCatch({
-        .load_data(null_model_file, phenotype_file, updateProgress = updateProgress)
+        dat <- .load_data(null_model_file, phenotype_file, updateProgress = updateProgress)
       },
       error = function(err) {
         validate(err$message)
       })
+
+      # Switch to the plotting tab.
+      updateNavbarPage(parent_session, "navbar", selected="Plot")
+
+      return(dat)
     })
 
     output$data_loaded_message <- renderText({
