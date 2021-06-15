@@ -100,7 +100,7 @@ test_that("generate plot with lm and loess option", {
 
 test_that("generate plot with yintercept line", {
   expect_doppelganger("xy scatterplot yintercept", .generate_plot(dat, "quant1", "quant2", yintercept = TRUE))
-  expect_doppelganger("xy boxplot yintercept", .generate_plot(dat, "cat1", "quant1", yintercept = TRUE))  
+  expect_doppelganger("xy boxplot yintercept", .generate_plot(dat, "cat1", "quant1", yintercept = TRUE))
   expect_doppelganger("xy flipped boxplot yintercept", .generate_plot(dat, "quant1", "cat1", yintercept = TRUE))
 })
 
@@ -164,4 +164,13 @@ test_that("variable names with spaces", {
   .generate_plot(tmp_dat, "var cat1", "var quant1", facet_var = "var facet") # faceted boxplot
   .generate_plot(tmp_dat, "var quant1", "var cat1", facet_var = "var facet") # faceted flipped boxplot
   expect_true(TRUE)
+})
+
+test_that("violin plots", {
+  # boxplot
+  expect_doppelganger("xy boxplot violin", .generate_plot(dat, "cat1", "quant1", violin = TRUE))
+  expect_doppelganger("xy boxplot grouped violin", .generate_plot(dat, "cat1", "quant1", group_var = "group", violin = TRUE))
+  # flipped boxplot
+  expect_doppelganger("xy flipped boxplot violin", .generate_plot(dat, "quant1", "cat1", violin = TRUE))
+  expect_doppelganger("xy flipped boxplot grouped violin", .generate_plot(dat, "quant1", "cat1", group_var = "group", violin = TRUE))
 })

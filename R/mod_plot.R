@@ -38,7 +38,8 @@ mod_plot_server <- function(id, dataset, selections){
         abline = selections$abline(),
         loess = selections$loess(),
         lm = selections$lm(),
-        yintercept = selections$yintercept()
+        yintercept = selections$yintercept(),
+        violin = selections$violin()
       )
     })
 

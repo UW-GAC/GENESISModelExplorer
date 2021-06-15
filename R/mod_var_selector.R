@@ -24,6 +24,8 @@ mod_var_selector_ui <- function(id){
       checkboxInput(ns("abline"), label = "Add x = y line?"),
       checkboxInput(ns("loess"), label = "Add loess smooth line?"),
       checkboxInput(ns("lm"), label = "Add lm line?"),
+      h3("Boxplot options"),
+      checkboxInput(ns("violin"), label = "Violin plot instead of boxplot?"),
       h3("Other options"),
       checkboxInput(ns("yintercept"), label = "Add y = 0 line?")
     )
@@ -63,7 +65,8 @@ mod_var_selector_server <- function(id, dataset){
         abline = reactive({ input$abline }),
         loess = reactive({ input$loess }),
         lm = reactive({ input$lm }),
-        yintercept = reactive({ input$yintercept })
+        yintercept = reactive({ input$yintercept }),
+        violin = reactive({ input$violin })
       )
     )
   })
