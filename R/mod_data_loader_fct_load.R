@@ -54,15 +54,24 @@
 #' @importFrom rlang .data
 .load_data <- function(null_model_filename, phenotype_filename, updateProgress = NULL) {
 
+  # better progress bar based on file sizes.
+  nm_size <- file.info(null_model_filename)$size
+  phen_size <- file.info(phenotype_filename)$size
+  total_size <- 1.1 * (nm_size + phen_size)
+
   if (is.function(updateProgress)) {
-    updateProgress(value = 1/3, detail = "null model file..")
+    updateProgress(value = 0, detail = "phenotype file..")
+  }
+  phen <- .load_phenotype(phenotype_filename)
+
+  if (is.function(updateProgress)) {
+    updateProgress(value = (phen_size) / total_size, detail = "null model file...")
   }
   null_model <- .load_null_model(null_model_filename)
 
   if (is.function(updateProgress)) {
-    updateProgress(value = 2/3, detail = "phenotype file...")
+    updateProgress((phen_size + nm_size) / total_size, detail = "combining...")
   }
-  phen <- .load_phenotype(phenotype_filename)
 
   # Check that sample sets are compatible.
   # All samples in the null model must be in the phenotype file.
@@ -71,6 +80,7 @@
     err <- "Phenotype file must contain all sample.ids in the null model."
     stop(err)
   }
+
 
   dat <- null_model %>%
     dplyr::inner_join(phen, by = "sample.id") %>%
