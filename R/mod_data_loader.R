@@ -10,6 +10,21 @@
 mod_data_loader_ui <- function(id){
   ns <- NS(id)
   tagList(
+
+    tags$head(
+      tags$style(
+        HTML(".shiny-notification {
+                height: 100px;
+                width: 400px;
+                position:fixed;
+                top: calc(50% - 50px);;
+                left: calc(50% - 400px);;
+              }
+             "
+        )
+      )
+    ),
+
       h2("Load data"),
       checkboxInput(ns("use_example_data"), label = "Use example data?"),
       fileInput(ns("null_model_file"), label = "Null model file", accept = ".RData"),
