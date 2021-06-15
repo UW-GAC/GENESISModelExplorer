@@ -41,7 +41,8 @@ mod_plot_server <- function(id, dataset, selections){
         yintercept = selections$yintercept(),
         violin = selections$violin(),
         nbins = selections$nbins(),
-        density = selections$density()
+        density = selections$density(),
+        hide_legend = selections$hide_legend()
       )
     })
 

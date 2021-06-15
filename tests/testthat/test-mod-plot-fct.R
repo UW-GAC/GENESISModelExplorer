@@ -189,3 +189,8 @@ test_that("density plot", {
   expect_doppelganger("x density", .generate_plot(dat, "quant1", density = TRUE))
   expect_doppelganger("x density grouped", .generate_plot(dat, "quant1", group_var = "group", density = TRUE))
 })
+
+test_that("hide legend", {
+  expect_doppelganger("x grouped hide legend", .generate_plot(dat, "quant1", group_var = "group", hide_legend = TRUE))
+  expect_doppelganger("xy boxplot hide legend", .generate_plot(dat, "cat1", "quant1", group_var = "group", hide_legend = TRUE))
+})

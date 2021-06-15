@@ -25,6 +25,7 @@
 #' @importFrom ggplot2 geom_hline
 #' @importFrom ggplot2 geom_violin
 #' @importFrom ggplot2 geom_density
+#' @importFrom ggplot2 theme
 .generate_plot <- function(dat, x_var,
   y_var = NULL,
   group_var = NULL,
@@ -36,7 +37,8 @@
   yintercept = FALSE,
   violin = FALSE,
   nbins = 30,
-  density = FALSE
+  density = FALSE,
+  hide_legend = FALSE
 ) {
   # This is using functions in the var_selector module. TODO: improve this?
   type_x <- .detect_variable_type(dat[[x_var]])
@@ -138,5 +140,10 @@
   if (!is.null(facet_var_str)) {
     p <- p + facet_wrap(facet_var_str)
   }
+
+  if (hide_legend) {
+    p <- p + theme(legend.position = "none")
+  }
+
   return(p)
 }

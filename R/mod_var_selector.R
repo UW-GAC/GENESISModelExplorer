@@ -30,7 +30,8 @@ mod_var_selector_ui <- function(id){
       checkboxInput(ns("density"), label = "Density plot instead of histogram?"),
       h3("Other options"),
       checkboxInput(ns("yintercept"), label = "Add y = 0 line?"),
-      numericInput(ns("nbins"), label = "Number of bins for histograms or hexbin plots", value = 30, step = 1, min = 2, max = 100)
+      numericInput(ns("nbins"), label = "Number of bins for histograms or hexbin plots", value = 30, step = 1, min = 2, max = 100),
+      checkboxInput(ns("hide_legend"), label = "Hide legend?")
     )
   )
 }
@@ -71,7 +72,8 @@ mod_var_selector_server <- function(id, dataset){
         yintercept = reactive({ input$yintercept }),
         violin = reactive({ input$violin }),
         nbins = reactive({ input$nbins }),
-        density = reactive({ input$density })
+        density = reactive({ input$density }),
+        hide_legend = reactive({ input$hide_legend })
       )
     )
   })
