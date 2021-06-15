@@ -28,6 +28,27 @@ mod_data_loader_server <- function(id){
     ns <- session$ns
 
     data_reactive <- eventReactive(input$load_data_button, {
+
+      # Set up progress reporting
+      # From this url: https://shiny.rstudio.com/articles/progress.html
+      progress <- shiny::Progress$new()
+      progress$set(message = "Loading", value = 0)
+      # Close the progress when this reactive exits (even if there's an error)
+      on.exit(progress$close())
+
+      # Create a callback function to update progress.
+       # Each time this is called:
+       # - If `value` is NULL, it will move the progress bar 1/5 of the remaining
+       #   distance. If non-NULL, it will set the progress to that value.
+       # - It also accepts optional detail text.
+       updateProgress <- function(value = NULL, detail = NULL) {
+         if (is.null(value)) {
+           value <- progress$getValue()
+           value <- value + (progress$getMax() - value) / 3
+         }
+         progress$set(value = value, detail = detail)
+       }
+
       if (input$use_example_data) {
         # TODO: May need to change this when deployed.
         null_model_file = system.file("extdata", "null_model.RData", package = "shinyNullModel")
@@ -40,7 +61,7 @@ mod_data_loader_server <- function(id){
         return(NULL)
       }
 
-      .load_data(null_model_file, phenotype_file)
+      .load_data(null_model_file, phenotype_file, updateProgress = updateProgress)
     })
 
     output$data_loaded_message <- renderText({

@@ -2,6 +2,8 @@
 #' @noRd
 #' @importFrom rlang .data
 .load_null_model <- function(filename) {
+  Sys.sleep(5) # TODO: REMOVE
+
   tmp <- get(load(filename))
 
   # Check that it's a valid nuull model file.
@@ -27,6 +29,8 @@
 #' @noRd
 #' @importFrom rlang .data
 .load_phenotype <- function(filename) {
+  Sys.sleep(5) # TODO: REMOVE
+
   tmp <- get(load(filename))
   # Convert to data frame if necessary.
   if (class(tmp) == "AnnotatedDataFrame") tmp <- Biobase::pData(tmp)
@@ -48,8 +52,16 @@
 #' Load and combine null model and phenotype files
 #' @noRd
 #' @importFrom rlang .data
-.load_data <- function(null_model_filename, phenotype_filename) {
+.load_data <- function(null_model_filename, phenotype_filename, updateProgress = NULL) {
+
+  if (is.function(updateProgress)) {
+    updateProgress(value = 1/3, detail = "null model file..")
+  }
   null_model <- .load_null_model(null_model_filename)
+
+  if (is.function(updateProgress)) {
+    updateProgress(value = 2/3, detail = "phenotype file...")
+  }
   phen <- .load_phenotype(phenotype_filename)
 
   # Check that sample sets are compatible.
@@ -63,6 +75,10 @@
   dat <- null_model %>%
     dplyr::inner_join(phen, by = "sample.id") %>%
     dplyr::select(.data$sample.id, tidyselect::everything())
+
+  if (is.function(updateProgress)) {
+    updateProgress(value = 1, detail = "done!")
+  }
 
   dat
 }
