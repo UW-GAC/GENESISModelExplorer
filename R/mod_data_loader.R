@@ -47,7 +47,7 @@ mod_data_loader_server <- function(id){
       # Set up progress reporting
       # From this url: https://shiny.rstudio.com/articles/progress.html
       progress <- shiny::Progress$new()
-      progress$set(message = "Loading", value = 0)
+      progress$set(message = "Loading data", value = 0)
       # Close the progress when this reactive exits (even if there's an error)
       on.exit(progress$close())
 
