@@ -8,7 +8,7 @@
   allowed_classes <- c("GENESIS.nullMixedModel", "GENESIS.nullModel")
   cls <- class(tmp)
   if (!(class(tmp) %in% allowed_classes)) {
-    err <- sprintf("%s is not a valid GENESIS null model.", filename)
+    err <- sprintf("Null model is not a valid GENESIS null model.", filename)
     stop(err)
   }
   # Some users may be using older null model formatss.
