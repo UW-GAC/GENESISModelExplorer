@@ -38,7 +38,7 @@ mod_data_loader_ui <- function(id){
 #' data_loader Server Functions
 #'
 #' @noRd
-mod_data_loader_server <- function(id, parent_session){
+mod_data_loader_server <- function(id, parent_session = NULL){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
@@ -84,7 +84,9 @@ mod_data_loader_server <- function(id, parent_session){
       })
 
       # Switch to the plotting tab.
-      updateNavbarPage(parent_session, "navbar", selected="Plot")
+      if (!is.null(parent_session)) {
+        updateNavbarPage(parent_session, "navbar", selected="Plot")
+      }
 
       return(dat)
     })
