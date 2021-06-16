@@ -39,6 +39,12 @@
     err <- "Phenotype file must include sample.id."
     stop(err)
   }
+
+  # Check for duplicates
+  if (any(duplicated(tmp$sample.id))) {
+    err <- "Phenotype file must not contain duplicated sample.ids."
+    stop(err)
+  }
   phen <- tmp %>%
     # Change names to have prefix "Phenotype: "
     dplyr::rename_with(.fn = ~ paste0("Phenotype: ", .x), -.data$sample.id) %>%
