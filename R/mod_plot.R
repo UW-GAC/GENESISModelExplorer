@@ -50,7 +50,6 @@ mod_plot_server <- function(id, dataset){
 
     # Update x and y axis selections based on loaded data.
     observe({
-      print("here")
       # Get variable types.
       var_types <- sapply(dataset(), .detect_variable_type)
       var_types <- var_types[names(var_types) != "sample.id"]
