@@ -108,3 +108,33 @@ test_that("load data fails when null model has more samples than phenotype file"
   expect_error(.load_data(nullmod_file, tmpfile), "must contain all sample.ids")
   unlink(tmpfile)
 })
+
+test_that("load data fails when phenotype file has duplicated sample ids not in null model file", {
+  nullmod_file <- system.file("extdata", "null_model.RData", package="shinyNullModel")
+  nm <- .load_null_model(nullmod_file)
+  phen <- get(load(system.file("extdata", "phenotype.RData", package="shinyNullModel")))
+  tmp <- rbind(
+    Biobase::pData(phen),
+    Biobase::pData(phen) %>% dplyr::filter(!(sample.id %in% nm$sample.id))
+  ) %>%
+    Biobase::AnnotatedDataFrame()
+  tmpfile <- withr::local_file("pheno.RData")
+  save(tmp, file = tmpfile)
+  expect_error(.load_data(nullmod_file, tmpfile), "duplicated sample.ids")
+  unlink(tmpfile)
+})
+
+test_that("load data fails when phenotype file has duplicated sample ids in null model file", {
+  nullmod_file <- system.file("extdata", "null_model.RData", package="shinyNullModel")
+  nm <- .load_null_model(nullmod_file)
+  phen <- get(load(system.file("extdata", "phenotype.RData", package="shinyNullModel")))
+  tmp <- rbind(
+    Biobase::pData(phen),
+    Biobase::pData(phen) %>% dplyr::filter(sample.id %in% nm$sample.id[1])
+  ) %>%
+    Biobase::AnnotatedDataFrame()
+  tmpfile <- withr::local_file("pheno.RData")
+  save(tmp, file = tmpfile)
+  expect_error(.load_data(nullmod_file, tmpfile), "duplicated sample.ids")
+  unlink(tmpfile)
+})
