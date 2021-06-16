@@ -20,7 +20,6 @@ app_ui <- function(request) {
       tabPanel(
         "Plot",
         id = "plot",
-        mod_var_selector_ui("var_selector_ui_1"),
         mod_plot_ui("plot_ui_1")
       )
     )
