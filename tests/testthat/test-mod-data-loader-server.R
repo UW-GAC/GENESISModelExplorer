@@ -76,15 +76,18 @@ test_that("fails when only null model file is specified", {
   null_model$fit <- null_model$fit[1:100, ]
   save(null_model, file = user_nullmod_file)
 
-  testServer(mod_data_loader_server, {
-    session$setInputs(use_example_data = FALSE)
-    session$setInputs(null_model_file = list(datapath = user_nullmod_file))
-    session$setInputs(load_data_button = TRUE)
-    expect_equal(data_reactive(), NULL)
-    expect_equal(output$data_loaded_message, "")
-    returned <- session$getReturned()
-    expect_equal(returned(), NULL)
-  })
+  expect_error(
+    testServer(mod_data_loader_server, {
+      session$setInputs(use_example_data = FALSE)
+      session$setInputs(null_model_file = list(datapath = user_nullmod_file))
+      session$setInputs(load_data_button = TRUE)
+      expect_equal(data_reactive(), NULL)
+      expect_equal(output$data_loaded_message, "")
+      returned <- session$getReturned()
+      expect_equal(returned(), NULL)
+    }),
+    "select a phenotype file"
+  )
 })
 
 test_that("fails when only phenotype file is specified", {
@@ -98,15 +101,18 @@ test_that("fails when only phenotype file is specified", {
   null_model$fit <- null_model$fit[1:100, ]
   save(null_model, file = user_nullmod_file)
 
-  testServer(mod_data_loader_server, {
-    session$setInputs(use_example_data = FALSE)
-    session$setInputs(phenotype_file = list(datapath = user_pheno_file))
-    session$setInputs(load_data_button = TRUE)
-    expect_equal(data_reactive(), NULL)
-    expect_equal(output$data_loaded_message, "")
-    returned <- session$getReturned()
-    expect_equal(returned(), NULL)
-  })
+  expect_error(
+    testServer(mod_data_loader_server, {
+      session$setInputs(use_example_data = FALSE)
+      session$setInputs(phenotype_file = list(datapath = user_pheno_file))
+      session$setInputs(load_data_button = TRUE)
+      expect_equal(data_reactive(), NULL)
+      expect_equal(output$data_loaded_message, "")
+      returned <- session$getReturned()
+      expect_equal(returned(), NULL)
+    }),
+    "select a null model file"
+  )
 })
 
 test_that("loads example data over user data when box is checked", {
