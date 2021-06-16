@@ -36,7 +36,7 @@ mod_plot_ui <- function(id){
       checkboxInput(ns("density"), label = "Density plot instead of histogram?"),
       checkboxInput(ns("proportion"), label = "Show proportion instead of counts?")
     ),
-    actionButton(ns("plot_button"), "Generate plot"),
+    actionButton(ns("plot_button"), "Generate plot", class = "btn-primary"),
     plotOutput(ns("plot"))
   )
 }
