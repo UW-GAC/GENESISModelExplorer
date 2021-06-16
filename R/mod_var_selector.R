@@ -19,6 +19,12 @@ mod_var_selector_ui <- function(id){
       selectInput(ns("facet"), label = "facet by", choices = NULL, selectize = FALSE),
     ),
     column(4,
+      h3("General options"),
+      checkboxInput(ns("yintercept"), label = "Add y = 0 line?"),
+      numericInput(ns("nbins"), label = "Number of bins for histograms or hexbin plots", value = 30, step = 1, min = 2, max = 100),
+      checkboxInput(ns("hide_legend"), label = "Hide legend?")
+    ),
+    column(4,
       h3("Scatterplot options"),
       checkboxInput(ns("hexbin"), label = "Hexbin instead of scatterplot?"),
       checkboxInput(ns("abline"), label = "Add x = y line?"),
@@ -28,11 +34,7 @@ mod_var_selector_ui <- function(id){
       checkboxInput(ns("violin"), label = "Violin plot instead of boxplot?"),
       h3("Histogram options"),
       checkboxInput(ns("density"), label = "Density plot instead of histogram?"),
-      checkboxInput(ns("proportion"), label = "Show proportion instead of counts?"),
-      h3("Other options"),
-      checkboxInput(ns("yintercept"), label = "Add y = 0 line?"),
-      numericInput(ns("nbins"), label = "Number of bins for histograms or hexbin plots", value = 30, step = 1, min = 2, max = 100),
-      checkboxInput(ns("hide_legend"), label = "Hide legend?")
+      checkboxInput(ns("proportion"), label = "Show proportion instead of counts?")
     )
   )
 }

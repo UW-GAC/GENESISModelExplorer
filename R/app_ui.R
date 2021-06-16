@@ -9,19 +9,20 @@ app_ui <- function(request) {
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # Your application UI logic
-    fluidPage(
-      titlePanel("shinyNullModel"),
-      hr(),
-      fluidRow(
-        column(4,
-          mod_data_loader_ui("data_loader_ui_1")
-        ),
-        column(8,
-          mod_var_selector_ui("var_selector_ui_1")
-        )
+    navbarPage(
+      "Shiny null model",
+      id = 'navbar',
+      tabPanel(
+        "Load data",
+        id = "load",
+        mod_data_loader_ui("data_loader_ui_1")
       ),
-      hr(),
-      mod_plot_ui("plot_ui_1")
+      tabPanel(
+        "Plot",
+        id = "plot",
+        mod_var_selector_ui("var_selector_ui_1"),
+        mod_plot_ui("plot_ui_1")
+      )
     )
   )
 }
