@@ -42,19 +42,37 @@ mod_data_loader_server <- function(id, parent_session = NULL){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
-    data_reactive <- eventReactive(input$load_data_button, {
-
+    selected_null_model_file <- reactive({
       if (input$use_example_data) {
         # TODO: May need to change this when deployed.
         null_model_file = system.file("extdata", "null_model.RData", package = "shinyNullModel")
-
-        phenotype_file = system.file("extdata", "phenotype.RData", package = "shinyNullModel")
-      } else if (!is.null(input$null_model_file) & !is.null(input$phenotype_file)) {
+      } else if (!is.null(input$null_model_file)) {
         null_model_file <- input$null_model_file$datapath
+      } else {
+        return(NULL)
+      }
+      null_model_file
+    })
+
+    selected_phenotype_file <- reactive({
+      if (input$use_example_data) {
+        # TODO: May need to change this when deployed.
+        phenotype_file = system.file("extdata", "phenotype.RData", package = "shinyNullModel")
+      } else if (!is.null(input$phenotype_file)) {
         phenotype_file <- input$phenotype_file$datapath
       } else {
         return(NULL)
       }
+      phenotype_file
+    })
+
+
+    data_reactive <- eventReactive(input$load_data_button, {
+
+      validate(
+        need(selected_null_model_file(), "Please select a null model file."),
+        need(selected_phenotype_file(), "Please select a phenotype file.")
+      )
 
       # Set up progress reporting
       # From this url: https://shiny.rstudio.com/articles/progress.html
@@ -77,7 +95,7 @@ mod_data_loader_server <- function(id, parent_session = NULL){
        }
 
       tryCatch({
-        dat <- .load_data(null_model_file, phenotype_file, updateProgress = updateProgress)
+        dat <- .load_data(selected_null_model_file(), selected_phenotype_file(), updateProgress = updateProgress)
       },
       error = function(err) {
         validate(err$message)
