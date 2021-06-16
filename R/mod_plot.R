@@ -10,6 +10,32 @@
 mod_plot_ui <- function(id){
   ns <- NS(id)
   tagList(
+    h2("Plot setup"),
+    column(4,
+      h3("Main selections"),
+      selectInput(ns("x"), label = "x axis", choices = NULL),
+      selectInput(ns("y"), label = "y axis", choices = NULL, selectize = FALSE),
+      selectInput(ns("group"), label = "group by", choices = NULL, selectize = FALSE),
+      selectInput(ns("facet"), label = "facet by", choices = NULL, selectize = FALSE),
+    ),
+    column(4,
+      h3("General options"),
+      checkboxInput(ns("yintercept"), label = "Add y = 0 line?"),
+      numericInput(ns("nbins"), label = "Number of bins for histograms or hexbin plots", value = 30, step = 1, min = 2, max = 100),
+      checkboxInput(ns("hide_legend"), label = "Hide legend?")
+    ),
+    column(4,
+      h3("Scatterplot options"),
+      checkboxInput(ns("hexbin"), label = "Hexbin instead of scatterplot?"),
+      checkboxInput(ns("abline"), label = "Add x = y line?"),
+      checkboxInput(ns("loess"), label = "Add loess smooth line?"),
+      checkboxInput(ns("lm"), label = "Add lm line?"),
+      h3("Boxplot options"),
+      checkboxInput(ns("violin"), label = "Violin plot instead of boxplot?"),
+      h3("Histogram options"),
+      checkboxInput(ns("density"), label = "Density plot instead of histogram?"),
+      checkboxInput(ns("proportion"), label = "Show proportion instead of counts?")
+    ),
     actionButton(ns("plot_button"), "Generate plot"),
     plotOutput(ns("plot"))
   )
