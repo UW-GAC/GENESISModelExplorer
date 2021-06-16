@@ -1,3 +1,6 @@
+QUANTITATIVE <- "quantitative"
+CATEGORICAL <- "categorical"
+
 #' Return NULL if a string is not truthy, otherwise return the string itself.
 #' @noRd
 .check_truthiness <- function(x) {
@@ -6,6 +9,24 @@
   } else {
     NULL
   }
+}
+
+.get_variable_names <- function(x) {
+  return(setdiff(names(x), "sample.id"))
+}
+
+.detect_variable_type <- function(variable, n_categories_threshold = 10) {
+  if (length(unique(variable)) <= n_categories_threshold) return(CATEGORICAL)
+
+  cls <- class(variable)
+  variable_type <- switch(
+      cls,
+      "numeric" = QUANTITATIVE,
+      "integer" = QUANTITATIVE,
+      "character" = CATEGORICAL,
+      sprintf("unknown type: %s", cls)
+    )
+  variable_type
 }
 
 #' Generate a plot from a dataset
