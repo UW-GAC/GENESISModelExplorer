@@ -12,7 +12,7 @@ mod_plot_ui <- function(id){
   tagList(
     h2("Plot setup"),
     column(4,
-      h3("Main selections"),
+      h3("Main input"),
       selectInput(ns("x"), label = "x axis", choices = NULL),
       selectInput(ns("y"), label = "y axis", choices = NULL, selectize = FALSE),
       selectInput(ns("group"), label = "group by", choices = NULL, selectize = FALSE),
@@ -44,15 +44,31 @@ mod_plot_ui <- function(id){
 #' plot Server Functions
 #'
 #' @noRd
-mod_plot_server <- function(id, dataset, selections){
+mod_plot_server <- function(id, dataset){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
+    # Update x and y axis selections based on loaded data.
+    observe({
+      print("here")
+      # Get variable types.
+      var_types <- sapply(dataset(), .detect_variable_type)
+      var_types <- var_types[names(var_types) != "sample.id"]
+
+      updateSelectInput(session, "x", choices = names(var_types))
+      updateSelectInput(session, "y", choices = c("---" = "", names(var_types)))
+
+      # group by categorical variables only.
+      categorical_variables <- names(var_types)[var_types == CATEGORICAL]
+      updateSelectInput(session, "group", choices = c("---" = "", categorical_variables))
+      updateSelectInput(session, "facet", choices = c("---" = "", categorical_variables))
+    })
+
     plot_obj <- eventReactive(input$plot_button, {
-      x_var <- .check_truthiness(selections$x_var())
-      y_var <- .check_truthiness(selections$y_var())
-      group_var <- .check_truthiness(selections$group_var())
-      facet_var <- .check_truthiness(selections$facet_var())
+      x_var <- .check_truthiness(input$x)
+      y_var <- .check_truthiness(input$y)
+      group_var <- .check_truthiness(input$group)
+      facet_var <- .check_truthiness(input$facet)
 
       .generate_plot(
         dataset(),
@@ -60,16 +76,16 @@ mod_plot_server <- function(id, dataset, selections){
         y_var,
         group_var = group_var,
         facet_var = facet_var,
-        hexbin = selections$hexbin(),
-        abline = selections$abline(),
-        loess = selections$loess(),
-        lm = selections$lm(),
-        yintercept = selections$yintercept(),
-        violin = selections$violin(),
-        nbins = selections$nbins(),
-        density = selections$density(),
-        hide_legend = selections$hide_legend(),
-        proportion = selections$proportion()
+        hexbin = input$hexbin,
+        abline = input$abline,
+        loess = input$loess,
+        lm = input$lm,
+        yintercept = input$yintercept,
+        violin = input$violin,
+        nbins = input$nbins,
+        density = input$density,
+        hide_legend = input$hide_legend,
+        proportion = input$proportion
       )
     })
 

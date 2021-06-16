@@ -4,6 +4,7 @@ CATEGORICAL <- "categorical"
 #' Return NULL if a string is not truthy, otherwise return the string itself.
 #' @noRd
 .check_truthiness <- function(x) {
+  print(x)
   if (shiny::isTruthy(x)) {
     x
   } else {
