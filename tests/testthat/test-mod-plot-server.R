@@ -30,6 +30,49 @@ set_default_inputs <- function(session) {
   )
 }
 
+test_that("test plot type display", {
+  # Reactive input arguments
+  n <- 100
+  dat <- reactiveVal(testdata)
+  testServer(mod_plot_server, args = list(dataset = dat), {
+    set_default_inputs(session)
+    session$setInputs(x = "cat1", y = "")
+    expect_equal(plot_type(), BARPLOT)
+
+    set_default_inputs(session)
+    session$setInputs(x = "quant1", y = "")
+    expect_equal(plot_type(), HISTOGRAM)
+
+    set_default_inputs(session)
+    session$setInputs(x = "quant1", y = "", density = TRUE)
+    expect_equal(plot_type(), DENSITY)
+
+    set_default_inputs(session)
+    session$setInputs(x = "quant1", y = "quant2")
+    expect_equal(plot_type(), SCATTERPLOT)
+
+    set_default_inputs(session)
+    session$setInputs(x = "quant1", y = "quant2", hexbin = TRUE)
+    expect_equal(plot_type(), HEXBIN)
+
+    set_default_inputs(session)
+    session$setInputs(x = "quant1", y = "cat1")
+    expect_equal(plot_type(), BOXPLOT)
+
+    set_default_inputs(session)
+    session$setInputs(x = "quant1", y = "cat1", violin = TRUE)
+    expect_equal(plot_type(), VIOLIN)
+
+    set_default_inputs(session)
+    session$setInputs(x = "cat1", y = "quant1")
+    expect_equal(plot_type(), BOXPLOT)
+
+    set_default_inputs(session)
+    session$setInputs(x = "cat1", y = "quant1", violin = TRUE)
+    expect_equal(plot_type(), VIOLIN)
+  })
+})
+
 test_that("test plot is created with x variable only", {
   # Reactive input arguments
   n <- 100
