@@ -20,33 +20,45 @@ mod_plot_ui <- function(id){
         selectInput(ns("facet"), label = "facet by", choices = NULL, selectize = FALSE),
       ),
       column(8,
-        h3("Options")
+        h3("Options"),
+        checkboxInput(ns("hide_legend"), label = "Hide legend?"),
+        conditionalPanel(
+          condition = sprintf("output['%s']", ns("show_options_1d")),
+          # Consider making this show up only if group_by is selected.
+          checkboxInput(ns("proportion"), label = "Show proportion instead of counts?"),
+          conditionalPanel(
+            condition = sprintf("output['%s']", ns("show_options_1d_quant")),
+            checkboxInput(ns("density"), label = "Density plot instead of histogram?")
+          ),
+          conditionalPanel(
+            condition = sprintf("output['%s'] == '%s'", ns("plot_type"), HISTOGRAM),
+            numericInput(ns("nbins_histogram"), label = "Number of bins for histograms", value = 30, step = 1, min = 2, max = 100),
+          )
+        ),
+        # 2d
+        conditionalPanel(
+          condition = sprintf("output['%s']", ns("show_options_2d")),
+          checkboxInput(ns("yintercept"), label = "Add y = 0 line?"),
+          conditionalPanel(
+            condition = sprintf("output['%s']", ns("show_options_2d_quant")),
+            checkboxInput(ns("abline"), label = "Add x = y line?"),
+            checkboxInput(ns("smooth_line"), label = "Add smooth line?"),
+            checkboxInput(ns("lm"), label = "Add lm line?"),
+            checkboxInput(ns("hexbin"), label = "Hexbin instead of scatterplot?"),
+            conditionalPanel(
+              condition = sprintf("output['%s'] == '%s'", ns("plot_type"), HEXBIN),
+              numericInput(ns("nbins_hexbin"), label = "Number of bins for hexbin", value = 30, step = 1, min = 2, max = 100),
+            )
+          ),
+          conditionalPanel(
+            condition = sprintf("output['%s']", ns("show_options_2d_cat")),
+            checkboxInput(ns("violin"), label = "Violin plot instead of boxplot?")
+          )
+        )
+        # 2d quant
+        # 2d quant hexbin
+        # 2d cat
       )
-    ),
-    column(4,
-      h3("General options"),
-      checkboxInput(ns("yintercept"), label = "Add y = 0 line?"),
-      conditionalPanel(
-        condition = sprintf("output['%s'] == '%s'", ns("plot_type"), HISTOGRAM),
-        numericInput(ns("nbins_histogram"), label = "Number of bins for histograms", value = 30, step = 1, min = 2, max = 100),
-      ),
-      conditionalPanel(
-        condition = sprintf("output['%s'] == '%s'", ns("plot_type"), HEXBIN),
-        numericInput(ns("nbins_hexbin"), label = "Number of bins for hexbin plot", value = 30, step = 1, min = 2, max = 100),
-      ),
-      checkboxInput(ns("hide_legend"), label = "Hide legend?")
-    ),
-    column(4,
-      h3("Scatterplot options"),
-      checkboxInput(ns("hexbin"), label = "Hexbin instead of scatterplot?"),
-      checkboxInput(ns("abline"), label = "Add x = y line?"),
-      checkboxInput(ns("smooth_line"), label = "Add smooth line?"),
-      checkboxInput(ns("lm"), label = "Add lm line?"),
-      h3("Boxplot options"),
-      checkboxInput(ns("violin"), label = "Violin plot instead of boxplot?"),
-      h3("Histogram options"),
-      checkboxInput(ns("density"), label = "Density plot instead of histogram?"),
-      checkboxInput(ns("proportion"), label = "Show proportion instead of counts?")
     ),
     actionButton(ns("plot_button"), "Generate plot", class = "btn-primary"),
     plotOutput(ns("plot"))
@@ -122,6 +134,22 @@ mod_plot_server <- function(id, dataset){
         proportion = input$proportion
       )
     })
+
+    # For showing or hiding certain options.
+    output$show_options_1d <- reactive({!isTruthy(input$y)})
+    outputOptions(output, "show_options_1d", suspendWhenHidden = FALSE)
+
+    output$show_options_1d_quant <- reactive({plot_type() %in% c(HISTOGRAM, DENSITY)})
+    outputOptions(output, "show_options_1d_quant", suspendWhenHidden = FALSE)
+
+    output$show_options_2d <- reactive({isTruthy(input$y)})
+    outputOptions(output, "show_options_2d", suspendWhenHidden = FALSE)
+
+    output$show_options_2d_quant <- reactive({plot_type() %in% c(SCATTERPLOT, HEXBIN)})
+    outputOptions(output, "show_options_2d_quant", suspendWhenHidden = FALSE)
+
+    output$show_options_2d_cat <- reactive({plot_type() %in% c(BOXPLOT)})
+    outputOptions(output, "show_options_2d_cat", suspendWhenHidden = FALSE)
 
     output$plot_type <- renderText({
       plot_type()

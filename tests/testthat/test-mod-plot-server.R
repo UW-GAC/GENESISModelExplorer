@@ -31,7 +31,7 @@ set_default_inputs <- function(session) {
   )
 }
 
-test_that("test plot type display", {
+test_that("plot type reactive", {
   # Reactive input arguments
   n <- 100
   dat <- reactiveVal(testdata)
@@ -71,6 +71,64 @@ test_that("test plot type display", {
     set_default_inputs(session)
     session$setInputs(x = "cat1", y = "quant1", violin = TRUE)
     expect_equal(plot_type(), VIOLIN)
+  })
+})
+
+test_that("conditional options", {
+  # Reactive input arguments
+  n <- 100
+  dat <- reactiveVal(testdata)
+  testServer(mod_plot_server, args = list(dataset = dat), {
+    set_default_inputs(session)
+    session$setInputs(x = "cat1", y = "")
+    skip("Figure out why calling output$show_options_1d produces an error")
+    # I have no idea how to test this. Just calling output$show_options_1d produces an error.
+    # expect_equal(output$show_options_1d, TRUE)
+    # expect_equal(output$show_options_1d_quant, FALSE)
+    # expect_equal(output$show_options_2d, FALSE)
+    # expect_equal(output$show_options_2d_quant, FALSE)
+    # expect_equal(output$show_options_2d_cat, FALSE)
+    #
+    # set_default_inputs(session)
+    # session$setInputs(x = "quant1", y = "")
+    # expect_equal(output$show_options_1d, TRUE)
+    # expect_equal(output$show_options_1d_quant, TRUE)
+    # expect_equal(output$show_options_2d, FALSE)
+    # expect_equal(output$show_options_2d_quant, FALSE)
+    # expect_equal(output$show_options_2d_cat, FALSE)
+    #
+    # set_default_inputs(session)
+    # session$setInputs(x = "quant1", y = "quant2")
+    # expect_equal(output$show_options_1d, FALSE)
+    # expect_equal(output$show_options_1d_quant, FALSE)
+    # expect_equal(output$show_options_2d, TRUE)
+    # expect_equal(output$show_options_2d_quant, TRUE)
+    # expect_equal(output$show_options_2d_cat, FALSE)
+    #
+    # set_default_inputs(session)
+    # session$setInputs(x = "quant1", y = "cat1")
+    # expect_equal(output$show_options_1d, FALSE)
+    # expect_equal(output$show_options_1d_quant, FALSE)
+    # expect_equal(output$show_options_2d, TRUE)
+    # expect_equal(output$show_options_2d_quant, FALSE)
+    # expect_equal(output$show_options_2d_cat, TRUE)
+    #
+    # set_default_inputs(session)
+    # session$setInputs(x = "cat1", y = "quant1")
+    # expect_equal(output$show_options_1d, FALSE)
+    # expect_equal(output$show_options_1d_quant, FALSE)
+    # expect_equal(output$show_options_2d, TRUE)
+    # expect_equal(output$show_options_2d_quant, FALSE)
+    # expect_equal(output$show_options_2d_cat, TRUE)
+    #
+    # set_default_inputs(session)
+    # session$setInputs(x = "cat1", y = "cat2")
+    # expect_equal(output$show_options_1d, FALSE)
+    # expect_equal(output$show_options_1d_quant, FALSE)
+    # expect_equal(output$show_options_2d, TRUE)
+    # expect_equal(output$show_options_2d_quant, FALSE)
+    # expect_equal(output$show_options_2d_cat, FALSE)
+
   })
 })
 
