@@ -54,6 +54,15 @@ test_that(".check_truthiness", {
   expect_equal(.check_truthiness("Model: outcome"), "Model: outcome")
 })
 
+test_that(".get_plot_type works correctly", {
+  expect_equal(.get_plot_type(QUANTITATIVE, y_type = NULL), HISTOGRAM)
+  expect_equal(.get_plot_type(CATEGORICAL, y_type = NULL), BARPLOT)
+  expect_equal(.get_plot_type(QUANTITATIVE, y_type = QUANTITATIVE), SCATTERPLOT)
+  expect_equal(.get_plot_type(QUANTITATIVE, y_type = CATEGORICAL), BOXPLOT)
+  expect_equal(.get_plot_type(CATEGORICAL, y_type = QUANTITATIVE), BOXPLOT)
+  expect_error(.get_plot_type(CATEGORICAL, y_type = CATEGORICAL), "two categorical variables")
+})
+
 test_that("generate plot with xvar only",{
   # histogram
   expect_doppelganger("x histogram", .generate_plot(dat, "quant1"))

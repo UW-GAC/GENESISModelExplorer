@@ -29,6 +29,37 @@ CATEGORICAL <- "categorical"
   variable_type
 }
 
+# Return the type of the plot
+BOXPLOT <- "box plot"
+HISTOGRAM <- "histogram"
+BARPLOT <- "bar plot"
+SCATTERPLOT <- "scatterplot"
+HEXBIN <- "hexbin plot"
+DENSITY <- "density plot"
+.get_plot_type <- function(x_type, y_type = NULL) {
+  # Check that specified types are valid.
+  stopifnot(x_type %in% c(QUANTITATIVE, CATEGORICAL))
+  stopifnot(is.null(y_type) | y_type %in% c(QUANTITATIVE, CATEGORICAL))
+
+  if (is.null(y_type)) {
+    if (x_type == CATEGORICAL) {
+      return(BARPLOT)
+    } else {
+      return(HISTOGRAM)
+    }
+  } else {
+    if (x_type == QUANTITATIVE & y_type == QUANTITATIVE) {
+      return(SCATTERPLOT)
+    } else if (x_type == QUANTITATIVE & y_type == CATEGORICAL) {
+      return(BOXPLOT)
+    } else if (x_type == CATEGORICAL & y_type == QUANTITATIVE) {
+      return(BOXPLOT)
+    } else if (x_type == CATEGORICAL & y_type == CATEGORICAL) {
+      stop("Cannot plot two categorical variables.")
+    }
+  }
+}
+
 #' Generate a plot from a dataset
 #'
 #' @noRd
