@@ -21,8 +21,14 @@ mod_plot_ui <- function(id){
     column(4,
       h3("General options"),
       checkboxInput(ns("yintercept"), label = "Add y = 0 line?"),
-      numericInput(ns("nbins_histogram"), label = "Number of bins for histograms", value = 30, step = 1, min = 2, max = 100),
-      numericInput(ns("nbins_hexbin"), label = "Number of bins for hexbin plot", value = 30, step = 1, min = 2, max = 100),
+      conditionalPanel(
+        condition = sprintf("output['%s'] == '%s'", ns("plot_type"), HISTOGRAM),
+        numericInput(ns("nbins_histogram"), label = "Number of bins for histograms", value = 30, step = 1, min = 2, max = 100),
+      ),
+      conditionalPanel(
+        condition = sprintf("output['%s'] == '%s'", ns("plot_type"), HEXBIN),
+        numericInput(ns("nbins_hexbin"), label = "Number of bins for hexbin plot", value = 30, step = 1, min = 2, max = 100),
+      ),
       checkboxInput(ns("hide_legend"), label = "Hide legend?")
     ),
     column(4,
