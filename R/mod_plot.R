@@ -11,12 +11,17 @@ mod_plot_ui <- function(id){
   ns <- NS(id)
   tagList(
     h2("Plot setup"),
-    column(4,
-      h3("Main input"),
-      selectInput(ns("x"), label = "x axis", choices = NULL),
-      selectInput(ns("y"), label = "y axis", choices = NULL, selectize = FALSE),
-      selectInput(ns("group"), label = "group by", choices = NULL, selectize = FALSE),
-      selectInput(ns("facet"), label = "facet by", choices = NULL, selectize = FALSE),
+    fluidRow(
+      column(4,
+        h3("Main input"),
+        selectInput(ns("x"), label = "x axis", choices = NULL),
+        selectInput(ns("y"), label = "y axis", choices = NULL, selectize = FALSE),
+        selectInput(ns("group"), label = "group by", choices = NULL, selectize = FALSE),
+        selectInput(ns("facet"), label = "facet by", choices = NULL, selectize = FALSE),
+      ),
+      column(8,
+        h3("Options")
+      )
     ),
     column(4,
       h3("General options"),
