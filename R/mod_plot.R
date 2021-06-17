@@ -112,6 +112,11 @@ mod_plot_server <- function(id, dataset){
       )
     })
 
+    output$plot_type <- renderText({
+      plot_type()
+    })
+    outputOptions(output, "plot_type", suspendWhenHidden = FALSE)
+
     output$plot <- renderPlot({
       plot_obj()
     })
