@@ -13,14 +13,14 @@ mod_plot_ui <- function(id){
     h2("Plot setup"),
     fluidRow(
       column(4,
-        h3("Main input"),
+        h3("Variable selection"),
         selectInput(ns("x"), label = "x axis", choices = NULL),
         selectInput(ns("y"), label = "y axis", choices = NULL, selectize = FALSE),
         selectInput(ns("group"), label = "group by", choices = NULL, selectize = FALSE),
         selectInput(ns("facet"), label = "facet by", choices = NULL, selectize = FALSE),
       ),
       column(8,
-        h3("Options"),
+        h3("Plot options"),
         checkboxInput(ns("hide_legend"), label = "Hide legend"),
         conditionalPanel(
           condition = sprintf("output['%s']", ns("show_options_1d")),
@@ -148,7 +148,7 @@ mod_plot_server <- function(id, dataset){
     output$show_options_2d_quant <- reactive({plot_type() %in% c(SCATTERPLOT, HEXBIN)})
     outputOptions(output, "show_options_2d_quant", suspendWhenHidden = FALSE)
 
-    output$show_options_2d_cat <- reactive({plot_type() %in% c(BOXPLOT)})
+    output$show_options_2d_cat <- reactive({plot_type() %in% c(VIOLIN, BOXPLOT)})
     outputOptions(output, "show_options_2d_cat", suspendWhenHidden = FALSE)
 
     output$plot_type <- renderText({
