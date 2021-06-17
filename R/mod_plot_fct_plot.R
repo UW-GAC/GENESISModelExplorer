@@ -36,7 +36,8 @@ BARPLOT <- "bar plot"
 SCATTERPLOT <- "scatterplot"
 HEXBIN <- "hexbin plot"
 DENSITY <- "density plot"
-.get_plot_type <- function(x_type, y_type = NULL) {
+VIOLIN <- "violin plot"
+.get_plot_type <- function(x_type, y_type = NULL, density = FALSE, violin = FALSE, hexbin = FALSE) {
   # Check that specified types are valid.
   stopifnot(x_type %in% c(QUANTITATIVE, CATEGORICAL))
   stopifnot(is.null(y_type) | y_type %in% c(QUANTITATIVE, CATEGORICAL))
@@ -45,15 +46,31 @@ DENSITY <- "density plot"
     if (x_type == CATEGORICAL) {
       return(BARPLOT)
     } else {
-      return(HISTOGRAM)
+      if (density) {
+        return(DENSITY)
+      } else {
+        return(HISTOGRAM)
+      }
     }
   } else {
     if (x_type == QUANTITATIVE & y_type == QUANTITATIVE) {
-      return(SCATTERPLOT)
+      if (hexbin) {
+        return(HEXBIN)
+      } else {
+        return(SCATTERPLOT)
+      }
     } else if (x_type == QUANTITATIVE & y_type == CATEGORICAL) {
-      return(BOXPLOT)
+      if (violin) {
+        return(VIOLIN)
+      } else {
+        return(BOXPLOT)
+      }
     } else if (x_type == CATEGORICAL & y_type == QUANTITATIVE) {
-      return(BOXPLOT)
+      if (violin) {
+        return(VIOLIN)
+      } else {
+        return(BOXPLOT)
+      }
     } else if (x_type == CATEGORICAL & y_type == CATEGORICAL) {
       stop("Cannot plot two categorical variables.")
     }
@@ -82,14 +99,16 @@ DENSITY <- "density plot"
   y_var = NULL,
   group_var = NULL,
   facet_var = NULL,
+  # plot type options
   hexbin = FALSE,
+  violin = FALSE,
+  density = FALSE,
+  # general options
   abline = FALSE,
   smooth_line = FALSE,
   lm = FALSE,
   yintercept = FALSE,
-  violin = FALSE,
   nbins = 30,
-  density = FALSE,
   hide_legend = FALSE,
   proportion = FALSE
 ) {

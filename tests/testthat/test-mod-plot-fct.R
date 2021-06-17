@@ -55,12 +55,41 @@ test_that(".check_truthiness", {
 })
 
 test_that(".get_plot_type works correctly", {
+  # x quantitative
   expect_equal(.get_plot_type(QUANTITATIVE, y_type = NULL), HISTOGRAM)
+  expect_equal(.get_plot_type(QUANTITATIVE, y_type = NULL, density = TRUE), DENSITY)
+  expect_equal(.get_plot_type(QUANTITATIVE, y_type = NULL, violin = TRUE), HISTOGRAM)
+  expect_equal(.get_plot_type(QUANTITATIVE, y_type = NULL, hexbin = TRUE), HISTOGRAM)
+
+  # x categorical
   expect_equal(.get_plot_type(CATEGORICAL, y_type = NULL), BARPLOT)
+  expect_equal(.get_plot_type(CATEGORICAL, y_type = NULL, density = TRUE), BARPLOT)
+  expect_equal(.get_plot_type(CATEGORICAL, y_type = NULL, violin = TRUE), BARPLOT)
+  expect_equal(.get_plot_type(CATEGORICAL, y_type = NULL, hexbin = TRUE), BARPLOT)
+
+  # xy quantitaive
   expect_equal(.get_plot_type(QUANTITATIVE, y_type = QUANTITATIVE), SCATTERPLOT)
+  expect_equal(.get_plot_type(QUANTITATIVE, y_type = QUANTITATIVE, density = TRUE), SCATTERPLOT)
+  expect_equal(.get_plot_type(QUANTITATIVE, y_type = QUANTITATIVE, violin = TRUE), SCATTERPLOT)
+  expect_equal(.get_plot_type(QUANTITATIVE, y_type = QUANTITATIVE, hexbin = TRUE), HEXBIN)
+
+  # xy quantitative categorical
   expect_equal(.get_plot_type(QUANTITATIVE, y_type = CATEGORICAL), BOXPLOT)
+  expect_equal(.get_plot_type(QUANTITATIVE, y_type = CATEGORICAL, density = TRUE), BOXPLOT)
+  expect_equal(.get_plot_type(QUANTITATIVE, y_type = CATEGORICAL, violin = TRUE), VIOLIN)
+  expect_equal(.get_plot_type(QUANTITATIVE, y_type = CATEGORICAL, hexbin = TRUE), BOXPLOT)
+
+  # xy categorical quantitative
   expect_equal(.get_plot_type(CATEGORICAL, y_type = QUANTITATIVE), BOXPLOT)
+  expect_equal(.get_plot_type(CATEGORICAL, y_type = QUANTITATIVE, density = TRUE), BOXPLOT)
+  expect_equal(.get_plot_type(CATEGORICAL, y_type = QUANTITATIVE, violin = TRUE), VIOLIN)
+  expect_equal(.get_plot_type(CATEGORICAL, y_type = QUANTITATIVE, hexbin = TRUE), BOXPLOT)
+
+  # two categorical
   expect_error(.get_plot_type(CATEGORICAL, y_type = CATEGORICAL), "two categorical variables")
+  expect_error(.get_plot_type(CATEGORICAL, y_type = CATEGORICAL, density = TRUE), "two categorical variables")
+  expect_error(.get_plot_type(CATEGORICAL, y_type = CATEGORICAL, violin = TRUE), "two categorical variables")
+  expect_error(.get_plot_type(CATEGORICAL, y_type = CATEGORICAL, hexbin = TRUE), "two categorical variables")
 })
 
 test_that("generate plot with xvar only",{
