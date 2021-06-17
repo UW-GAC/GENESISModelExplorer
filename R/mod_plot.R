@@ -37,7 +37,6 @@ mod_plot_ui <- function(id){
       checkboxInput(ns("proportion"), label = "Show proportion instead of counts?")
     ),
     actionButton(ns("plot_button"), "Generate plot", class = "btn-primary"),
-    textOutput(ns("plot_type")),
     plotOutput(ns("plot"))
   )
 }
@@ -69,12 +68,16 @@ mod_plot_server <- function(id, dataset){
     })
 
     plot_type <- reactive({
+      req(input$x)
       x_type <- var_types()[input$x]
       y_type <- .check_truthiness(var_types()[input$y])
-      plot_type <- .get_plot_type(x_type, y_type = y_type, density = input$density,
+      .get_plot_type(x_type, y_type = y_type, density = input$density,
                      hexbin = input$hexbin, violin = input$violin)
-      shiny::updateActionButton(session, "plot_button", label = sprintf("Generate %s", plot_type))
-      plot_type
+    })
+
+    observe({
+      req(plot_type())
+      shiny::updateActionButton(session, "plot_button", label = sprintf("Generate %s", plot_type()))
     })
 
     plot_obj <- eventReactive(input$plot_button, {
