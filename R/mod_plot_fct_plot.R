@@ -108,7 +108,8 @@ VIOLIN <- "violin plot"
   smooth_line = FALSE,
   lm = FALSE,
   yintercept = FALSE,
-  nbins = 30,
+  nbins_histogram = 30,
+  nbins_hexbin = 30,
   hide_legend = FALSE,
   proportion = FALSE
 ) {
@@ -137,7 +138,7 @@ VIOLIN <- "violin plot"
     # 1d plots
     if (plot_type == HISTOGRAM) {
       if (proportion) pos_string <- "fill" else pos_string <- "stack"
-      p <- p + geom_histogram(aes_string(fill = group_var_str), position = pos_string, bins = nbins)
+      p <- p + geom_histogram(aes_string(fill = group_var_str), position = pos_string, bins = nbins_histogram)
     } else if (plot_type == DENSITY) {
       if (proportion) pos_string <- "fill" else pos_string <- "identity"
       p <- p + geom_density(aes_string(fill = group_var_str), position = pos_string, alpha = 0.5)
@@ -155,7 +156,7 @@ VIOLIN <- "violin plot"
       if (smooth_line) p <- p + geom_smooth()
       if (lm) p <- p + geom_smooth(formula = y ~ x, method = 'lm')
     } else if (plot_type == HEXBIN) {
-      p <- p + geom_hex(aes_string(), bins = nbins)
+      p <- p + geom_hex(aes_string(), bins = nbins_hexbin)
       if (abline) p <- p + geom_abline()
       if (smooth_line) p <- p + geom_smooth()
       if (lm) p <- p + geom_smooth(formula = y ~ x, method = 'lm')

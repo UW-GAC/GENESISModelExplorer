@@ -246,12 +246,14 @@ test_that("violin plots", {
 })
 
 test_that("nbins", {
-  expect_doppelganger("x histogram bins 2", .generate_plot(dat, "quant1", nbins = 2))
-  expect_doppelganger("x histogram bins 100", .generate_plot(dat, "quant1", nbins = 100))
-  expect_doppelganger("x histogram bins grouped", .generate_plot(dat, "quant1", group_var = "group", nbins = 10))
-  expect_doppelganger("xy hexbin bins 2", .generate_plot(dat, "quant1", "quant2", hexbin = TRUE, nbins = 2))
-  expect_doppelganger("xy hexbin bins 100", .generate_plot(dat, "quant1", "quant2", hexbin = TRUE, nbins = 100))
-  expect_doppelganger("xy hexbin bins grouped", .generate_plot(dat, "quant1", "quant2", group_var = "group", hexbin = TRUE, nbins = 20))
+  expect_doppelganger("x histogram bins 2", .generate_plot(dat, "quant1", nbins_histogram = 2))
+  expect_doppelganger("x histogram bins 100", .generate_plot(dat, "quant1", nbins_histogram = 100))
+  expect_doppelganger("x histogram bins grouped", .generate_plot(dat, "quant1", group_var = "group", nbins_histogram = 10))
+  expect_doppelganger("x histogram bins with hexbin option", .generate_plot(dat, "quant1", nbins_hexbin = 2))
+  expect_doppelganger("xy hexbin bins 2", .generate_plot(dat, "quant1", "quant2", hexbin = TRUE, nbins_hexbin = 2))
+  expect_doppelganger("xy hexbin bins 100", .generate_plot(dat, "quant1", "quant2", hexbin = TRUE, nbins_hexbin = 100))
+  expect_doppelganger("xy hexbin bins grouped", .generate_plot(dat, "quant1", "quant2", group_var = "group", hexbin = TRUE, nbins_hexbin = 20))
+  expect_doppelganger("x hexbin bins with histogram option", .generate_plot(dat, "quant1", "quant2", hexbin = TRUE, nbins_histogram = 2))
 })
 
 
@@ -266,8 +268,8 @@ test_that("hide legend", {
 })
 
 test_that("proportion", {
-  expect_doppelganger("x histogram proportion", .generate_plot(dat, "quant1", proportion = TRUE, nbins = 5))
-  expect_doppelganger("x histogram grouped proportion", .generate_plot(dat, "quant1", group_var = "group", proportion = TRUE, nbins = 5))
+  expect_doppelganger("x histogram proportion", .generate_plot(dat, "quant1", proportion = TRUE, nbins_histogram = 5))
+  expect_doppelganger("x histogram grouped proportion", .generate_plot(dat, "quant1", group_var = "group", proportion = TRUE, nbins_histogram = 5))
   expect_doppelganger("x density proportion", .generate_plot(dat, "quant1", proportion = TRUE, density = TRUE))
   expect_doppelganger("x density grouped proportion", .generate_plot(dat, "quant1", group_var = "group", proportion = TRUE, density = TRUE))
 })

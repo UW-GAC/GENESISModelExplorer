@@ -21,7 +21,8 @@ mod_plot_ui <- function(id){
     column(4,
       h3("General options"),
       checkboxInput(ns("yintercept"), label = "Add y = 0 line?"),
-      numericInput(ns("nbins"), label = "Number of bins for histograms or hexbin plots", value = 30, step = 1, min = 2, max = 100),
+      numericInput(ns("nbins_histogram"), label = "Number of bins for histograms", value = 30, step = 1, min = 2, max = 100),
+      numericInput(ns("nbins_hexbin"), label = "Number of bins for hexbin plot", value = 30, step = 1, min = 2, max = 100),
       checkboxInput(ns("hide_legend"), label = "Hide legend?")
     ),
     column(4,
@@ -98,7 +99,8 @@ mod_plot_server <- function(id, dataset){
         lm = input$lm,
         yintercept = input$yintercept,
         violin = input$violin,
-        nbins = input$nbins,
+        nbins_histogram = input$nbins_histogram,
+        nbins_hexbin = input$nbins_hexbin,
         density = input$density,
         hide_legend = input$hide_legend,
         proportion = input$proportion
