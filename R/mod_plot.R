@@ -72,8 +72,13 @@ mod_plot_server <- function(id, dataset){
       req(input$x)
       x_type <- var_types()[input$x]
       y_type <- .check_truthiness(var_types()[input$y])
-      .get_plot_type(x_type, y_type = y_type, density = input$density,
-                     hexbin = input$hexbin, violin = input$violin)
+      tryCatch({
+        .get_plot_type(x_type, y_type = y_type, density = input$density,
+                       hexbin = input$hexbin, violin = input$violin)
+      },
+      error = function(err) {
+        validate(err$message)
+      })
     })
 
     observe({
