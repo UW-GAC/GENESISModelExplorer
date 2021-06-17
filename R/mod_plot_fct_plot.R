@@ -114,6 +114,7 @@ VIOLIN <- "violin plot"
 ) {
   # This is using functions in the var_selector module. TODO: improve this?
   type_x <- .detect_variable_type(dat[[x_var]])
+  type_y <- if (is.null(y_var)) NULL else .detect_variable_type(dat[[y_var]])
 
   # Check categorical variables
   group_var_str <- NULL
@@ -129,100 +130,43 @@ VIOLIN <- "violin plot"
     facet_var_str <- as.name(facet_var)
   }
 
+  plot_type <- .get_plot_type(type_x, type_y, density = density, violin = violin, hexbin = hexbin)
 
   if (is.null(y_var)) {
     p <- ggplot(dat, aes_string(x = as.name(x_var)))
-    if (type_x == QUANTITATIVE) {
-      # Density plot or histogram.
-      if (density) {
-        if (proportion) {
-          pos_string <- "fill"
-        } else {
-          pos_string <- "identity"
-        }
-        p <- p + geom_density(aes_string(fill = group_var_str), position = pos_string, alpha = 0.5)
-      } else {
-        if (proportion) {
-          pos_string <- "fill"
-        } else {
-          pos_string <- "stack"
-        }
-        p <- p + geom_histogram(aes_string(fill = group_var_str), position = pos_string, bins = nbins)
-      }
-    } else if (type_x == CATEGORICAL) {
-      # Bar plot.
-      if (proportion) {
-        pos_string <- "fill"
-      } else {
-        pos_string <- "stack"
-      }
+    # 1d plots
+    if (plot_type == HISTOGRAM) {
+      if (proportion) pos_string <- "fill" else pos_string <- "stack"
+      p <- p + geom_histogram(aes_string(fill = group_var_str), position = pos_string, bins = nbins)
+    } else if (plot_type == DENSITY) {
+      if (proportion) pos_string <- "fill" else pos_string <- "identity"
+      p <- p + geom_density(aes_string(fill = group_var_str), position = pos_string, alpha = 0.5)
+    } else if (plot_type == BARPLOT) {
+      if (proportion) pos_string <- "fill" else pos_string <- "stack"
       p <- p + geom_bar(aes_string(fill = group_var_str), position = pos_string)
     }
-  }
-  else {
-    type_y <- .detect_variable_type(dat[[y_var]])
+  } else {
 
     p <- ggplot(dat, aes_string(x = as.name(x_var), y = as.name(y_var)))
-    if (type_x == QUANTITATIVE & type_y == QUANTITATIVE) {
 
-      if (hexbin) {
-        p <- p + geom_hex(aes_string(), bins = nbins)
-      } else {
-        p <- p + geom_point(aes_string(color = group_var_str))
-      }
-
-      if (abline) {
-        p <- p + geom_abline()
-      }
-
-      if (smooth_line) {
-        p <- p + geom_smooth()
-      }
-
-      if (lm) {
-        p <- p + geom_smooth(formula = y ~ x, method = 'lm')
-      }
-
-      if (yintercept) {
-        p <- p + geom_hline(yintercept = 0)
-      }
-
-    } else if (type_x == QUANTITATIVE & type_y == CATEGORICAL) {
-      # Show a flipped boxplot.
-      # We have to recreate p because we need to use coord_flip.
-      p <- ggplot(dat, aes_string(y = as.name(x_var), x = as.name(y_var)))
-
-      if (violin) {
-        p <- p +
-          geom_violin(aes_string(fill = group_var_str), draw_quantiles = 0.5)
-      } else {
-        p <- p +
-          geom_boxplot(aes_string(fill = group_var_str))
-      }
-      p <- p +
-        coord_flip()
-
-    } else if (type_x == CATEGORICAL & type_y == QUANTITATIVE) {
-      # Show a boxplot.
-      p <- ggplot(dat, aes_string(x = as.name(x_var), y = as.name(y_var)))
-
-      if (violin) {
-        p <- p +
-          geom_violin(aes_string(fill = group_var_str), draw_quantiles = 0.5)
-      } else {
-        p <- p +
-          geom_boxplot(aes_string(fill = group_var_str))
-      }
-
-      if (yintercept) {
-        p <- p + geom_hline(yintercept = 0)
-      }
-
-    } else if (type_y == CATEGORICAL & type_y == CATEGORICAL) {
-      # Maybe we don't want to allow this?
-      stop("Cannot plot two categorical variables against each other.")
+    if (plot_type == SCATTERPLOT) {
+      p <- p + geom_point(aes_string(color = group_var_str))
+      if (abline) p <- p + geom_abline()
+      if (smooth_line) p <- p + geom_smooth()
+      if (lm) p <- p + geom_smooth(formula = y ~ x, method = 'lm')
+    } else if (plot_type == HEXBIN) {
+      p <- p + geom_hex(aes_string(), bins = nbins)
+      if (abline) p <- p + geom_abline()
+      if (smooth_line) p <- p + geom_smooth()
+      if (lm) p <- p + geom_smooth(formula = y ~ x, method = 'lm')
+    } else if (plot_type == BOXPLOT) {
+      p <- p + geom_boxplot(aes_string(fill = group_var_str))
+    } else if (plot_type == VIOLIN) {
+      p <- p + geom_violin(aes_string(fill = group_var_str), draw_quantiles = 0.5)
     }
   }
+
+  if (yintercept) p <- p + geom_hline(yintercept = 0)
 
   if (!is.null(facet_var_str)) {
     p <- p + facet_wrap(facet_var_str)
