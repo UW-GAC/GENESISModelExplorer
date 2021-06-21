@@ -57,7 +57,7 @@ mod_plot_ui <- function(id){
         )
       ),
       mainPanel(
-        plotOutput(ns("plot"))
+        plotOutput(ns("plot"), height = "600px")
       )
     )
   )
