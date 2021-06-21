@@ -126,7 +126,7 @@ CATEGORICAL <- "categorical"
       }
 
       if (loess) {
-        p <- p + geom_smooth(formula = y ~ x, method = 'loess')
+        p <- p + geom_smooth()
       }
 
       if (lm) {

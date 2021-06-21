@@ -33,15 +33,17 @@ test_that(".detect_variable_type works properly", {
 
 # Create some test data.
 set.seed(123)
-n <- 100
+n <- 1000
 dat <- data.frame(
   quant1 = rnorm(n),
-  quant2 = rnorm(n),
-  cat1 = sample(letters[1:3], n, replace = T),
+  cat1 = sample(letters[1:3], n, replace = T, prob = c(1, 2, 5)),
   cat2 = sample(letters[1:3], n, replace = T),
   group = sample(letters[1:3], n, replace = T),
   quant3 = rnorm(n),
   facet = sample(letters[1:3], n, replace = T)
+) %>%
+dplyr::mutate(
+  quant2 = 2 * quant1^2 + 0.5 * rnorm(n)
 )
 
 test_that(".check_truthiness", {
@@ -230,4 +232,21 @@ test_that("proportion", {
   expect_doppelganger("x histogram grouped proportion", .generate_plot(dat, "quant1", group_var = "group", proportion = TRUE, nbins = 5))
   expect_doppelganger("x density proportion", .generate_plot(dat, "quant1", proportion = TRUE, density = TRUE))
   expect_doppelganger("x density grouped proportion", .generate_plot(dat, "quant1", group_var = "group", proportion = TRUE, density = TRUE))
+})
+
+test_that("smooth line with many data points", {
+  set.seed(123)
+  n <- 60000
+  dat_large <- data.frame(
+    quant1 = rnorm(n),
+    cat1 = sample(letters[1:3], n, replace = T),
+    cat2 = sample(letters[1:3], n, replace = T),
+    group = sample(letters[1:3], n, replace = T),
+    quant3 = rnorm(n),
+    facet = sample(letters[1:3], n, replace = T)
+  ) %>%
+  dplyr::mutate(
+    quant2 = 2 * quant1^2 + 0.5 * rnorm(n)
+  )
+  expect_doppelganger("x smoothed large data", .generate_plot(dat_large, "quant1", "quant2", loess = TRUE))
 })
