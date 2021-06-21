@@ -13,14 +13,14 @@ mod_plot_ui <- function(id){
     h2("Plot setup"),
     fluidRow(
       column(4,
+        actionButton(ns("plot_button"), "Generate plot", class = "btn-primary"),
         h3("Variable selection"),
         selectInput(ns("x"), label = "x axis", choices = NULL),
         selectInput(ns("y"), label = "y axis", choices = NULL, selectize = FALSE),
         selectInput(ns("group"), label = "group by", choices = NULL, selectize = FALSE),
         selectInput(ns("facet"), label = "facet by", choices = NULL, selectize = FALSE),
-      ),
-      column(8,
-        h3("Plot options"),
+
+        h3("Additional options"),
         checkboxInput(ns("hide_legend"), label = "Hide legend"),
         conditionalPanel(
           condition = sprintf("output['%s']", ns("show_options_1d")),
@@ -35,7 +35,7 @@ mod_plot_ui <- function(id){
             numericInput(ns("nbins_histogram"), label = "Number of bins for histograms", value = 30, step = 1, min = 2, max = 100),
           )
         ),
-        # 2d
+
         conditionalPanel(
           condition = sprintf("output['%s']", ns("show_options_2d")),
           checkboxInput(ns("yintercept"), label = "Add y = 0 line"),
@@ -55,13 +55,11 @@ mod_plot_ui <- function(id){
             checkboxInput(ns("violin"), label = "Violin plot instead of boxplot")
           )
         )
-        # 2d quant
-        # 2d quant hexbin
-        # 2d cat
+      ),
+      column(8,
+        plotOutput(ns("plot"))
       )
-    ),
-    actionButton(ns("plot_button"), "Generate plot", class = "btn-primary"),
-    plotOutput(ns("plot"))
+    )
   )
 }
 
