@@ -19,7 +19,7 @@ set_default_inputs <- function(session) {
     facet = "",
     hexbin = FALSE,
     abline = FALSE,
-    loess = FALSE,
+    smooth_line = FALSE,
     lm = FALSE,
     yintercept = FALSE,
     nbins = 30,
@@ -148,14 +148,14 @@ test_that("plot is created with abline option", {
   })
 })
 
-test_that("plot is created with loess option", {
+test_that("plot is created with smooth_line option", {
   n <- 100
   dat <- reactiveVal(testdata)
   testServer(mod_plot_server, args = list(dataset = dat), {
     # No plot to begin with
     expect_error(output$plot)
     set_default_inputs(session)
-    session$setInputs(x = "quant1", y = "quant2", loess = TRUE)
+    session$setInputs(x = "quant1", y = "quant2", smooth_line = TRUE)
     session$setInputs(plot_button = TRUE)
     output$plot # Confirm that the plot can be accessed without an error.
     # Note that this does not test if the plot is correct. We'll need to add snapshot tests for that.

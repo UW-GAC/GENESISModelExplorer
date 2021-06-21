@@ -53,7 +53,7 @@ CATEGORICAL <- "categorical"
   facet_var = NULL,
   hexbin = FALSE,
   abline = FALSE,
-  loess = FALSE,
+  smooth_line = FALSE,
   lm = FALSE,
   yintercept = FALSE,
   violin = FALSE,
@@ -125,7 +125,7 @@ CATEGORICAL <- "categorical"
         p <- p + geom_abline()
       }
 
-      if (loess) {
+      if (smooth_line) {
         p <- p + geom_smooth()
       }
 

@@ -1127,5 +1127,5 @@
 <polyline points='30.04,100.47 32.78,100.47 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' clip-path='url(#cpMC4wMHw3MjAuMDB8NTc2LjAwfDAuMDA=)' />
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8NTc2LjAwfDAuMDA=)'><text x='356.80' y='568.24' style='font-size: 11.00px; font-family: Liberation Sans;' textLength='33.69px' lengthAdjust='spacingAndGlyphs'>quant1</text></g>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8NTc2LjAwfDAuMDA=)'><text transform='translate(13.04,309.12) rotate(-90)' style='font-size: 11.00px; font-family: Liberation Sans;' textLength='33.69px' lengthAdjust='spacingAndGlyphs'>quant2</text></g>
-<g clip-path='url(#cpMC4wMHw3MjAuMDB8NTc2LjAwfDAuMDA=)'><text x='32.78' y='14.56' style='font-size: 13.20px; font-family: Liberation Sans;' textLength='79.84px' lengthAdjust='spacingAndGlyphs'>xy loess facet</text></g>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8NTc2LjAwfDAuMDA=)'><text x='32.78' y='14.56' style='font-size: 13.20px; font-family: Liberation Sans;' textLength='120.14px' lengthAdjust='spacingAndGlyphs'>xy smooth_line facet</text></g>
 </svg>

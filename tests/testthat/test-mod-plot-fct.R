@@ -114,10 +114,10 @@ test_that("generate plot with abline option", {
   expect_doppelganger("xy abline", .generate_plot(dat, "quant1", "quant2", abline = TRUE))
 })
 
-test_that("generate plot with loess option", {
-  expect_doppelganger("xy loess", .generate_plot(dat, "quant1", "quant2", loess = TRUE))
-  expect_doppelganger("xy loess grouped", .generate_plot(dat, "quant1", "quant2", group = "group", loess = TRUE))
-  expect_doppelganger("xy loess facet", .generate_plot(dat, "quant1", "quant2", facet = "facet", loess = TRUE))
+test_that("generate plot with smooth_line option", {
+  expect_doppelganger("xy smooth_line", .generate_plot(dat, "quant1", "quant2", smooth_line = TRUE))
+  expect_doppelganger("xy smooth_line grouped", .generate_plot(dat, "quant1", "quant2", group = "group", smooth_line = TRUE))
+  expect_doppelganger("xy smooth_line facet", .generate_plot(dat, "quant1", "quant2", facet = "facet", smooth_line = TRUE))
 })
 
 test_that("generate plot with lm option", {
@@ -126,8 +126,8 @@ test_that("generate plot with lm option", {
   expect_doppelganger("xy lm facet", .generate_plot(dat, "quant1", "quant2", facet = "facet", lm = TRUE))
 })
 
-test_that("generate plot with lm and loess option", {
-  expect_doppelganger("xy loess lm", .generate_plot(dat, "quant1", "quant2", lm = TRUE, loess = TRUE))
+test_that("generate plot with lm and smooth_line option", {
+  expect_doppelganger("xy smooth_line lm", .generate_plot(dat, "quant1", "quant2", lm = TRUE, smooth_line = TRUE))
 })
 
 test_that("generate plot with yintercept line", {
@@ -248,5 +248,5 @@ test_that("smooth line with many data points", {
   dplyr::mutate(
     quant2 = 2 * quant1^2 + 0.5 * rnorm(n)
   )
-  expect_doppelganger("x smoothed large data", .generate_plot(dat_large, "quant1", "quant2", loess = TRUE))
+  expect_doppelganger("x smoothed large data", .generate_plot(dat_large, "quant1", "quant2", smooth_line = TRUE))
 })
