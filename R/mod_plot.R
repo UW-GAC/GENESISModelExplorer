@@ -11,8 +11,8 @@ mod_plot_ui <- function(id){
   ns <- NS(id)
   tagList(
     h2("Plot setup"),
-    fluidRow(
-      column(4,
+    sidebarLayout(
+      sidebarPanel(
         actionButton(ns("plot_button"), "Generate plot", class = "btn-primary"),
         h3("Variable selection"),
         selectInput(ns("x"), label = "x axis", choices = NULL),
@@ -56,7 +56,7 @@ mod_plot_ui <- function(id){
           )
         )
       ),
-      column(8,
+      mainPanel(
         plotOutput(ns("plot"))
       )
     )
