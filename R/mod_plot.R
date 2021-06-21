@@ -11,30 +11,54 @@ mod_plot_ui <- function(id){
   ns <- NS(id)
   tagList(
     h2("Plot setup"),
-    column(4,
-      h3("Main input"),
-      selectInput(ns("x"), label = "x axis", choices = NULL),
-      selectInput(ns("y"), label = "y axis", choices = NULL, selectize = FALSE),
-      selectInput(ns("group"), label = "group by", choices = NULL, selectize = FALSE),
-      selectInput(ns("facet"), label = "facet by", choices = NULL, selectize = FALSE),
-    ),
-    column(4,
-      h3("General options"),
-      checkboxInput(ns("yintercept"), label = "Add y = 0 line?"),
-      numericInput(ns("nbins"), label = "Number of bins for histograms or hexbin plots", value = 30, step = 1, min = 2, max = 100),
-      checkboxInput(ns("hide_legend"), label = "Hide legend?")
-    ),
-    column(4,
-      h3("Scatterplot options"),
-      checkboxInput(ns("hexbin"), label = "Hexbin instead of scatterplot?"),
-      checkboxInput(ns("abline"), label = "Add x = y line?"),
-      checkboxInput(ns("smooth_line"), label = "Add smooth line?"),
-      checkboxInput(ns("lm"), label = "Add lm line?"),
-      h3("Boxplot options"),
-      checkboxInput(ns("violin"), label = "Violin plot instead of boxplot?"),
-      h3("Histogram options"),
-      checkboxInput(ns("density"), label = "Density plot instead of histogram?"),
-      checkboxInput(ns("proportion"), label = "Show proportion instead of counts?")
+    fluidRow(
+      column(4,
+        h3("Variable selection"),
+        selectInput(ns("x"), label = "x axis", choices = NULL),
+        selectInput(ns("y"), label = "y axis", choices = NULL, selectize = FALSE),
+        selectInput(ns("group"), label = "group by", choices = NULL, selectize = FALSE),
+        selectInput(ns("facet"), label = "facet by", choices = NULL, selectize = FALSE),
+      ),
+      column(8,
+        h3("Plot options"),
+        checkboxInput(ns("hide_legend"), label = "Hide legend"),
+        conditionalPanel(
+          condition = sprintf("output['%s']", ns("show_options_1d")),
+          # Consider making this show up only if group_by is selected.
+          checkboxInput(ns("proportion"), label = "Show proportion instead of counts"),
+          conditionalPanel(
+            condition = sprintf("output['%s']", ns("show_options_1d_quant")),
+            checkboxInput(ns("density"), label = "Density plot instead of histogram")
+          ),
+          conditionalPanel(
+            condition = sprintf("output['%s'] == '%s'", ns("plot_type"), HISTOGRAM),
+            numericInput(ns("nbins_histogram"), label = "Number of bins for histograms", value = 30, step = 1, min = 2, max = 100),
+          )
+        ),
+        # 2d
+        conditionalPanel(
+          condition = sprintf("output['%s']", ns("show_options_2d")),
+          checkboxInput(ns("yintercept"), label = "Add y = 0 line"),
+          conditionalPanel(
+            condition = sprintf("output['%s']", ns("show_options_2d_quant")),
+            checkboxInput(ns("abline"), label = "Add x = y line"),
+            checkboxInput(ns("smooth_line"), label = "Add smooth line"),
+            checkboxInput(ns("lm"), label = "Add lm line"),
+            checkboxInput(ns("hexbin"), label = "Hexbin instead of scatterplot"),
+            conditionalPanel(
+              condition = sprintf("output['%s'] == '%s'", ns("plot_type"), HEXBIN),
+              numericInput(ns("nbins_hexbin"), label = "Number of bins for hexbin", value = 30, step = 1, min = 2, max = 100),
+            )
+          ),
+          conditionalPanel(
+            condition = sprintf("output['%s']", ns("show_options_2d_cat")),
+            checkboxInput(ns("violin"), label = "Violin plot instead of boxplot")
+          )
+        )
+        # 2d quant
+        # 2d quant hexbin
+        # 2d cat
+      )
     ),
     actionButton(ns("plot_button"), "Generate plot", class = "btn-primary"),
     plotOutput(ns("plot"))
@@ -51,16 +75,38 @@ mod_plot_server <- function(id, dataset){
     # Update x and y axis selections based on loaded data.
     observe({
       # Get variable types.
-      var_types <- sapply(dataset(), .detect_variable_type)
-      var_types <- var_types[names(var_types) != "sample.id"]
+      these_types <- var_types()
 
-      updateSelectInput(session, "x", choices = names(var_types))
-      updateSelectInput(session, "y", choices = c("---" = "", names(var_types)))
+      updateSelectInput(session, "x", choices = names(these_types))
+      updateSelectInput(session, "y", choices = c("---" = "", names(these_types)))
 
       # group by categorical variables only.
-      categorical_variables <- names(var_types)[var_types == CATEGORICAL]
+      categorical_variables <- names(these_types)[these_types == CATEGORICAL]
       updateSelectInput(session, "group", choices = c("---" = "", categorical_variables))
       updateSelectInput(session, "facet", choices = c("---" = "", categorical_variables))
+    })
+
+    var_types <- reactive({
+      tmp <- sapply(dataset(), .detect_variable_type)
+      tmp[names(tmp) != "sample.id"]
+    })
+
+    plot_type <- reactive({
+      req(input$x)
+      x_type <- var_types()[input$x]
+      y_type <- .check_truthiness(var_types()[input$y])
+      tryCatch({
+        .get_plot_type(x_type, y_type = y_type, density = input$density,
+                       hexbin = input$hexbin, violin = input$violin)
+      },
+      error = function(err) {
+        validate(err$message)
+      })
+    })
+
+    observe({
+      req(plot_type())
+      shiny::updateActionButton(session, "plot_button", label = sprintf("Generate %s", plot_type()))
     })
 
     plot_obj <- eventReactive(input$plot_button, {
@@ -81,12 +127,34 @@ mod_plot_server <- function(id, dataset){
         lm = input$lm,
         yintercept = input$yintercept,
         violin = input$violin,
-        nbins = input$nbins,
+        nbins_histogram = input$nbins_histogram,
+        nbins_hexbin = input$nbins_hexbin,
         density = input$density,
         hide_legend = input$hide_legend,
         proportion = input$proportion
       )
     })
+
+    # For showing or hiding certain options.
+    output$show_options_1d <- reactive({!isTruthy(input$y)})
+    outputOptions(output, "show_options_1d", suspendWhenHidden = FALSE)
+
+    output$show_options_1d_quant <- reactive({plot_type() %in% c(HISTOGRAM, DENSITY)})
+    outputOptions(output, "show_options_1d_quant", suspendWhenHidden = FALSE)
+
+    output$show_options_2d <- reactive({isTruthy(input$y)})
+    outputOptions(output, "show_options_2d", suspendWhenHidden = FALSE)
+
+    output$show_options_2d_quant <- reactive({plot_type() %in% c(SCATTERPLOT, HEXBIN)})
+    outputOptions(output, "show_options_2d_quant", suspendWhenHidden = FALSE)
+
+    output$show_options_2d_cat <- reactive({plot_type() %in% c(VIOLIN, BOXPLOT)})
+    outputOptions(output, "show_options_2d_cat", suspendWhenHidden = FALSE)
+
+    output$plot_type <- renderText({
+      plot_type()
+    })
+    outputOptions(output, "plot_type", suspendWhenHidden = FALSE)
 
     output$plot <- renderPlot({
       plot_obj()
