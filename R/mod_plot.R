@@ -15,12 +15,20 @@ mod_plot_ui <- function(id){
       sidebarPanel(
         actionButton(ns("plot_button"), "Generate plot", class = "btn-primary"),
         h3("Variable selection"),
+        helpText(
+          "Only the x-axis variable is required.
+          Variables names are prefixed by \"Phenotype: \" or \"Model: \" based on which file they were originally in.
+          The plot type will be selected based on the types of the selected variables."
+        ),
         selectInput(ns("x"), label = "x axis", choices = NULL),
         selectInput(ns("y"), label = "y axis", choices = NULL, selectize = FALSE),
         selectInput(ns("group"), label = "group by", choices = NULL, selectize = FALSE),
+        helpText("The group variable can only be a categorical variable."),
         selectInput(ns("facet"), label = "facet by", choices = NULL, selectize = FALSE),
+        helpText("The facet variable can only be a categorical variable."),
 
         h3("Additional options"),
+        helpText("Different options will be displayed based on the plot type."),
         checkboxInput(ns("hide_legend"), label = "Hide legend"),
         conditionalPanel(
           condition = sprintf("output['%s']", ns("show_options_1d")),
