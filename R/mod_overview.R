@@ -37,10 +37,15 @@ mod_overview_ui <- function(id){
 #' overview Server Functions
 #'
 #' @noRd
-mod_overview_server <- function(id){
+mod_overview_server <- function(id, parent_session = NULL){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-    # No server code yet, since this is intended to provide general information
-    # about using the app.
+
+    observeEvent(input$button, {
+      # Switch to the data loader tab.
+      if (!is.null(parent_session)) {
+        updateNavbarPage(parent_session, "navbar", selected="Load data")
+      }
+    })
   })
 }
