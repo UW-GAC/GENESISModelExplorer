@@ -27,7 +27,7 @@ mod_overview_ui <- function(id){
           p(
             "First, you will load these files into the app. After loading your data, you will be able to generate plots of different phenotype or model variables. You can plot these variables by themselves or against each other. You can also color the plots or created faceted plots using these variables."
           ),
-          p("placeholder button")
+          actionButton(ns("button"), "Get started!", class = "btn-primary")
         )
       )
     )
