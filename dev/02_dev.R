@@ -41,6 +41,7 @@ shinytest::installDependencies()
 
 # ## Add modules ----
 # ## Create a module infrastructure in R/
+golem::add_module( name = "overview" )
 golem::add_module( name = "data_loader", fct = "load" ) # Name of the module
 golem::add_module( name = "plot", fct = "plots" )
 
