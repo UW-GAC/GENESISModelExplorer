@@ -15,7 +15,10 @@ mod_overview_ui <- function(id){
         column(10, offset = 1,
           h1("Welcome to Shiny Null Model!"),
           p(
-            "This app allows you to interactively explore GENESIS null models that you have fit on a set of samples. It can help you determine whether a model fit looks reasonable or identify outliers in your model."
+            "
+            This app allows you to interactively explore GENESIS null models that you have fit on a set of samples.
+            It can help you determine whether a model fit looks reasonable or identify outliers in your model.
+            "
           ),
           p(
             "You will need access to:"
@@ -25,7 +28,12 @@ mod_overview_ui <- function(id){
             tags$li(HTML("A <b>phenotype file</b> in RData format. This can be the same file you used to fit the null model, or a new file where you have added additional columns. It must contain all the samples included in your null model file."))
           ),
           p(
-            "First, you will load these files into the app. After loading your data, you will be able to generate plots of different phenotype or model variables. You can plot these variables by themselves or against each other. You can also color the plots or created faceted plots using these variables."
+            "
+            First, you will load these files into the app.
+            After loading your data, you will be able to generate plots of different phenotype or model variables.
+            You can plot these variables by themselves or against each other.
+            You can also color the plots or create faceted plots using these variables.
+            "
           ),
           actionButton(ns("button"), "Get started!", class = "btn-primary")
         )
