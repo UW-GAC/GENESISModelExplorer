@@ -35,7 +35,7 @@ mod_data_loader_ui <- function(id){
         helpText("The phenotype file should be the phenotype file used to fit the GENESIS null model, or a modified version of it with extra columns. It must contain all the sample ids in the null model.")
       ),
       # TODO: Grey this out until both files are uploaded?
-      actionButton(ns("load_data_button"), "Load data"),
+      actionButton(ns("load_data_button"), "Load data", class = "btn-primary"),
       textOutput(ns("data_loaded_message"))
   )
 }
