@@ -27,10 +27,13 @@ mod_data_loader_ui <- function(id){
 
       h2("Load data"),
       checkboxInput(ns("use_example_data"), label = "Use example data?"),
-      fileInput(ns("null_model_file"), label = "Null model file", accept = ".RData"),
-      helpText("The null model file should be a GENESIS null model."),
-      fileInput(ns("phenotype_file"), label = "Phenotype file", accept = ".RData"),
-      helpText("The phenotype file should be the phenotype file used to fit the GENESIS null model, or a modified version of it with extra columns. It must contain all the sample ids in the null model."),
+      conditionalPanel(
+        condition = sprintf("input['%s'] == false", ns("use_example_data")),
+        fileInput(ns("null_model_file"), label = "Null model file", accept = ".RData"),
+        helpText("The null model file should be a GENESIS null model."),
+        fileInput(ns("phenotype_file"), label = "Phenotype file", accept = ".RData"),
+        helpText("The phenotype file should be the phenotype file used to fit the GENESIS null model, or a modified version of it with extra columns. It must contain all the sample ids in the null model.")
+      ),
       # TODO: Grey this out until both files are uploaded?
       actionButton(ns("load_data_button"), "Load data"),
       textOutput(ns("data_loaded_message"))
