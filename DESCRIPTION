@@ -19,6 +19,7 @@ Imports:
     processx,
     rlang,
     shiny (>= 1.6.0),
+    shinyFiles,
     stringr,
     tibble,
     tidyselect

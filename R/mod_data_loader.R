@@ -7,6 +7,7 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
+#' @importFrom shinyFiles shinyFilesButton
 mod_data_loader_ui <- function(id){
   ns <- NS(id)
   tagList(
@@ -24,13 +25,32 @@ mod_data_loader_ui <- function(id){
         )
       )
     ),
-
       h2("Load data"),
       checkboxInput(ns("use_example_data"), label = "Use example data?"),
-      fileInput(ns("null_model_file"), label = "Null model file", accept = ".RData"),
-      fileInput(ns("phenotype_file"), label = "Phenotype file", accept = ".RData"),
+      p(
+        strong("Null model file"),
+        fluidRow(
+          column(1,
+            shinyFilesButton(ns("null_model_file"), label = "Select", title = 'Please select a null model file', multiple = FALSE)
+          ),
+          column(11,
+            textOutput(ns("selected_null_model_file"))
+          )
+        )
+      ),
+      p(
+        strong("Phenotype file"),
+        fluidRow(
+          column(1,
+            shinyFilesButton(ns("phenotype_file"), label = "Select", title = 'Please select a phenotype file', multiple = FALSE)
+          ),
+          column(11,
+            textOutput(ns("selected_phenotype_file"))
+          )
+        )
+      ),
       # TODO: Grey this out until both files are uploaded?
-      actionButton(ns("load_data_button"), "Load data"),
+      actionButton(ns("load_data_button"), "Load data", class = "btn-primary"),
       textOutput(ns("data_loaded_message"))
   )
 }
@@ -38,16 +58,22 @@ mod_data_loader_ui <- function(id){
 #' data_loader Server Functions
 #'
 #' @noRd
+#' @importFrom shinyFiles shinyFileChoose
+#' @importFrom shinyFiles parseFilePaths
 mod_data_loader_server <- function(id, parent_session = NULL){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
+
+    roots <- c(wd = ".")
+    shinyFileChoose(input, 'null_model_file', root=roots, filetypes=c('', 'RData'), session = session)
+    shinyFileChoose(input, 'phenotype_file', root=roots, filetypes=c('', 'RData'), session = session)
 
     selected_null_model_file <- reactive({
       if (input$use_example_data) {
         # TODO: May need to change this when deployed.
         null_model_file = system.file("extdata", "null_model.RData", package = "shinyNullModel")
       } else if (!is.null(input$null_model_file)) {
-        null_model_file <- input$null_model_file$datapath
+        null_model_file <- parseFilePaths(roots, input$null_model_file)$datapath
       } else {
         return(NULL)
       }
@@ -59,7 +85,7 @@ mod_data_loader_server <- function(id, parent_session = NULL){
         # TODO: May need to change this when deployed.
         phenotype_file = system.file("extdata", "phenotype.RData", package = "shinyNullModel")
       } else if (!is.null(input$phenotype_file)) {
-        phenotype_file <- input$phenotype_file$datapath
+        phenotype_file <- parseFilePaths(roots, input$phenotype_file)$datapath
       } else {
         return(NULL)
       }
@@ -107,6 +133,14 @@ mod_data_loader_server <- function(id, parent_session = NULL){
       }
 
       return(dat)
+    })
+
+    output$selected_null_model_file <- renderText({
+      sprintf("Selected: %s", selected_null_model_file())
+    })
+
+    output$selected_phenotype_file <- renderText({
+      sprintf("Selected: %s", selected_phenotype_file())
     })
 
     output$data_loaded_message <- renderText({
