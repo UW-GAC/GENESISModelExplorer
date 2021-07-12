@@ -27,27 +27,32 @@ mod_data_loader_ui <- function(id){
     ),
       h2("Load data"),
       checkboxInput(ns("use_example_data"), label = "Use example data?"),
-      p(
-        strong("Null model file"),
-        fluidRow(
-          column(1,
-            shinyFilesButton(ns("null_model_file"), label = "Select", title = 'Please select a null model file', multiple = FALSE)
-          ),
-          column(11,
-            textOutput(ns("selected_null_model_file"))
+      conditionalPanel(
+        condition = sprintf("input['%s'] == false", ns("use_example_data")),
+        p(
+          strong("Null model file"),
+          fluidRow(
+            column(1,
+              shinyFilesButton(ns("null_model_file"), label = "Select", title = 'Please select a null model file', multiple = FALSE)
+            ),
+            column(11,
+              textOutput(ns("selected_null_model_file"))
+            )
           )
-        )
-      ),
-      p(
-        strong("Phenotype file"),
-        fluidRow(
-          column(1,
-            shinyFilesButton(ns("phenotype_file"), label = "Select", title = 'Please select a phenotype file', multiple = FALSE)
-          ),
-          column(11,
-            textOutput(ns("selected_phenotype_file"))
+        ),
+        helpText("The null model file should be a GENESIS null model."),
+        p(
+          strong("Phenotype file"),
+          fluidRow(
+            column(1,
+              shinyFilesButton(ns("phenotype_file"), label = "Select", title = 'Please select a phenotype file', multiple = FALSE)
+            ),
+            column(11,
+              textOutput(ns("selected_phenotype_file"))
+            )
           )
-        )
+        ),
+        helpText("The phenotype file should be the phenotype file used to fit the GENESIS null model, or a modified version of it with extra columns. It must contain all the sample ids in the null model.")
       ),
       # TODO: Grey this out until both files are uploaded?
       actionButton(ns("load_data_button"), "Load data", class = "btn-primary"),

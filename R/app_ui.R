@@ -13,6 +13,11 @@ app_ui <- function(request) {
       "Shiny null model",
       id = 'navbar',
       tabPanel(
+        "Overview",
+        id = "overview",
+        mod_overview_ui("overview_ui_1")
+      ),
+      tabPanel(
         "Load data",
         id = "load",
         mod_data_loader_ui("data_loader_ui_1")

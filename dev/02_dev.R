@@ -42,6 +42,7 @@ shinytest::installDependencies()
 
 # ## Add modules ----
 # ## Create a module infrastructure in R/
+golem::add_module( name = "overview" )
 golem::add_module( name = "data_loader", fct = "load" ) # Name of the module
 golem::add_module( name = "plot", fct = "plots" )
 
@@ -64,6 +65,7 @@ usethis::use_data_raw( name = "null_model", open = FALSE )
 
 # ## Tests ----
 # ## Add one line by test you want to create
+usethis::use_test( "mod-overview-server" )
 usethis::use_test( "mod-data-loader-fct" )
 usethis::use_test( "mod-data-loader-server" )
 usethis::use_test( "mod-plot-fct" )
