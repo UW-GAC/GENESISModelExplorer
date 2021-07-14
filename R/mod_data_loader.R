@@ -40,7 +40,7 @@ mod_data_loader_ui <- function(id){
             )
           )
         ),
-        helpText("The null model file should be a GENESIS null model."),
+        helpText("The null model file should be a GENESIS null model. It is suggested to use the \"reportonly\" file, which is smaller but contains all data necessary for this app."),
         p(
           strong("Phenotype file"),
           fluidRow(
