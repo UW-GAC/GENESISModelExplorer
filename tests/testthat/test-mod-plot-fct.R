@@ -290,3 +290,18 @@ test_that("smooth line with many data points", {
   )
   expect_doppelganger("x smoothed large data", .generate_plot(dat_large, "quant1", "quant2", smooth_line = TRUE))
 })
+
+test_that(".get_allowed_plot_types", {
+  # just x variable
+  expect_equal(.get_allowed_plot_types(QUANTITATIVE, y_type = NULL), c(HISTOGRAM, DENSITY))
+  expect_equal(.get_allowed_plot_types(CATEGORICAL, y_type = NULL), c(BARPLOT))
+  # x and y variables
+  expect_equal(.get_allowed_plot_types(QUANTITATIVE, y_type = QUANTITATIVE), c(HEXBIN, SCATTERPLOT))
+  expect_equal(.get_allowed_plot_types(QUANTITATIVE, y_type = CATEGORICAL), c(BOXPLOT, VIOLIN))
+  expect_equal(.get_allowed_plot_types(CATEGORICAL, y_type = QUANTITATIVE), c(BOXPLOT, VIOLIN))
+  # not allowed
+  expect_error(.get_allowed_plot_types(CATEGORICAL, y_type = CATEGORICAL), "two categorical variables")
+  # other errors
+  expect_error(.get_allowed_plot_types("foo"), "variable type must be")
+  expect_error(.get_allowed_plot_types(QUANTITATIVE, y_type = "foo"), "variable type must be")
+})
