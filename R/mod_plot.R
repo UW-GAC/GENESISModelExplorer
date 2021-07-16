@@ -36,8 +36,7 @@ mod_plot_ui <- function(id){
           # Consider making this show up only if group_by is selected.
           checkboxInput(ns("proportion"), label = "Show proportion instead of counts"),
           conditionalPanel(
-            condition = sprintf("output['%s']", ns("show_options_1d_quant")),
-            checkboxInput(ns("density"), label = "Density plot instead of histogram")
+            condition = sprintf("output['%s']", ns("show_options_1d_quant"))
           ),
           conditionalPanel(
             condition = sprintf("output['%s'] == '%s'", ns("plot_type"), HISTOGRAM),
@@ -53,15 +52,13 @@ mod_plot_ui <- function(id){
             checkboxInput(ns("abline"), label = "Add x = y line"),
             checkboxInput(ns("smooth_line"), label = "Add smooth line"),
             checkboxInput(ns("lm"), label = "Add lm line"),
-            checkboxInput(ns("hexbin"), label = "Hexbin instead of scatterplot"),
             conditionalPanel(
               condition = sprintf("output['%s'] == '%s'", ns("plot_type"), HEXBIN),
               numericInput(ns("nbins_hexbin"), label = "Number of bins for hexbin", value = 30, step = 1, min = 2, max = 100),
             )
           ),
           conditionalPanel(
-            condition = sprintf("output['%s']", ns("show_options_2d_cat")),
-            checkboxInput(ns("violin"), label = "Violin plot instead of boxplot")
+            condition = sprintf("output['%s']", ns("show_options_2d_cat"))
           )
         )
       ),

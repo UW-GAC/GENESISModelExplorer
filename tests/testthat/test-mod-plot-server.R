@@ -17,17 +17,14 @@ set_default_inputs <- function(session) {
     y = "",
     group = "",
     facet = "",
-    hexbin = FALSE,
     abline = FALSE,
     smooth_line = FALSE,
     lm = FALSE,
     yintercept = FALSE,
     nbins_histogram = 30,
     nbins_hexbin = 30,
-    density = FALSE,
     hide_legend = FALSE,
     proportion = FALSE,
-    violin = FALSE,
     plot_type = ""
   )
 }
