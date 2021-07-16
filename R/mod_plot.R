@@ -39,7 +39,7 @@ mod_plot_ui <- function(id){
             condition = sprintf("output['%s']", ns("show_options_1d_quant"))
           ),
           conditionalPanel(
-            condition = sprintf("output['%s'] == '%s'", ns("plot_type"), HISTOGRAM),
+            condition = sprintf("input['%s'] == '%s'", ns("plot_type"), HISTOGRAM),
             numericInput(ns("nbins_histogram"), label = "Number of bins for histograms", value = 30, step = 1, min = 2, max = 100),
           )
         ),
@@ -53,7 +53,7 @@ mod_plot_ui <- function(id){
             checkboxInput(ns("smooth_line"), label = "Add smooth line"),
             checkboxInput(ns("lm"), label = "Add lm line"),
             conditionalPanel(
-              condition = sprintf("output['%s'] == '%s'", ns("plot_type"), HEXBIN),
+              condition = sprintf("input['%s'] == '%s'", ns("plot_type"), HEXBIN),
               numericInput(ns("nbins_hexbin"), label = "Number of bins for hexbin", value = 30, step = 1, min = 2, max = 100),
             )
           ),
@@ -105,24 +105,6 @@ mod_plot_server <- function(id, dataset){
       tmp[names(tmp) != "sample.id"]
     })
 
-    plot_type <- reactive({
-      req(input$x)
-      x_type <- var_types()[input$x]
-      y_type <- .check_truthiness(var_types()[input$y])
-      tryCatch({
-        .get_plot_type(x_type, y_type = y_type, density = input$density,
-                       hexbin = input$hexbin, violin = input$violin)
-      },
-      error = function(err) {
-        validate(err$message)
-      })
-    })
-
-    observe({
-      req(plot_type())
-      shiny::updateActionButton(session, "plot_button", label = sprintf("Generate %s", plot_type()))
-    })
-
     plot_obj <- eventReactive(input$plot_button, {
       x_var <- .check_truthiness(input$x)
       y_var <- .check_truthiness(input$y)
@@ -153,22 +135,17 @@ mod_plot_server <- function(id, dataset){
     output$show_options_1d <- reactive({!isTruthy(input$y)})
     outputOptions(output, "show_options_1d", suspendWhenHidden = FALSE)
 
-    output$show_options_1d_quant <- reactive({plot_type() %in% c(HISTOGRAM, DENSITY)})
+    output$show_options_1d_quant <- reactive({input$plot_type %in% c(HISTOGRAM, DENSITY)})
     outputOptions(output, "show_options_1d_quant", suspendWhenHidden = FALSE)
 
     output$show_options_2d <- reactive({isTruthy(input$y)})
     outputOptions(output, "show_options_2d", suspendWhenHidden = FALSE)
 
-    output$show_options_2d_quant <- reactive({plot_type() %in% c(SCATTERPLOT, HEXBIN)})
+    output$show_options_2d_quant <- reactive({input$plot_type %in% c(SCATTERPLOT, HEXBIN)})
     outputOptions(output, "show_options_2d_quant", suspendWhenHidden = FALSE)
 
-    output$show_options_2d_cat <- reactive({plot_type() %in% c(VIOLIN, BOXPLOT)})
+    output$show_options_2d_cat <- reactive({input$plot_type %in% c(VIOLIN, BOXPLOT)})
     outputOptions(output, "show_options_2d_cat", suspendWhenHidden = FALSE)
-
-    output$plot_type <- renderText({
-      plot_type()
-    })
-    outputOptions(output, "plot_type", suspendWhenHidden = FALSE)
 
     output$plot <- renderPlot({
       plot_obj()
