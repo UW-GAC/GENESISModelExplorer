@@ -22,6 +22,7 @@ mod_plot_ui <- function(id){
         ),
         selectInput(ns("x"), label = "x axis", choices = NULL),
         selectInput(ns("y"), label = "y axis", choices = NULL, selectize = FALSE),
+        selectInput(ns("plot_type"), label = "plot type", choices = NULL),
         selectInput(ns("group"), label = "group by", choices = NULL, selectize = FALSE),
         helpText("The group variable can only be a categorical variable."),
         selectInput(ns("facet"), label = "facet by", choices = NULL, selectize = FALSE),
@@ -92,6 +93,16 @@ mod_plot_server <- function(id, dataset){
       updateSelectInput(session, "facet", choices = c("---" = "", categorical_variables))
     })
 
+    # Update plot type based on selected variables.
+    observe({
+      req(input$x)
+      x_type <- var_types()[input$x]
+      y_type <- .check_truthiness(var_types()[input$y])
+      allowed_plot_types <- .get_allowed_plot_types(x_type, y_type = y_type)
+      if (length(allowed_plot_types) == 0) allowed_plot_types <- ""
+      updateSelectInput(session, "plot_type", choices = allowed_plot_types)
+    })
+
     var_types <- reactive({
       tmp <- sapply(dataset(), .detect_variable_type)
       tmp[names(tmp) != "sample.id"]
@@ -127,15 +138,15 @@ mod_plot_server <- function(id, dataset){
         y_var,
         group_var = group_var,
         facet_var = facet_var,
-        hexbin = input$hexbin,
+        hexbin = input$plot_type == HEXBIN,
         abline = input$abline,
         smooth_line = input$smooth_line,
         lm = input$lm,
         yintercept = input$yintercept,
-        violin = input$violin,
+        violin = input$plot_type == VIOLIN,
         nbins_histogram = input$nbins_histogram,
         nbins_hexbin = input$nbins_hexbin,
-        density = input$density,
+        density = input$plot_type == DENSITY,
         hide_legend = input$hide_legend,
         proportion = input$proportion
       )
