@@ -52,8 +52,8 @@ VIOLIN <- "violin plot"
     return(c(BOXPLOT, VIOLIN))
   } else if (x_type == CATEGORICAL & y_type == QUANTITATIVE) {
     return(c(BOXPLOT, VIOLIN))
-  } else if (x_type == CATEGORICAL & y_type == CATEGORICAL) {
-    stop("Cannot plot two categorical variables.")
+  } else {
+    return(c())
   }
 }
 

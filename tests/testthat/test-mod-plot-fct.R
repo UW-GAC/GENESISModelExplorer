@@ -300,7 +300,7 @@ test_that(".get_allowed_plot_types", {
   expect_equal(.get_allowed_plot_types(QUANTITATIVE, y_type = CATEGORICAL), c(BOXPLOT, VIOLIN))
   expect_equal(.get_allowed_plot_types(CATEGORICAL, y_type = QUANTITATIVE), c(BOXPLOT, VIOLIN))
   # not allowed
-  expect_error(.get_allowed_plot_types(CATEGORICAL, y_type = CATEGORICAL), "two categorical variables")
+  expect_equal(length(.get_allowed_plot_types(CATEGORICAL, y_type = CATEGORICAL)), 0)
   # other errors
   expect_error(.get_allowed_plot_types("foo"), "variable type must be")
   expect_error(.get_allowed_plot_types(QUANTITATIVE, y_type = "foo"), "variable type must be")
