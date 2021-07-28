@@ -29,7 +29,6 @@ CATEGORICAL <- "categorical"
   variable_type
 }
 
-# Return the type of the plot
 BOXPLOT <- "box plot"
 HISTOGRAM <- "histogram"
 BARPLOT <- "bar plot"
@@ -37,6 +36,28 @@ SCATTERPLOT <- "scatterplot"
 HEXBIN <- "hexbin plot"
 DENSITY <- "density plot"
 VIOLIN <- "violin plot"
+.get_allowed_plot_types <- function(x_type, y_type = NULL) {
+  # Check that specified types are valid.
+  errmsg <- sprintf("variable type must be %s or %s", QUANTITATIVE, CATEGORICAL)
+  if (!(x_type %in% c(QUANTITATIVE, CATEGORICAL))) stop(errmsg)
+  if (!is.null(y_type) && !(y_type %in% c(QUANTITATIVE, CATEGORICAL))) stop(errmsg)
+
+  if (x_type == QUANTITATIVE & is.null(y_type)) {
+    return(c(HISTOGRAM, DENSITY))
+  } else if (x_type == CATEGORICAL & is.null(y_type)) {
+    return(c(BARPLOT))
+  } else if (x_type == QUANTITATIVE & y_type == QUANTITATIVE) {
+    return(c(HEXBIN, SCATTERPLOT))
+  } else if (x_type == QUANTITATIVE & y_type == CATEGORICAL) {
+    return(c(BOXPLOT, VIOLIN))
+  } else if (x_type == CATEGORICAL & y_type == QUANTITATIVE) {
+    return(c(BOXPLOT, VIOLIN))
+  } else {
+    return(c())
+  }
+}
+
+# Return the type of the plot
 .get_plot_type <- function(x_type, y_type = NULL, density = FALSE, violin = FALSE, hexbin = FALSE) {
   # Check that specified types are valid.
   stopifnot(x_type %in% c(QUANTITATIVE, CATEGORICAL))
