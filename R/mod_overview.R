@@ -25,7 +25,8 @@ mod_overview_ui <- function(id){
           ),
           tags$ol(
             tags$li(HTML("The <b>GENESIS null model file</b> in RData format.")),
-            tags$li(HTML("A <b>phenotype file</b> in RData format. This can be the same file you used to fit the null model, or a new file where you have added additional columns. It must contain all the samples included in your null model file."))
+            tags$li(HTML("A <b>phenotype file</b> in RData format. This can be the same file you used to fit the null model, or a new file where you have added additional columns. It must contain all the samples included in your null model file.")),
+            tags$li(HTML("(optional) A <b>genotype file</b> in rds format containing variants of interest. XXX"))
           ),
           p(
             "
