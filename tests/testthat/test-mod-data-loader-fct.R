@@ -69,6 +69,118 @@ test_that("load phenotype fails with incorrect data type", {
   unlink(tmpfile)
 })
 
+test_that("load genotype works as expected with multiple variants", {
+  geno <- tibble::tibble(
+    variant.id = 1:3,
+    chr = c(1, 1, 2),
+    pos = c(1000, 2000, 3000),
+    ref = c("A", "C", "T"),
+    alt = c("G", "A", "TA"),
+    sample1 = c(0, 1, 2),
+    sample2 = c(0, 0, 0),
+    sample3 = c(0, 0, NA),
+    sample4 = c(1, 1, 0)
+  )
+  tmpfile <- withr::local_file("geno.RData")
+  saveRDS(geno, tmpfile)
+
+  out <- .load_genotype(tmpfile)
+  expect_s3_class(out, "tbl_df")
+  # Check names and format.
+  expect_equal(nrow(out), 4) # four samples
+  expect_equal(ncol(out), 4) # sample id and three variants
+  variant_names <- c(
+    "Genotype: chr1:1000_A_G",
+    "Genotype: chr1:2000_C_A",
+    "Genotype: chr2:3000_T_TA"
+  )
+  expect_equal(names(out), c("sample.id", variant_names))
+  sample_ids <- c("sample1", "sample2", "sample3", "sample4")
+  expect_equal(out$sample.id, sample_ids)
+  # Check values.
+  expect_equal(out[[variant_names[1]]], as.numeric(geno[1, 6:9]))
+  expect_equal(out[[variant_names[2]]], as.numeric(geno[2, 6:9]))
+  expect_equal(out[[variant_names[3]]], as.numeric(geno[3, 6:9]))
+})
+
+test_that("load genotype works with one variant", {
+  geno <- tibble::tibble(
+    variant.id = 1,
+    chr = 1,
+    pos = 1000,
+    ref = "A",
+    alt = "G",
+    sample1 = 0,
+    sample2 = 0,
+    sample3 = 0,
+    sample4 = 1
+  )
+  tmpfile <- withr::local_file("geno.RData")
+  saveRDS(geno, tmpfile)
+
+  out <- .load_genotype(tmpfile)
+  expect_s3_class(out, "tbl_df")
+  # Check names and format.
+  expect_equal(nrow(out), 4) # four samples
+  expect_equal(ncol(out), 2) # sample id and three variants
+  variant_names <- c(
+    "Genotype: chr1:1000_A_G"
+  )
+  expect_equal(names(out), c("sample.id", variant_names))
+  sample_ids <- c("sample1", "sample2", "sample3", "sample4")
+  expect_equal(out$sample.id, sample_ids)
+  # Check values.
+  expect_equal(out[[variant_names[1]]], as.numeric(geno[1, 6:9]))
+})
+
+test_that("load genotype fails if missing variant columns", {
+  geno <- tibble::tibble(
+    variant.id = 1,
+    chr = 1,
+    pos = 1000,
+    ref = "A",
+    alt = "G",
+    sample1 = 0,
+    sample2 = 0,
+    sample3 = 0,
+    sample4 = 1
+  )
+  tmpfile <- withr::local_file("geno.RData")
+  saveRDS(geno %>% select(-variant.id), tmpfile)
+  expect_error(.load_genotype(tmpfile), "must have variant.id")
+  saveRDS(geno %>% select(-chr), tmpfile)
+  expect_error(.load_genotype(tmpfile), "must have variant.id")
+  saveRDS(geno %>% select(-pos), tmpfile)
+  expect_error(.load_genotype(tmpfile), "must have variant.id")
+  saveRDS(geno %>% select(-ref), tmpfile)
+  expect_error(.load_genotype(tmpfile), "must have variant.id")
+  saveRDS(geno %>% select(-alt), tmpfile)
+  expect_error(.load_genotype(tmpfile), "must have variant.id")
+})
+
+test_that('load genotype fails if missing any sample columns',{
+  geno <- tibble::tibble(
+    variant.id = 1,
+    chr = 1,
+    pos = 1000,
+    ref = "A",
+    alt = "G"
+  )
+  tmpfile <- withr::local_file("geno.RData")
+  saveRDS(geno, tmpfile)
+  expect_error(.load_genotype(tmpfile), "contain sample columns")
+})
+
+test_that("load genotype fails with incorrect format", {
+  geno <- tibble::tibble(
+    sample.id = c("samp1", "samp2", "samp3"),
+    `Genotype: chr1:1000_A_G` = c(0, 1, 2)
+  )
+  tmpfile <- withr::local_file("geno.RData")
+  saveRDS(geno, tmpfile)
+  expect_error(.load_genotype(tmpfile), "must have variant.id")
+})
+
 test_that("load data works as expected", {
   nullmod_file <- system.file("extdata", "null_model.RData", package="shinyNullModel")
   nm <- .load_null_model(nullmod_file)
