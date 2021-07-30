@@ -55,25 +55,18 @@
   geno <- readRDS(filename)
 
   # Check names
-  required_names <- c("variant.id", "chr", "pos", "ref", "alt")
+  required_names <- c("sample.id")
   missing <- setdiff(required_names, names(geno))
   if (length(missing) > 0) {
-    errmsg <- "Genotype file must have variant.id, chr, pos, ref, and alt."
+    errmsg <- "Genotype file must have a sample.id column"
     stop(errmsg)
   }
 
   # Check if there are any sample columns.
   if (ncol(geno) <= length(required_names)) {
-    errmsg <- "Genotype file must contain sample columns."
+    errmsg <- "Genotype file must contain variant columns."
     stop(errmsg)
   }
-
-  geno <- geno %>%
-    dplyr::mutate(variant = sprintf("chr%s:%d_%s_%s", chr, pos, ref, alt)) %>%
-    dplyr::select(-variant.id, -chr, -pos, -ref, -alt) %>%
-    dplyr::select(variant, everything()) %>%
-    tidyr::pivot_longer(-variant, names_to = "sample.id", values_to = "genotype") %>%
-    tidyr::pivot_wider(names_from = "variant", values_from = "genotype")
 
   geno <- geno %>%
     # Change names to have prefix "Phenotype: "
