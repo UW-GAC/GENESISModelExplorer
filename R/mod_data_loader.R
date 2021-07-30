@@ -84,6 +84,7 @@ mod_data_loader_server <- function(id, parent_session = NULL){
     roots <- c(wd = ".")
     shinyFileChoose(input, 'null_model_file', root=roots, filetypes=c('', 'RData'), session = session)
     shinyFileChoose(input, 'phenotype_file', root=roots, filetypes=c('', 'RData'), session = session)
+    shinyFileChoose(input, 'genotype_file', root=roots, filetypes=c('', 'rds'), session = session)
 
     selected_null_model_file <- reactive({
       if (input$use_example_data) {
@@ -109,6 +110,17 @@ mod_data_loader_server <- function(id, parent_session = NULL){
       phenotype_file
     })
 
+    selected_genotype_file <- reactive({
+      if (input$use_example_data) {
+        # TODO: May need to change this when deployed.
+        genotype_file = system.file("extdata", "genotypes.rds", package = "shinyNullModel")
+      } else if (!is.null(input$genotype_file)) {
+        genotype_file <- parseFilePaths(roots, input$genotype_file)$datapath
+      } else {
+        return(NULL)
+      }
+      genotype_file
+    })
 
     data_reactive <- eventReactive(input$load_data_button, {
 
@@ -138,7 +150,12 @@ mod_data_loader_server <- function(id, parent_session = NULL){
        }
 
       tryCatch({
-        dat <- .load_data(selected_null_model_file(), selected_phenotype_file(), updateProgress = updateProgress)
+        dat <- .load_data(
+          selected_null_model_file(),
+          selected_phenotype_file(),
+          genotype_filename = selected_genotype_file(),
+          updateProgress = updateProgress
+        )
       },
       error = function(err) {
         validate(err$message)
@@ -158,6 +175,10 @@ mod_data_loader_server <- function(id, parent_session = NULL){
 
     output$selected_phenotype_file <- renderText({
       sprintf("Selected: %s", selected_phenotype_file())
+    })
+
+    output$selected_genotype_file <- renderText({
+      sprintf("Selected: %s", selected_genotype_file())
     })
 
     output$data_loaded_message <- renderText({
