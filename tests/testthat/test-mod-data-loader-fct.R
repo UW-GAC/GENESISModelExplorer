@@ -203,3 +203,50 @@ test_that("load data fails when phenotype file has duplicated sample ids in null
   expect_error(.load_data(nullmod_file, tmpfile), "duplicated sample.ids")
   unlink(tmpfile)
 })
+
+test_that("load data works as expected with genotype file", {
+  nullmod_file <- system.file("extdata", "null_model.RData", package="shinyNullModel")
+  nm <- .load_null_model(nullmod_file)
+  phenotype_file <- system.file("extdata", "phenotype.RData", package="shinyNullModel")
+  phen <- .load_phenotype(phenotype_file)
+  genotype_file <- system.file("extdata", "genotypes.rds", package="shinyNullModel")
+  geno <- .load_genotype(genotype_file)
+  out <- .load_data(nullmod_file, phenotype_file, genotype_filename = genotype_file)
+  expect_s3_class(out, "tbl_df")
+  expect_equal(nrow(out), nrow(nm))
+  expect_equal(out$sample.id, nm$sample.id)
+  expect_equal(names(out), unique(c("sample.id", names(nm), names(phen), names(geno))))
+})
+
+test_that("load data works as expected if genotype file has additional samples", {
+  # Hacky, for now.
+  tmp <- get(load(system.file("extdata", "null_model.RData", package="shinyNullModel")))
+  tmp$fit <- tmp$fit[1:10, ]
+  tmpfile <- tempfile()
+  save(tmp, file = tmpfile)
+  nm <- .load_null_model(tmpfile)
+  phenotype_file <- system.file("extdata", "phenotype.RData", package="shinyNullModel")
+  phen <- .load_phenotype(phenotype_file)
+  genotype_file <- system.file("extdata", "genotypes.rds", package="shinyNullModel")
+  geno <- .load_genotype(genotype_file)
+  out <- .load_data(tmpfile, phenotype_file, genotype_filename = genotype_file)
+  expect_s3_class(out, "tbl_df")
+  expect_equal(nrow(out), 10)
+  expect_equal(out$sample.id, nm$sample.id)
+  expect_equal(names(out), unique(c("sample.id", names(nm), names(phen), names(geno))))
+})
+
+test_that("load data works as expected if genotype file has fewer samples", {
+  nullmod_file <- system.file("extdata", "null_model.RData", package="shinyNullModel")
+  nm <- .load_null_model(nullmod_file)
+  phenotype_file <- system.file("extdata", "phenotype.RData", package="shinyNullModel")
+  phen <- .load_phenotype(phenotype_file)
+  tmp <- readRDS(system.file("extdata", "genotypes.rds", package="shinyNullModel"))
+  tmp <- tmp[1:10, ]
+  tmpfile <- withr::local_file("geno.rds")
+  saveRDS(tmp, tmpfile)
+  expect_error(.load_data(nullmod_file, phenotype_file, tmpfile), "Genotype file must contain all sample.ids")
+  unlink(tmpfile)
+
+
+})
