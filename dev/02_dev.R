@@ -62,6 +62,7 @@ golem::add_module( name = "plot", fct = "plots" )
 # usethis::use_data_raw( name = "my_dataset", open = FALSE )
 usethis::use_data_raw( name = "phenotype", open = FALSE )
 usethis::use_data_raw( name = "null_model", open = FALSE )
+usethis::use_data_raw( name = "genotypes", open = FALSE )
 
 # ## Tests ----
 # ## Add one line by test you want to create
