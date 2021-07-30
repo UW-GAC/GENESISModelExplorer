@@ -138,18 +138,25 @@ VIOLIN <- "violin plot"
   type_x <- .detect_variable_type(dat[[x_var]])
   type_y <- if (is.null(y_var)) NULL else .detect_variable_type(dat[[y_var]])
 
+  # Make categorical types into factors - this is because quantitative variables
+  # with small numbers of values are considered categorical.
+  if (type_x == CATEGORICAL) dat[[x_var]] <- as.factor(dat[[x_var]])
+  if (!is.null(y_var) && type_y == CATEGORICAL) dat[[y_var]] <- as.factor(dat[[y_var]])
+
   # Check categorical variables
   group_var_str <- NULL
   if (!is.null(group_var) && .detect_variable_type(dat[[group_var]]) == QUANTITATIVE) {
     stop("Cannot group by a quantitative variable.")
   } else if (!is.null(group_var)) {
     group_var_str <- as.name(group_var)
+    dat[[group_var]] <- as.factor(dat[[group_var]])
   }
   facet_var_str <- NULL
   if (!is.null(facet_var) && .detect_variable_type(dat[[facet_var]]) == QUANTITATIVE) {
     stop("Cannot facet by a quantitative variable.")
   } else if (!is.null(facet_var)) {
     facet_var_str <- as.name(facet_var)
+    dat[[facet_var]] <- as.factor(dat[[facet_var]])
   }
 
   plot_type <- .get_plot_type(type_x, type_y, density = density, violin = violin, hexbin = hexbin)
