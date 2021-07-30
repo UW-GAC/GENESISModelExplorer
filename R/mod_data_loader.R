@@ -52,7 +52,19 @@ mod_data_loader_ui <- function(id){
             )
           )
         ),
-        helpText("The phenotype file should be the phenotype file used to fit the GENESIS null model, or a modified version of it with extra columns. It must contain all the sample ids in the null model.")
+        helpText("The phenotype file should be the phenotype file used to fit the GENESIS null model, or a modified version of it with extra columns. It must contain all the sample ids in the null model."),
+        p(
+          strong("Genotype file (optional)"),
+          fluidRow(
+            column(1,
+              shinyFilesButton(ns("genotype_file"), label = "Select", title = 'Please select a genotype file', multiple = FALSE)
+            ),
+            column(11,
+              textOutput(ns("selected_genotype_file"))
+            )
+          ),
+          helpText("The genotype file should contain all the samples in the null model in the sample.id column. Other columns must contain variants. This file can be generated with the XXX app.")
+        )
       ),
       # TODO: Grey this out until both files are uploaded?
       actionButton(ns("load_data_button"), "Load data", class = "btn-primary"),
