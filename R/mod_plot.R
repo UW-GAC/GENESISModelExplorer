@@ -18,7 +18,7 @@ mod_plot_ui <- function(id){
         helpText(
           "Only the x-axis variable is required.
           Variables names are prefixed by \"Phenotype: \", \"Model: \", or \"Genotype: \" based on which file they were originally in.
-          The plot type will be selected based on the types of the selected variables.
+          The allowed plot types will be selected based on the types of the x and y variables.
           If a quantitative variable contains fewer than 10 values, it will be treated as categorical when plotting."
         ),
         selectInput(ns("x"), label = "x axis", choices = NULL),
