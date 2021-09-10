@@ -40,7 +40,7 @@ mod_data_loader_ui <- function(id){
             )
           )
         ),
-        helpText("The null model file should be a GENESIS null model. It is suggested to use the \"reportonly\" file, which is smaller but contains all data necessary for this app."),
+        helpText("The null model file should be a GENESIS null model in RData format. It is suggested to use the \"reportonly\" file, which is smaller but contains all data necessary for this app."),
         p(
           strong("Phenotype file"),
           fluidRow(
@@ -52,7 +52,19 @@ mod_data_loader_ui <- function(id){
             )
           )
         ),
-        helpText("The phenotype file should be the phenotype file used to fit the GENESIS null model, or a modified version of it with extra columns. It must contain all the sample ids in the null model.")
+        helpText("The phenotype file should be the phenotype file used to fit the GENESIS null model in RData format, or a modified version of it with extra columns. It must contain all the sample ids in the null model."),
+        p(
+          strong("Genotype file (optional)"),
+          fluidRow(
+            column(1,
+              shinyFilesButton(ns("genotype_file"), label = "Select", title = 'Please select a genotype file', multiple = FALSE)
+            ),
+            column(11,
+              textOutput(ns("selected_genotype_file"))
+            )
+          ),
+          helpText("The genotype file must be rds format and should contain all the samples in the null model in the sample.id column. Other columns must contain variants. This file can be generated with the ", a("GDS Genotype Extractor", href = "https://platform.sb.biodatacatalyst.nhlbi.nih.gov/u/smgogarten/uw-gac-commit/apps/#smgogarten/uw-gac-commit/gds-genotype-extractor"), " app.")
+        )
       ),
       # TODO: Grey this out until both files are uploaded?
       actionButton(ns("load_data_button"), "Load data", class = "btn-primary"),
@@ -72,6 +84,7 @@ mod_data_loader_server <- function(id, parent_session = NULL){
     roots <- c(wd = ".")
     shinyFileChoose(input, 'null_model_file', root=roots, filetypes=c('', 'RData'), session = session)
     shinyFileChoose(input, 'phenotype_file', root=roots, filetypes=c('', 'RData'), session = session)
+    shinyFileChoose(input, 'genotype_file', root=roots, filetypes=c('', 'rds'), session = session)
 
     selected_null_model_file <- reactive({
       if (input$use_example_data) {
@@ -97,6 +110,17 @@ mod_data_loader_server <- function(id, parent_session = NULL){
       phenotype_file
     })
 
+    selected_genotype_file <- reactive({
+      if (input$use_example_data) {
+        # TODO: May need to change this when deployed.
+        genotype_file = system.file("extdata", "genotypes.rds", package = "shinyNullModel")
+      } else if (!is.null(input$genotype_file)) {
+        genotype_file <- parseFilePaths(roots, input$genotype_file)$datapath
+      } else {
+        return(NULL)
+      }
+      genotype_file
+    })
 
     data_reactive <- eventReactive(input$load_data_button, {
 
@@ -126,7 +150,12 @@ mod_data_loader_server <- function(id, parent_session = NULL){
        }
 
       tryCatch({
-        dat <- .load_data(selected_null_model_file(), selected_phenotype_file(), updateProgress = updateProgress)
+        dat <- .load_data(
+          selected_null_model_file(),
+          selected_phenotype_file(),
+          genotype_filename = selected_genotype_file(),
+          updateProgress = updateProgress
+        )
       },
       error = function(err) {
         validate(err$message)
@@ -146,6 +175,10 @@ mod_data_loader_server <- function(id, parent_session = NULL){
 
     output$selected_phenotype_file <- renderText({
       sprintf("Selected: %s", selected_phenotype_file())
+    })
+
+    output$selected_genotype_file <- renderText({
+      sprintf("Selected: %s", selected_genotype_file())
     })
 
     output$data_loaded_message <- renderText({

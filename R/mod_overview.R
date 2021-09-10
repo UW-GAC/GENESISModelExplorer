@@ -25,7 +25,8 @@ mod_overview_ui <- function(id){
           ),
           tags$ol(
             tags$li(HTML("The <b>GENESIS null model file</b> in RData format.")),
-            tags$li(HTML("A <b>phenotype file</b> in RData format. This can be the same file you used to fit the null model, or a new file where you have added additional columns. It must contain all the samples included in your null model file."))
+            tags$li(HTML("A <b>phenotype file</b> in RData format. This can be the same file you used to fit the null model, or a new file where you have added additional columns. It must contain all the samples included in your null model file in a column named \"sample.id\", with additional columns containing phenotype variables.")),
+            tags$li(HTML("(optional) A <b>genotype file</b> in rds format containing variants of interest. It must contain a column named \"sample.id\" with all the samples in your null model file, with additional columns containing variant dosages. This file can be generated from an existing GDS file with the"), a("GDS Genotype Extractor", href = "https://platform.sb.biodatacatalyst.nhlbi.nih.gov/u/smgogarten/uw-gac-commit/apps/#smgogarten/uw-gac-commit/gds-genotype-extractor"), HTML(" app."))
           ),
           p(
             "

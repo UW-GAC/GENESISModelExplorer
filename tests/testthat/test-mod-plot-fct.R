@@ -43,7 +43,8 @@ dat <- data.frame(
   facet = sample(letters[1:3], n, replace = T)
 ) %>%
 dplyr::mutate(
-  quant2 = 2 * quant1^2 + 0.5 * rnorm(n)
+  quant2 = 2 * quant1^2 + 0.5 * rnorm(n),
+  geno = sample(c(0, 1, 2), n, replace = T)
 )
 
 test_that(".check_truthiness", {
@@ -273,6 +274,24 @@ test_that("proportion", {
   expect_doppelganger("x density proportion", .generate_plot(dat, "quant1", proportion = TRUE, density = TRUE))
   expect_doppelganger("x density grouped proportion", .generate_plot(dat, "quant1", group_var = "group", proportion = TRUE, density = TRUE))
 })
+
+test_that("plots with genotype", {
+  expect_doppelganger("genotype barplot", .generate_plot(dat, "geno"))
+  # genotype as x axis
+  expect_doppelganger("genotype vs quantitative boxplot", .generate_plot(dat, "geno", "quant1"))
+  expect_doppelganger("genotype vs quantitative violin plot", .generate_plot(dat, "geno", "quant1", violin = TRUE))
+  expect_error(.generate_plot(dat, "geno", "cat1"), "two categorical variables")
+  # genotype as y axis
+  expect_doppelganger("quantitative vs genotype boxplot", .generate_plot(dat, "quant1", "geno"))
+  expect_doppelganger("quantitative vs genotype violin plot", .generate_plot(dat, "quant1", "geno", violin = TRUE))
+  expect_error(.generate_plot(dat, "cat1", "geno"), "two categorical variables")
+  # group by genotype
+  expect_doppelganger("genotype barplot grouped", .generate_plot(dat, "quant1", group = "geno"))
+  # facet by genotype
+  expect_doppelganger("genotype barplot facet", .generate_plot(dat, "quant1", facet = "geno"))
+
+})
+
 
 test_that("smooth line with many data points", {
   set.seed(123)

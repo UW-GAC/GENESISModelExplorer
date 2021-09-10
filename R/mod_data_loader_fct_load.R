@@ -51,15 +51,45 @@
     tibble::as_tibble()
 }
 
+.load_genotype <- function(filename) {
+  geno <- readRDS(filename)
+
+  # Check names
+  required_names <- c("sample.id")
+  missing <- setdiff(required_names, names(geno))
+  if (length(missing) > 0) {
+    errmsg <- "Genotype file must have a sample.id column"
+    stop(errmsg)
+  }
+
+  # Check if there are any sample columns.
+  if (ncol(geno) <= length(required_names)) {
+    errmsg <- "Genotype file must contain variant columns."
+    stop(errmsg)
+  }
+
+  geno <- geno %>%
+    # Change names to have prefix "Phenotype: "
+    dplyr::rename_with(.fn = ~ paste0("Genotype: ", .x), -.data$sample.id) %>%
+    tibble::as_tibble()
+
+  geno
+}
+
 #' Load and combine null model and phenotype files
 #' @noRd
 #' @importFrom rlang .data
-.load_data <- function(null_model_filename, phenotype_filename, updateProgress = NULL) {
+.load_data <- function(null_model_filename, phenotype_filename, genotype_filename = NULL, updateProgress = NULL) {
 
   # better progress bar based on file sizes.
   nm_size <- file.info(null_model_filename)$size
   phen_size <- file.info(phenotype_filename)$size
-  total_size <- 1.1 * (nm_size + phen_size)
+  if (!is.null(genotype_filename)) {
+    geno_size <- file.info(genotype_filename)$size
+  } else {
+    geno_size <- 0
+  }
+  total_size <- 1.1 * (nm_size + phen_size + geno_size)
 
   if (is.function(updateProgress)) {
     updateProgress(value = 0, detail = "phenotype file..")
@@ -70,6 +100,14 @@
     updateProgress(value = (phen_size) / total_size, detail = "null model file...")
   }
   null_model <- .load_null_model(null_model_filename)
+
+  if (!is.null(genotype_filename)) {
+    if (!is.null(updateProgress))
+    updateProgress((phen_size + nm_size + geno_size) / total_size, detail = "genotype file...")
+    geno <- .load_genotype(genotype_filename)
+  } else {
+    geno <- NULL
+  }
 
   if (is.function(updateProgress)) {
     updateProgress((phen_size + nm_size) / total_size, detail = "combining...")
@@ -83,10 +121,23 @@
     stop(err)
   }
 
+  # All samples in the null model must be in the genotype file.
+  if (!is.null(geno)) {
+    chk <- length(setdiff(null_model$sample.id, geno$sample.id))
+    if (chk > 0) {
+      err <- "Genotype file must contain all sample.ids in the null model."
+      stop(err)
+    }
+  }
 
   dat <- null_model %>%
-    dplyr::inner_join(phen, by = "sample.id") %>%
+    dplyr::left_join(phen, by = "sample.id") %>%
     dplyr::select(.data$sample.id, tidyselect::everything())
+
+  if (!is.null(geno)) {
+    dat <- dat %>%
+      dplyr::left_join(geno, by = "sample.id")
+  }
 
   if (is.function(updateProgress)) {
     updateProgress(value = 1, detail = "done!")
