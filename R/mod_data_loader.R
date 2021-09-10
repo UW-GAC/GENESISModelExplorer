@@ -40,7 +40,7 @@ mod_data_loader_ui <- function(id){
             )
           )
         ),
-        helpText("The null model file should be a GENESIS null model. It is suggested to use the \"reportonly\" file, which is smaller but contains all data necessary for this app."),
+        helpText("The null model file should be a GENESIS null model in RData format. It is suggested to use the \"reportonly\" file, which is smaller but contains all data necessary for this app."),
         p(
           strong("Phenotype file"),
           fluidRow(
@@ -52,7 +52,7 @@ mod_data_loader_ui <- function(id){
             )
           )
         ),
-        helpText("The phenotype file should be the phenotype file used to fit the GENESIS null model, or a modified version of it with extra columns. It must contain all the sample ids in the null model."),
+        helpText("The phenotype file should be the phenotype file used to fit the GENESIS null model in RData format, or a modified version of it with extra columns. It must contain all the sample ids in the null model."),
         p(
           strong("Genotype file (optional)"),
           fluidRow(
@@ -63,7 +63,7 @@ mod_data_loader_ui <- function(id){
               textOutput(ns("selected_genotype_file"))
             )
           ),
-          helpText("The genotype file should contain all the samples in the null model in the sample.id column. Other columns must contain variants. This file can be generated with the ", a("GDS Genotype Extractor", href = "https://platform.sb.biodatacatalyst.nhlbi.nih.gov/u/smgogarten/uw-gac-commit/apps/#smgogarten/uw-gac-commit/gds-genotype-extractor"), " app.")
+          helpText("The genotype file must be rds format and should contain all the samples in the null model in the sample.id column. Other columns must contain variants. This file can be generated with the ", a("GDS Genotype Extractor", href = "https://platform.sb.biodatacatalyst.nhlbi.nih.gov/u/smgogarten/uw-gac-commit/apps/#smgogarten/uw-gac-commit/gds-genotype-extractor"), " app.")
         )
       ),
       # TODO: Grey this out until both files are uploaded?
