@@ -63,7 +63,7 @@ mod_data_loader_ui <- function(id){
               textOutput(ns("selected_genotype_file"))
             )
           ),
-          helpText("The genotype file should contain all the samples in the null model in the sample.id column. Other columns must contain variants. This file can be generated with the XXX app.")
+          helpText("The genotype file should contain all the samples in the null model in the sample.id column. Other columns must contain variants. This file can be generated with the ", a("GDS Genotype Extractor", href = "https://platform.sb.biodatacatalyst.nhlbi.nih.gov/u/smgogarten/uw-gac-commit/apps/#smgogarten/uw-gac-commit/gds-genotype-extractor"), " app.")
         )
       ),
       # TODO: Grey this out until both files are uploaded?
