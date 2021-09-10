@@ -236,7 +236,7 @@ test_that("load data works as expected if genotype file has additional samples",
   expect_equal(names(out), unique(c("sample.id", names(nm), names(phen), names(geno))))
 })
 
-test_that("load data works as expected if genotype file has fewer samples", {
+test_that("load data fails if genotype file has fewer samples", {
   nullmod_file <- system.file("extdata", "null_model.RData", package="shinyNullModel")
   nm <- .load_null_model(nullmod_file)
   phenotype_file <- system.file("extdata", "phenotype.RData", package="shinyNullModel")
