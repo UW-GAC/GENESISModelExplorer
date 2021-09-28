@@ -35,8 +35,12 @@ mod_overview_ui <- function(id){
             You can plot these variables by themselves or against each other.
             You can also color the plots or create faceted plots using these variables.
             "
-          ),
-          actionButton(ns("button"), "Get started!", class = "btn-primary"),
+          )
+        ),
+      ),
+      fluidRow(
+        column(10, align="center", offset = 1,
+          actionButton(ns("button"), "Get started!", class = "btn-primary")
         )
       ),
       hr(),
