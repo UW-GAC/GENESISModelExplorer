@@ -16,12 +16,17 @@ mod_overview_ui <- function(id){
           h1("Welcome to Shiny Null Model!"),
           p(
             "
-            This app allows you to interactively explore GENESIS null models that you have fit on a set of samples.
-            It can help you determine whether a model fit looks reasonable or identify outliers in your model.
+            The Shiny Null Model App is a Shiny application developed by the Genetic Analysis Center at the University of Washington in collaboration with SevenBridges.
+            It enables users to visualize and explore the results of the GENESIS Null Model workflow.
+            It is meant to provide an intuitive interface for researchers to easily select, visualize, and explore phenotype variables, genotypes, and GENESIS model results interactively with no prior R programming knowledge.
+            Researchers can use the app to explore their own data or use example data provided with the app.
             "
           ),
           p(
-            "You will need access to:"
+            "The Shiny Null Model app is in beta version. If you are having any difficulty using the app please email support@sevenbridges.com."
+          ),
+          p(
+            "To use the app with your own data, you will need access to:"
           ),
           tags$ol(
             tags$li(HTML("The <b>GENESIS null model file</b> in RData format.")),
@@ -30,7 +35,7 @@ mod_overview_ui <- function(id){
           ),
           p(
             "
-            First, you will load these files into the app.
+            First, you will load either your data files or example data files into the app.
             After loading your data, you will be able to generate plots of different phenotype or model variables.
             You can plot these variables by themselves or against each other.
             You can also color the plots or create faceted plots using these variables.
