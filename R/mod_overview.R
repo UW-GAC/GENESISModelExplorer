@@ -33,13 +33,11 @@ mod_overview_ui <- function(id){
             tags$li(HTML("A <b>phenotype file</b> in RData format. This can be the same file you used to fit the null model, or a new file where you have added additional columns. It must contain all the samples included in your null model file in a column named \"sample.id\", with additional columns containing phenotype variables.")),
             tags$li(HTML("(optional) A <b>genotype file</b> in rds format containing variants of interest. It must contain a column named \"sample.id\" with all the samples in your null model file, with additional columns containing variant dosages. This file can be generated from an existing GDS file with the"), a("GDS Genotype Extractor", href = "https://platform.sb.biodatacatalyst.nhlbi.nih.gov/u/smgogarten/uw-gac-commit/apps/#smgogarten/uw-gac-commit/gds-genotype-extractor"), HTML(" app."))
           ),
-          p(
-            "
-            First, you will load either your data files or example data files into the app.
-            After loading your data, you will be able to generate plots of different phenotype or model variables.
-            You can plot these variables by themselves or against each other.
-            You can also color the plots or create faceted plots using these variables.
-            "
+          p("The app contains three different tabs:"),
+          tags$ol(
+            tags$li(HTML("<b>Overview</b>: Read basic information about the app (this tab).")),
+            tags$li(HTML("<b>Load data</b>: Load your own data or indicate that you will use example data.")),
+            tags$li(HTML("<b>Plot</b>: Plot your data. Note that data must be loaded in the <b>Load data</b> tab before using this tab."))
           )
         ),
       ),
