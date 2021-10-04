@@ -23,7 +23,9 @@ mod_overview_ui <- function(id){
             "
           ),
           p(
-            "The Shiny Null Model app is in beta version. If you are having any difficulty using the app please email support@sevenbridges.com."
+            "The Shiny Null Model app is in beta version. If you are having any difficulty using the app please email",
+            a("support@sevenbridges.com", href="mailto:support@sevenbridges.com", .noWS="after"),
+            "."
           ),
           p(
             "To use the app with your own data, you will need access to:"
