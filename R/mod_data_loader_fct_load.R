@@ -84,7 +84,7 @@
   # better progress bar based on file sizes.
   nm_size <- file.info(null_model_filename)$size
   phen_size <- file.info(phenotype_filename)$size
-  if (!is.null(genotype_filename)) {
+  if (isTruthy(genotype_filename)) {
     geno_size <- file.info(genotype_filename)$size
   } else {
     geno_size <- 0
@@ -101,7 +101,7 @@
   }
   null_model <- .load_null_model(null_model_filename)
 
-  if (!is.null(genotype_filename)) {
+  if (isTruthy(genotype_filename)) {
     if (!is.null(updateProgress))
     updateProgress((phen_size + nm_size + geno_size) / total_size, detail = "genotype file...")
     geno <- .load_genotype(genotype_filename)
