@@ -250,3 +250,16 @@ test_that("load data fails if genotype file has fewer samples", {
 
 
 })
+
+test_that("load data works when 0-length character vector is passed as the genotype file", {
+  nullmod_file <- system.file("extdata", "null_model.RData", package="shinyNullModel")
+  nm <- .load_null_model(nullmod_file)
+  phenotype_file <- system.file("extdata", "phenotype.RData", package="shinyNullModel")
+  phen <- .load_phenotype(phenotype_file)
+  # This is what is actually passed by the app, but it may be due to shinyFileChoose.
+  # Still, it is causing an error when trying to load data without specifying the option genotype file.
+  genotype_file <- character(0)
+  out <- .load_data(nullmod_file, phenotype_file, genotype_filename = genotype_file)
+  chk <- .load_data(nullmod_file, phenotype_file)
+  expect_equal(out, chk)
+})
