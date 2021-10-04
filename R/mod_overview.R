@@ -13,17 +13,17 @@ mod_overview_ui <- function(id){
     fluidPage(
       fluidRow(
         column(10, offset = 1,
-          h1("Welcome to Shiny Null Model!"),
+          h1("Welcome to GENESIS Model Explorer!"),
           p(
             "
-            The Shiny Null Model App is a Shiny application developed by the Genetic Analysis Center at the University of Washington in collaboration with SevenBridges.
+            The GENESIS Model Explorer App is a Shiny application developed by the Genetic Analysis Center at the University of Washington in collaboration with SevenBridges.
             It enables users to visualize and explore the results of the GENESIS Null Model workflow.
             It is meant to provide an intuitive interface for researchers to easily select, visualize, and explore phenotype variables, genotypes, and GENESIS model results interactively with no prior R programming knowledge.
             Researchers can use the app to explore their own data or use example data provided with the app.
             "
           ),
           p(
-            "The Shiny Null Model app is in beta version. If you are having any difficulty using the app please email",
+            "The GENESIS Model Explorer app is in beta version. If you are having any difficulty using the app please email",
             a("support@sevenbridges.com", href="mailto:support@sevenbridges.com", .noWS="after"),
             "."
           ),
@@ -55,7 +55,7 @@ mod_overview_ui <- function(id){
         column(10, offset = 1,
           p(
             "
-            The Shiny Null Model app was developed at the University of Washington", a("Genetic Analysis Center", href="https://www.biostat.washington.edu/research/centers/gac", target="_blank"), "in collaboration with the NHLBI Biodata Catalyst powered by Seven Bridges team and uses the GENESIS R package (", a("Gogarten et al. 2019", href="https://pubmed.ncbi.nlm.nih.gov/31329242/", target="_blank", .noWS="outside"), ").
+            The GENESIS Model Explorer app was developed at the University of Washington", a("Genetic Analysis Center", href="https://www.biostat.washington.edu/research/centers/gac", target="_blank"), "in collaboration with the NHLBI Biodata Catalyst powered by Seven Bridges team and uses the GENESIS R package (", a("Gogarten et al. 2019", href="https://pubmed.ncbi.nlm.nih.gov/31329242/", target="_blank", .noWS="outside"), ").
             The source code is available in a", a("GitHub repository", href="https://github.com/UW-GAC/shinyNullModel", target="_blank", .noWS="after"), ".
             "
           )
