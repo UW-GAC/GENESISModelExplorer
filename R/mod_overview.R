@@ -15,8 +15,7 @@ mod_overview_ui <- function(id){
         column(10, offset = 1,
           h1("Welcome to GENESIS Model Explorer!"),
           p(
-            "The GENESIS Model Explorer App is a Shiny application developed by the Genetic Analysis Center at the University of Washington in collaboration with SevenBridges.",
-            "It enables users to visualize and explore the results of the", a("GENESIS Null Model workflow", href="https://platform.sb.biodatacatalyst.nhlbi.nih.gov/public/apps/admin/sbg-public-data/null-model", target="_blank", .noWS="after"), ".",
+            "The GENESIS Model Explorer App is a Shiny application that enables users to visualize and explore the results of the", a("GENESIS Null Model workflow", href="https://platform.sb.biodatacatalyst.nhlbi.nih.gov/public/apps/admin/sbg-public-data/null-model", target="_blank", .noWS="after"), ".",
             "It is meant to provide an intuitive interface for researchers to easily select, visualize, and explore phenotype variables, genotypes, and GENESIS model results interactively with no prior R programming knowledge.",
             "Researchers can use the app to explore their own data or use example data provided with the app."
           ),
@@ -36,9 +35,10 @@ mod_overview_ui <- function(id){
           p("The app contains three different tabs:"),
           tags$ol(
             tags$li(HTML("<b>Overview</b>: Read basic information about the app (this tab).")),
-            tags$li(HTML("<b>Load data</b>: Load your own data or indicate that you will use example data.")),
+            tags$li(HTML("<b>Load data</b>: Load your own data or indicate that you will use example data provided with the app.")),
             tags$li(HTML("<b>Plot</b>: Plot your data. Note that data must be loaded in the <b>Load data</b> tab before using this tab."))
-          )
+          ),
+          p(HTML("To get started, click the button below to go to the <b>Load data</b> tab!"))
         ),
       ),
       fluidRow(
