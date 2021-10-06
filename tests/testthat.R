@@ -1,4 +1,4 @@
 library(testthat)
-library(shinyNullModel)
+library(GENESISModelExplorer)
 
-test_check("shinyNullModel")
+test_check("GENESISModelExplorer")

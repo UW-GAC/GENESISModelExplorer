@@ -1,8 +1,8 @@
 ### TESTSERVER tests
 test_that("loads example data", {
-  nm_file <- system.file("extdata", "null_model.RData", package="shinyNullModel")
-  pheno_file <- system.file("extdata", "phenotype.RData", package="shinyNullModel")
-  geno_file <- system.file("extdata", "genotypes.rds", package="shinyNullModel")
+  nm_file <- system.file("extdata", "null_model.RData", package="GENESISModelExplorer")
+  pheno_file <- system.file("extdata", "phenotype.RData", package="GENESISModelExplorer")
+  geno_file <- system.file("extdata", "genotypes.rds", package="GENESISModelExplorer")
   dat <- .load_data(nm_file, pheno_file, genotype_filename = geno_file)
 
   testServer(mod_data_loader_server, {
@@ -21,8 +21,8 @@ test_that("loads example data", {
 test_that("does not load without button - example data", {
   testServer(mod_data_loader_server, {
     session$setInputs(use_example_data = TRUE)
-    expect_true(stringr::str_detect(output$selected_null_model_file, system.file("extdata", "null_model.RData", package="shinyNullModel")))
-    expect_true(stringr::str_detect(output$selected_phenotype_file, system.file("extdata", "phenotype.RData", package="shinyNullModel")))
+    expect_true(stringr::str_detect(output$selected_null_model_file, system.file("extdata", "null_model.RData", package="GENESISModelExplorer")))
+    expect_true(stringr::str_detect(output$selected_phenotype_file, system.file("extdata", "phenotype.RData", package="GENESISModelExplorer")))
     # Is this appropriate?
     expect_error(data_reactive())
     returned <- session$getReturned()
@@ -31,8 +31,8 @@ test_that("does not load without button - example data", {
 })
 
 test_that("does not load without button - user data", {
-  nm_file <- system.file("extdata", "null_model.RData", package="shinyNullModel")
-  pheno_file <- system.file("extdata", "phenotype.RData", package="shinyNullModel")
+  nm_file <- system.file("extdata", "null_model.RData", package="GENESISModelExplorer")
+  pheno_file <- system.file("extdata", "phenotype.RData", package="GENESISModelExplorer")
   skip("Update for shinyFiles")
 
   testServer(mod_data_loader_server, {
@@ -47,13 +47,13 @@ test_that("does not load without button - user data", {
 })
 
 test_that("loads user data", {
-  tmp_pheno <- get(load(system.file("extdata", "phenotype.RData", package="shinyNullModel")))
+  tmp_pheno <- get(load(system.file("extdata", "phenotype.RData", package="GENESISModelExplorer")))
   user_pheno_file <- withr::local_file("pheno.RData")
   save(tmp_pheno, file = user_pheno_file)
 
   # Temporary null model file with fewer samples.
   user_nullmod_file <- withr::local_file("nullmod.RData")
-  null_model <- get(load(system.file("extdata", "null_model.RData", package="shinyNullModel")))
+  null_model <- get(load(system.file("extdata", "null_model.RData", package="GENESISModelExplorer")))
   null_model$fit <- null_model$fit[1:100, ]
   save(null_model, file = user_nullmod_file)
 
@@ -75,17 +75,17 @@ test_that("loads user data", {
 })
 
 test_that("loads user data with genotype", {
-  tmp_pheno <- get(load(system.file("extdata", "phenotype.RData", package="shinyNullModel")))
+  tmp_pheno <- get(load(system.file("extdata", "phenotype.RData", package="GENESISModelExplorer")))
   user_pheno_file <- withr::local_file("pheno.RData")
   save(tmp_pheno, file = user_pheno_file)
 
-  tmp_geno <- readRDS(system.file("extdata", "genotypes.rds", package="shinyNullModel"))
+  tmp_geno <- readRDS(system.file("extdata", "genotypes.rds", package="GENESISModelExplorer"))
   user_geno_file <- withr::local_file("geno.RData")
   saveRDS(tmp_geno, file = user_geno_file)
 
   # Temporary null model file with fewer samples.
   user_nullmod_file <- withr::local_file("nullmod.RData")
-  null_model <- get(load(system.file("extdata", "null_model.RData", package="shinyNullModel")))
+  null_model <- get(load(system.file("extdata", "null_model.RData", package="GENESISModelExplorer")))
   null_model$fit <- null_model$fit[1:100, ]
   save(null_model, file = user_nullmod_file)
 
@@ -109,13 +109,13 @@ test_that("loads user data with genotype", {
 })
 
 test_that("fails when only null model file is specified", {
-  tmp_pheno <- get(load(system.file("extdata", "phenotype.RData", package="shinyNullModel")))
+  tmp_pheno <- get(load(system.file("extdata", "phenotype.RData", package="GENESISModelExplorer")))
   user_pheno_file <- withr::local_file("pheno.RData")
   save(tmp_pheno, file = user_pheno_file)
 
   # Temporary null model file with fewer samples.
   user_nullmod_file <- withr::local_file("nullmod.RData")
-  null_model <- get(load(system.file("extdata", "null_model.RData", package="shinyNullModel")))
+  null_model <- get(load(system.file("extdata", "null_model.RData", package="GENESISModelExplorer")))
   null_model$fit <- null_model$fit[1:100, ]
   save(null_model, file = user_nullmod_file)
 
@@ -135,13 +135,13 @@ test_that("fails when only null model file is specified", {
 })
 
 test_that("fails when only phenotype file is specified", {
-  tmp_pheno <- get(load(system.file("extdata", "phenotype.RData", package="shinyNullModel")))
+  tmp_pheno <- get(load(system.file("extdata", "phenotype.RData", package="GENESISModelExplorer")))
   user_pheno_file <- withr::local_file("pheno.RData")
   save(tmp_pheno, file = user_pheno_file)
 
   # Temporary null model file with fewer samples.
   user_nullmod_file <- withr::local_file("nullmod.RData")
-  null_model <- get(load(system.file("extdata", "null_model.RData", package="shinyNullModel")))
+  null_model <- get(load(system.file("extdata", "null_model.RData", package="GENESISModelExplorer")))
   null_model$fit <- null_model$fit[1:100, ]
   save(null_model, file = user_nullmod_file)
 
@@ -161,17 +161,17 @@ test_that("fails when only phenotype file is specified", {
 })
 
 test_that("fails when only genotype file is specified", {
-  tmp_pheno <- get(load(system.file("extdata", "phenotype.RData", package="shinyNullModel")))
+  tmp_pheno <- get(load(system.file("extdata", "phenotype.RData", package="GENESISModelExplorer")))
   user_pheno_file <- withr::local_file("pheno.RData")
   save(tmp_pheno, file = user_pheno_file)
 
-  tmp_geno <- readRDS(system.file("extdata", "genotypes.rds", package="shinyNullModel"))
+  tmp_geno <- readRDS(system.file("extdata", "genotypes.rds", package="GENESISModelExplorer"))
   user_geno_file <- withr::local_file("geno.RData")
   save(tmp_geno, file = user_geno_file)
 
   # Temporary null model file with fewer samples.
   user_nullmod_file <- withr::local_file("nullmod.RData")
-  null_model <- get(load(system.file("extdata", "null_model.RData", package="shinyNullModel")))
+  null_model <- get(load(system.file("extdata", "null_model.RData", package="GENESISModelExplorer")))
   null_model$fit <- null_model$fit[1:100, ]
   save(null_model, file = user_nullmod_file)
 
@@ -191,13 +191,13 @@ test_that("fails when only genotype file is specified", {
 })
 
 test_that("loads example data over user data when box is checked", {
-  example_pheno_file <- system.file("extdata", "phenotype.RData", package="shinyNullModel")
+  example_pheno_file <- system.file("extdata", "phenotype.RData", package="GENESISModelExplorer")
   tmp_pheno <- get(load(example_pheno_file))
   user_pheno_file <- withr::local_file("pheno.RData")
   save(tmp_pheno, file = user_pheno_file)
 
   # Temporary null model file with fewer samples.
-  example_nullmod_file <- system.file("extdata", "null_model.RData", package="shinyNullModel")
+  example_nullmod_file <- system.file("extdata", "null_model.RData", package="GENESISModelExplorer")
   user_nullmod_file <- withr::local_file("nullmod.RData")
   null_model <- get(load(example_nullmod_file))
   null_model$fit <- null_model$fit[1:100, ]
