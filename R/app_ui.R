@@ -10,7 +10,7 @@ app_ui <- function(request) {
     golem_add_external_resources(),
     # Your application UI logic
     navbarPage(
-      "Shiny null model",
+      "GENESIS Model Explorer",
       id = 'navbar',
       tabPanel(
         "Overview",

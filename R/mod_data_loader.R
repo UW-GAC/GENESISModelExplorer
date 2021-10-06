@@ -26,7 +26,8 @@ mod_data_loader_ui <- function(id){
       )
     ),
       h2("Load data"),
-      checkboxInput(ns("use_example_data"), label = "Use example data?"),
+      checkboxInput(ns("use_example_data"), label = "Use example data provided with the app?"),
+      helpText("If you select this option, you do not need to load your own data files into the app. De-select it to load your own data files instead."),
       conditionalPanel(
         condition = sprintf("input['%s'] == false", ns("use_example_data")),
         p(

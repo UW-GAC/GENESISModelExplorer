@@ -13,29 +13,31 @@ mod_overview_ui <- function(id){
     fluidPage(
       fluidRow(
         column(10, offset = 1,
-          h1("Welcome to Shiny Null Model!"),
+          h1("Welcome to GENESIS Model Explorer!"),
           p(
-            "
-            This app allows you to interactively explore GENESIS null models that you have fit on a set of samples.
-            It can help you determine whether a model fit looks reasonable or identify outliers in your model.
-            "
+            "The GENESIS Model Explorer App is a Shiny application that enables users to visualize and explore the results of the", a("GENESIS Null Model workflow", href="https://platform.sb.biodatacatalyst.nhlbi.nih.gov/public/apps/admin/sbg-public-data/null-model", target="_blank", .noWS="after"), ".",
+            "It is meant to provide an intuitive interface for researchers to easily select, visualize, and explore phenotype variables, genotypes, and GENESIS model results interactively with no prior R programming knowledge.",
+            "Researchers can use the app to explore their own data or use example data provided with the app."
           ),
           p(
-            "You will need access to:"
+            "The GENESIS Model Explorer app is in beta version. If you are having any difficulty using the app please email",
+            a("support@sevenbridges.com", href="mailto:support@sevenbridges.com", .noWS="after"),
+            "."
           ),
+          p("The app contains three different tabs:"),
+          tags$ol(
+            tags$li(HTML("<b>Overview</b>: Read basic information about the app (this tab).")),
+            tags$li(HTML("<b>Load data</b>: Load your own data or indicate that you will use example data provided with the app.")),
+            tags$li(HTML("<b>Plot</b>: Plot your data. Note that data must be loaded in the <b>Load data</b> tab before using this tab."))
+          ),
+          p("To use the app with your own data, you will need access to:"),
           tags$ol(
             tags$li(HTML("The <b>GENESIS null model file</b> in RData format.")),
             tags$li(HTML("A <b>phenotype file</b> in RData format. This can be the same file you used to fit the null model, or a new file where you have added additional columns. It must contain all the samples included in your null model file in a column named \"sample.id\", with additional columns containing phenotype variables.")),
             tags$li(HTML("(optional) A <b>genotype file</b> in rds format containing variants of interest. It must contain a column named \"sample.id\" with all the samples in your null model file, with additional columns containing variant dosages. This file can be generated from an existing GDS file with the"), a("GDS Genotype Extractor", href = "https://platform.sb.biodatacatalyst.nhlbi.nih.gov/u/smgogarten/uw-gac-commit/apps/#smgogarten/uw-gac-commit/gds-genotype-extractor"), HTML(" app."))
           ),
-          p(
-            "
-            First, you will load these files into the app.
-            After loading your data, you will be able to generate plots of different phenotype or model variables.
-            You can plot these variables by themselves or against each other.
-            You can also color the plots or create faceted plots using these variables.
-            "
-          )
+          p("When you are finished using the app, just close the app window."),
+          p(HTML("To get started, click the button below to go to the <b>Load data</b> tab!"))
         ),
       ),
       fluidRow(
@@ -48,7 +50,7 @@ mod_overview_ui <- function(id){
         column(10, offset = 1,
           p(
             "
-            The Shiny Null Model app was developed at the University of Washington", a("Genetic Analysis Center", href="https://www.biostat.washington.edu/research/centers/gac", target="_blank"), "in collaboration with the NHLBI Biodata Catalyst powered by Seven Bridges team and uses the GENESIS R package (", a("Gogarten et al. 2019", href="https://pubmed.ncbi.nlm.nih.gov/31329242/", target="_blank", .noWS="outside"), ").
+            The GENESIS Model Explorer app was developed at the University of Washington", a("Genetic Analysis Center", href="https://www.biostat.washington.edu/research/centers/gac", target="_blank"), "in collaboration with the NHLBI Biodata Catalyst powered by Seven Bridges team and uses the GENESIS R package (", a("Gogarten et al. 2019", href="https://pubmed.ncbi.nlm.nih.gov/31329242/", target="_blank", .noWS="outside"), ").
             The source code is available in a", a("GitHub repository", href="https://github.com/UW-GAC/shinyNullModel", target="_blank", .noWS="after"), ".
             "
           )
