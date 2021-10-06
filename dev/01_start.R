@@ -25,7 +25,7 @@ golem::fill_desc(
   author_first_name = "Adrienne", # Your First Name
   author_last_name = "Stilp", # Your Last Name
   author_email = "amstilp@uw.edu", # Your Email
-  repo_url = "https://github.com/UW-GAC/shinyNullModel" # The URL of the GitHub Repo (optional)
+  repo_url = "https://github.com/UW-GAC/GENESISModelExplorer" # The URL of the GitHub Repo (optional)
 )
 
 ## Set {golem} options ----

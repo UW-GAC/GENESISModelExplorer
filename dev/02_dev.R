@@ -75,7 +75,7 @@ usethis::use_test( "mod-plot-server" )
 # # Documentation
 #
 # ## Vignette ----
-# usethis::use_vignette("shinyNullModel")
+# usethis::use_vignette("GENESISModelExplorer")
 # devtools::build_vignettes()
 #
 # ## Code Coverage----

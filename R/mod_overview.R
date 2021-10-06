@@ -51,7 +51,7 @@ mod_overview_ui <- function(id){
           p(
             "
             The GENESIS Model Explorer app was developed at the University of Washington", a("Genetic Analysis Center", href="https://www.biostat.washington.edu/research/centers/gac", target="_blank"), "in collaboration with the NHLBI Biodata Catalyst powered by Seven Bridges team and uses the GENESIS R package (", a("Gogarten et al. 2019", href="https://pubmed.ncbi.nlm.nih.gov/31329242/", target="_blank", .noWS="outside"), ").
-            The source code is available in a", a("GitHub repository", href="https://github.com/UW-GAC/shinyNullModel", target="_blank", .noWS="after"), ".
+            The source code is available in a", a("GitHub repository", href="https://github.com/UW-GAC/GENESISModelExplorer", target="_blank", .noWS="after"), ".
             "
           )
         )
