@@ -75,6 +75,7 @@ The other file selections will disappear.
 To use your own data, you will need to select both a **null model file** and a **phenotype file**.
 They are required to be in RData format.
 Both of these files are produced by the GENESIS Null Model app.
+For the **null model file** input, we suggest using the file(s) listed in the GENESIS Null Model `null_model_report_files` output field because they are smaller.
 You can optionally modify the phenotype file to add additional columns to use when plotting, as long as the modified version is stored in an Annotated Data Frame and saved as an RData file.
 
 You may optionally provide a **genotype file** to generate plots by the genotype of selected variants.
