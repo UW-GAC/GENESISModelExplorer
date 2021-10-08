@@ -33,4 +33,4 @@ RUN R -e 'renv::install(".")'
 EXPOSE 3838
 
 # Run the app.
-CMD R -e "options('shiny.port'=3838,shiny.host='0.0.0.0'); shinyNullModel::run_app()"
+CMD R -e "options('shiny.port'=3838,shiny.host='0.0.0.0'); GENESISModelExplorer::run_app()"
