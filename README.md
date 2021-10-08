@@ -7,7 +7,7 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![R-CMD-check](https://github.com/UW-GAC/shinyNullModel/workflows/R-CMD-check/badge.svg)](https://github.com/UW-GAC/shinyNullModel/actions)
+[![R-CMD-check](https://github.com/UW-GAC/GENESISModelExplorer/workflows/R-CMD-check/badge.svg)](https://github.com/UW-GAC/GENESISModelExplorer/actions)
 <!-- badges: end -->
 
 The GENESIS Model Explorer App is a Shiny application developed by the
@@ -37,7 +37,7 @@ You can install the development version from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("UW-GAC/shinyNullModel")
+devtools::install_github("UW-GAC/GENESISModelExplorer")
 ```
 
 ## Launch GENESIS Model Explorer App
@@ -45,7 +45,7 @@ devtools::install_github("UW-GAC/shinyNullModel")
 To launch the app, run the following:
 
 ``` r
-shinyNullModel::run_app()
+GENESISModelExplorer::run_app()
 ```
 
 ## App workflow
@@ -171,7 +171,7 @@ app window.
 
 ## Code of Conduct
 
-Please note that the shinyNullModel project is released with a
+Please note that the GENESISModelExplorer project is released with a
 [Contributor Code of
 Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms.

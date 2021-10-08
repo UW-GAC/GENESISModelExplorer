@@ -1,5 +1,5 @@
 test_that("load null model works as expected", {
-  nullmod_file <- system.file("extdata", "null_model.RData", package="shinyNullModel")
+  nullmod_file <- system.file("extdata", "null_model.RData", package="GENESISModelExplorer")
   nm <- get(load(nullmod_file))
   out <- .load_null_model(nullmod_file)
   expect_s3_class(out, "tbl_df")
@@ -9,7 +9,7 @@ test_that("load null model works as expected", {
 })
 
 test_that("load null model data updates old null models", {
-  nullmod_file <- system.file("extdata", "null_model_old.RData", package="shinyNullModel")
+  nullmod_file <- system.file("extdata", "null_model_old.RData", package="GENESISModelExplorer")
   nm <- get(load(nullmod_file))
   expect_warning(out <- .load_null_model(nullmod_file), "updated")
   expect_s3_class(out, "tbl_df")
@@ -27,7 +27,7 @@ test_that("load null model fails iwth incorrect data type", {
 })
 
 test_that("load phenotype works as expected with AnnotatedDataFrame", {
-  phenotype_file <- system.file("extdata", "phenotype.RData", package="shinyNullModel")
+  phenotype_file <- system.file("extdata", "phenotype.RData", package="GENESISModelExplorer")
   phen <- get(load(phenotype_file))
   out <- .load_phenotype(phenotype_file)
   expect_s3_class(out, "tbl_df")
@@ -38,7 +38,7 @@ test_that("load phenotype works as expected with AnnotatedDataFrame", {
 
 test_that("load phenotype works as expected with data frame", {
   # Save as a temporary file
-  phen <- get(load(system.file("extdata", "phenotype.RData", package="shinyNullModel"))) %>%
+  phen <- get(load(system.file("extdata", "phenotype.RData", package="GENESISModelExplorer"))) %>%
     Biobase::pData()
   tmpfile <- tempfile()
   save(phen, file = tmpfile)
@@ -52,7 +52,7 @@ test_that("load phenotype works as expected with data frame", {
 
 test_that("load phenotype fails if sample.id is missing", {
   # Remove sample id to make sure the function returns an error.
-  tmp <- get(load(system.file("extdata", "phenotype.RData", package="shinyNullModel")))
+  tmp <- get(load(system.file("extdata", "phenotype.RData", package="GENESISModelExplorer")))
   tmp <- tmp[, Biobase::varLabels(tmp) != "sample.id"]
   tmpfile <- tempfile()
   save(tmp, file = tmpfile)
@@ -135,9 +135,9 @@ test_that('load genotype fails if missing any variant columns',{
 
 
 test_that("load data works as expected", {
-  nullmod_file <- system.file("extdata", "null_model.RData", package="shinyNullModel")
+  nullmod_file <- system.file("extdata", "null_model.RData", package="GENESISModelExplorer")
   nm <- .load_null_model(nullmod_file)
-  phenotype_file <- system.file("extdata", "phenotype.RData", package="shinyNullModel")
+  phenotype_file <- system.file("extdata", "phenotype.RData", package="GENESISModelExplorer")
   phen <- .load_phenotype(phenotype_file)
   out <- .load_data(nullmod_file, phenotype_file)
   expect_s3_class(out, "tbl_df")
@@ -148,12 +148,12 @@ test_that("load data works as expected", {
 
 test_that("load data works when null model has fewer samples than phenotype file", {
   # Hacky, for now.
-  tmp <- get(load(system.file("extdata", "null_model.RData", package="shinyNullModel")))
+  tmp <- get(load(system.file("extdata", "null_model.RData", package="GENESISModelExplorer")))
   tmp$fit <- tmp$fit[1:10, ]
   tmpfile <- tempfile()
   save(tmp, file = tmpfile)
   nm <- .load_null_model(tmpfile)
-  phenotype_file <- system.file("extdata", "phenotype.RData", package="shinyNullModel")
+  phenotype_file <- system.file("extdata", "phenotype.RData", package="GENESISModelExplorer")
   phen <- .load_phenotype(phenotype_file)
   out <- .load_data(tmpfile, phenotype_file)
   expect_s3_class(out, "tbl_df")
@@ -164,9 +164,9 @@ test_that("load data works when null model has fewer samples than phenotype file
 })
 
 test_that("load data fails when null model has more samples than phenotype file", {
-  nullmod_file <- system.file("extdata", "null_model.RData", package="shinyNullModel")
+  nullmod_file <- system.file("extdata", "null_model.RData", package="GENESISModelExplorer")
   nm <- .load_null_model(nullmod_file)
-  tmp <- get(load(system.file("extdata", "phenotype.RData", package="shinyNullModel")))
+  tmp <- get(load(system.file("extdata", "phenotype.RData", package="GENESISModelExplorer")))
   tmp <- tmp[1:10, ]
   tmpfile <- tempfile()
   save(tmp, file = tmpfile)
@@ -175,9 +175,9 @@ test_that("load data fails when null model has more samples than phenotype file"
 })
 
 test_that("load data fails when phenotype file has duplicated sample ids not in null model file", {
-  nullmod_file <- system.file("extdata", "null_model.RData", package="shinyNullModel")
+  nullmod_file <- system.file("extdata", "null_model.RData", package="GENESISModelExplorer")
   nm <- .load_null_model(nullmod_file)
-  phen <- get(load(system.file("extdata", "phenotype.RData", package="shinyNullModel")))
+  phen <- get(load(system.file("extdata", "phenotype.RData", package="GENESISModelExplorer")))
   tmp <- rbind(
     Biobase::pData(phen),
     Biobase::pData(phen) %>% dplyr::filter(!(sample.id %in% nm$sample.id))
@@ -190,9 +190,9 @@ test_that("load data fails when phenotype file has duplicated sample ids not in 
 })
 
 test_that("load data fails when phenotype file has duplicated sample ids in null model file", {
-  nullmod_file <- system.file("extdata", "null_model.RData", package="shinyNullModel")
+  nullmod_file <- system.file("extdata", "null_model.RData", package="GENESISModelExplorer")
   nm <- .load_null_model(nullmod_file)
-  phen <- get(load(system.file("extdata", "phenotype.RData", package="shinyNullModel")))
+  phen <- get(load(system.file("extdata", "phenotype.RData", package="GENESISModelExplorer")))
   tmp <- rbind(
     Biobase::pData(phen),
     Biobase::pData(phen) %>% dplyr::filter(sample.id %in% nm$sample.id[1])
@@ -205,11 +205,11 @@ test_that("load data fails when phenotype file has duplicated sample ids in null
 })
 
 test_that("load data works as expected with genotype file", {
-  nullmod_file <- system.file("extdata", "null_model.RData", package="shinyNullModel")
+  nullmod_file <- system.file("extdata", "null_model.RData", package="GENESISModelExplorer")
   nm <- .load_null_model(nullmod_file)
-  phenotype_file <- system.file("extdata", "phenotype.RData", package="shinyNullModel")
+  phenotype_file <- system.file("extdata", "phenotype.RData", package="GENESISModelExplorer")
   phen <- .load_phenotype(phenotype_file)
-  genotype_file <- system.file("extdata", "genotypes.rds", package="shinyNullModel")
+  genotype_file <- system.file("extdata", "genotypes.rds", package="GENESISModelExplorer")
   geno <- .load_genotype(genotype_file)
   out <- .load_data(nullmod_file, phenotype_file, genotype_filename = genotype_file)
   expect_s3_class(out, "tbl_df")
@@ -220,14 +220,14 @@ test_that("load data works as expected with genotype file", {
 
 test_that("load data works as expected if genotype file has additional samples", {
   # Hacky, for now.
-  tmp <- get(load(system.file("extdata", "null_model.RData", package="shinyNullModel")))
+  tmp <- get(load(system.file("extdata", "null_model.RData", package="GENESISModelExplorer")))
   tmp$fit <- tmp$fit[1:10, ]
   tmpfile <- tempfile()
   save(tmp, file = tmpfile)
   nm <- .load_null_model(tmpfile)
-  phenotype_file <- system.file("extdata", "phenotype.RData", package="shinyNullModel")
+  phenotype_file <- system.file("extdata", "phenotype.RData", package="GENESISModelExplorer")
   phen <- .load_phenotype(phenotype_file)
-  genotype_file <- system.file("extdata", "genotypes.rds", package="shinyNullModel")
+  genotype_file <- system.file("extdata", "genotypes.rds", package="GENESISModelExplorer")
   geno <- .load_genotype(genotype_file)
   out <- .load_data(tmpfile, phenotype_file, genotype_filename = genotype_file)
   expect_s3_class(out, "tbl_df")
@@ -237,11 +237,11 @@ test_that("load data works as expected if genotype file has additional samples",
 })
 
 test_that("load data fails if genotype file has fewer samples", {
-  nullmod_file <- system.file("extdata", "null_model.RData", package="shinyNullModel")
+  nullmod_file <- system.file("extdata", "null_model.RData", package="GENESISModelExplorer")
   nm <- .load_null_model(nullmod_file)
-  phenotype_file <- system.file("extdata", "phenotype.RData", package="shinyNullModel")
+  phenotype_file <- system.file("extdata", "phenotype.RData", package="GENESISModelExplorer")
   phen <- .load_phenotype(phenotype_file)
-  tmp <- readRDS(system.file("extdata", "genotypes.rds", package="shinyNullModel"))
+  tmp <- readRDS(system.file("extdata", "genotypes.rds", package="GENESISModelExplorer"))
   tmp <- tmp[1:10, ]
   tmpfile <- withr::local_file("geno.rds")
   saveRDS(tmp, tmpfile)
@@ -252,9 +252,9 @@ test_that("load data fails if genotype file has fewer samples", {
 })
 
 test_that("load data works when 0-length character vector is passed as the genotype file", {
-  nullmod_file <- system.file("extdata", "null_model.RData", package="shinyNullModel")
+  nullmod_file <- system.file("extdata", "null_model.RData", package="GENESISModelExplorer")
   nm <- .load_null_model(nullmod_file)
-  phenotype_file <- system.file("extdata", "phenotype.RData", package="shinyNullModel")
+  phenotype_file <- system.file("extdata", "phenotype.RData", package="GENESISModelExplorer")
   phen <- .load_phenotype(phenotype_file)
   # This is what is actually passed by the app, but it may be due to shinyFileChoose.
   # Still, it is causing an error when trying to load data without specifying the option genotype file.

@@ -90,7 +90,7 @@ mod_data_loader_server <- function(id, parent_session = NULL){
     selected_null_model_file <- reactive({
       if (input$use_example_data) {
         # TODO: May need to change this when deployed.
-        null_model_file = system.file("extdata", "null_model.RData", package = "shinyNullModel")
+        null_model_file = system.file("extdata", "null_model.RData", package = "GENESISModelExplorer")
       } else if (!is.null(input$null_model_file)) {
         null_model_file <- parseFilePaths(roots, input$null_model_file)$datapath
       } else {
@@ -102,7 +102,7 @@ mod_data_loader_server <- function(id, parent_session = NULL){
     selected_phenotype_file <- reactive({
       if (input$use_example_data) {
         # TODO: May need to change this when deployed.
-        phenotype_file = system.file("extdata", "phenotype.RData", package = "shinyNullModel")
+        phenotype_file = system.file("extdata", "phenotype.RData", package = "GENESISModelExplorer")
       } else if (!is.null(input$phenotype_file)) {
         phenotype_file <- parseFilePaths(roots, input$phenotype_file)$datapath
       } else {
@@ -114,7 +114,7 @@ mod_data_loader_server <- function(id, parent_session = NULL){
     selected_genotype_file <- reactive({
       if (input$use_example_data) {
         # TODO: May need to change this when deployed.
-        genotype_file = system.file("extdata", "genotypes.rds", package = "shinyNullModel")
+        genotype_file = system.file("extdata", "genotypes.rds", package = "GENESISModelExplorer")
       } else if (!is.null(input$genotype_file)) {
         genotype_file <- parseFilePaths(roots, input$genotype_file)$datapath
       } else {

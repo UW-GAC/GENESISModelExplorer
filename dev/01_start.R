@@ -19,13 +19,13 @@
 ## to change the name in the app_sys() function in app_config.R /!\
 ##
 golem::fill_desc(
-  pkg_name = "shinyNullModel", # The Name of the package containing the App
+  pkg_name = "GENESISModelExplorer", # The Name of the package containing the App
   pkg_title = "Interactive data visualization of GENESIS null models", # The Title of the package containing the App
   pkg_description = "A Shiny app to provide interactive data visualization of GENESIS null models.", # The Description of the package containing the App
   author_first_name = "Adrienne", # Your First Name
   author_last_name = "Stilp", # Your Last Name
   author_email = "amstilp@uw.edu", # Your Email
-  repo_url = "https://github.com/UW-GAC/shinyNullModel" # The URL of the GitHub Repo (optional)
+  repo_url = "https://github.com/UW-GAC/GENESISModelExplorer" # The URL of the GitHub Repo (optional)
 )
 
 ## Set {golem} options ----
